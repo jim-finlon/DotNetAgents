@@ -95,17 +95,29 @@ Welcome back! Follow these steps to quickly resume work:
 
 ## 🛠️ Common Commands
 
-### Project Status
+### Git Workflow
 ```bash
+# Check current branch
+git branch
+
 # Check git status
 git status
 
 # View recent commits
 git log --oneline -10
 
-# View current branch
-git branch
+# Switch to main
+git checkout main
+
+# Create new feature branch
+git checkout -b feature/phase-name
+
+# Merge feature branch to main (after tests pass)
+git checkout main
+git merge feature/phase-name
 ```
+
+See [Git Workflow Guide](docs/GIT_WORKFLOW.md) for detailed workflow.
 
 ### Build & Test
 ```bash
