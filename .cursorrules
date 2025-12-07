@@ -212,16 +212,24 @@ public Task<Document> LoadAsync(string filePath, DocumentMetadata? metadata = nu
 
 ## Git Workflow
 
-### Branching
-- `main` - Production-ready code
-- `develop` - Development branch
-- `feature/*` - Feature branches
-- `bugfix/*` - Bug fix branches
-- `release/*` - Release preparation
+### Branching Strategy
+- `main` - Production-ready code (protected, merge-only)
+- `feature/{phase-name}` - Major development phases (merged after tests pass)
+- `bugfix/{issue-name}` - Bug fixes
+- `release/{version}` - Release preparation
+
+### Workflow
+1. Create feature branch from `main` for each major phase
+2. Work on feature branch with regular commits
+3. Ensure all tests pass before merging
+4. Merge feature branch back to `main`
+5. Start next phase from updated `main`
+
+See `docs/GIT_WORKFLOW.md` for detailed workflow guide.
 
 ### Commit Messages
 - Format: `type(scope): description`
-- Types: `feat`, `fix`, `docs`, `test`, `refactor`, `perf`, `chore`
+- Types: `feat`, `fix`, `docs`, `test`, `refactor`, `perf`, `chore`, `build`, `ci`
 - Examples:
   - `feat(core): add recursive character text splitter`
   - `fix(providers): handle OpenAI rate limits correctly`

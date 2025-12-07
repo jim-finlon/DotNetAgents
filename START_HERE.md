@@ -29,6 +29,7 @@ Welcome back! Follow these steps to quickly resume work:
 - **API Reference**: `/docs/API_REFERENCE.md` - Complete API documentation
 - **Build Guide**: `/docs/BUILD_AND_CICD.md` - Build and CI/CD configuration
 - **Testing**: `/docs/TESTING_STRATEGY.md` - Testing approach
+- **Git Workflow**: `/docs/GIT_WORKFLOW.md` - Branching strategy and workflow
 - **Performance**: `/docs/PERFORMANCE_BENCHMARKS.md` - Performance targets
 - **Error Handling**: `/docs/ERROR_HANDLING.md` - Exception patterns
 - **Versioning**: `/docs/VERSIONING_AND_MIGRATION.md` - Version strategy
@@ -95,17 +96,29 @@ Welcome back! Follow these steps to quickly resume work:
 
 ## 🛠️ Common Commands
 
-### Project Status
+### Git Workflow
 ```bash
+# Check current branch
+git branch
+
 # Check git status
 git status
 
 # View recent commits
 git log --oneline -10
 
-# View current branch
-git branch
+# Switch to main
+git checkout main
+
+# Create new feature branch
+git checkout -b feature/phase-name
+
+# Merge feature branch to main (after tests pass)
+git checkout main
+git merge feature/phase-name
 ```
+
+See [Git Workflow Guide](docs/GIT_WORKFLOW.md) for detailed workflow.
 
 ### Build & Test
 ```bash

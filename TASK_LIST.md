@@ -15,15 +15,16 @@
 - [ ] Configure build system
 - [ ] Set up version control
 
-### Phase 2: Core Abstractions (Next)
-- [ ] Create DotLangChain.Abstractions project
-- [ ] Implement Document types
-- [ ] Implement Embedding interfaces
-- [ ] Implement Vector Store interfaces
-- [ ] Implement LLM interfaces
-- [ ] Implement Agent/Graph interfaces
-- [ ] Implement Tool system interfaces
-- [ ] Implement Memory interfaces
+### Phase 2: Core Abstractions ✅
+- [x] Create DotLangChain.Abstractions project
+- [x] Implement Document types
+- [x] Implement Embedding interfaces
+- [x] Implement Vector Store interfaces
+- [x] Implement LLM interfaces
+- [x] Implement Agent/Graph interfaces
+- [x] Implement Tool system interfaces
+- [x] Implement Memory interfaces
+- [x] Add base exception classes
 
 ### Phase 3: Core Implementation
 - [ ] Create DotLangChain.Core project
