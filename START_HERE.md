@@ -29,6 +29,7 @@ Welcome back! Follow these steps to quickly resume work:
 - **API Reference**: `/docs/API_REFERENCE.md` - Complete API documentation
 - **Build Guide**: `/docs/BUILD_AND_CICD.md` - Build and CI/CD configuration
 - **Testing**: `/docs/TESTING_STRATEGY.md` - Testing approach
+- **Git Workflow**: `/docs/GIT_WORKFLOW.md` - Branching strategy and workflow
 - **Performance**: `/docs/PERFORMANCE_BENCHMARKS.md` - Performance targets
 - **Error Handling**: `/docs/ERROR_HANDLING.md` - Exception patterns
 - **Versioning**: `/docs/VERSIONING_AND_MIGRATION.md` - Version strategy
