@@ -1,0 +1,285 @@
+# DotLangChain Project Rules for Cursor
+
+## Project Overview
+DotLangChain is a .NET 9 library for document ingestion, embeddings, vector stores, and agent orchestration. This file provides context and guidelines for AI-assisted development in Cursor.
+
+## Key Documentation Files
+
+### Must Read Before Major Changes
+- `START_HERE.md` - Session initialization and quick reference
+- `SESSION_STATE.md` - Current phase and progress
+- `TASK_LIST.md` - Detailed task breakdown
+- `LESSONS_LEARNED.md` - Key decisions and patterns
+- `RESUME.md` - How to resume work after breaks
+
+### Architecture & Design
+- `docs/TECHNICAL_SPECIFICATIONS.md` - Architecture and implementation details
+- `docs/API_REFERENCE.md` - Complete API documentation
+- `docs/REQUIREMENTS.md` - Functional and non-functional requirements
+
+### Implementation Guides
+- `docs/BUILD_AND_CICD.md` - Build configuration and CI/CD
+- `docs/TESTING_STRATEGY.md` - Testing approach and guidelines
+- `docs/ERROR_HANDLING.md` - Exception hierarchy and error handling
+- `docs/PERFORMANCE_BENCHMARKS.md` - Performance targets
+- `docs/VERSIONING_AND_MIGRATION.md` - Versioning strategy
+- `docs/PACKAGE_METADATA.md` - Package distribution
+
+## Code Standards
+
+### Language & Framework
+- Target: .NET 9.0 (net9.0)
+- Language: C# 13 (LangVersion 13.0)
+- Nullable reference types: Enabled
+- Implicit usings: Enabled
+- Treat warnings as errors: Enabled in Release builds
+
+### Code Style
+- Use `record` types for immutable data (Document, DocumentChunk, etc.)
+- Prefer `IAsyncEnumerable<T>` for streaming operations
+- All I/O operations must be async
+- Use `Span<T>`/`Memory<T>` for zero-allocation operations where possible
+- Follow SOLID principles, especially Dependency Inversion
+
+### Naming Conventions
+- Interfaces: `I{Name}` (e.g., `IDocumentLoader`)
+- Abstract classes: `{Name}Base` or descriptive name (e.g., `AgentState`)
+- Concrete classes: `{Name}` (e.g., `RecursiveCharacterTextSplitter`)
+- Records: `{Name}` (e.g., `Document`, `DocumentChunk`)
+- Enums: `{Name}` (e.g., `MessageRole`, `DistanceMetric`)
+
+### Project Structure
+```
+src/
+├── DotLangChain.Abstractions/     # Interfaces and contracts
+├── DotLangChain.Core/             # Core implementations
+├── DotLangChain.Providers.*/      # LLM provider implementations
+├── DotLangChain.VectorStores.*/   # Vector store integrations
+├── DotLangChain.StateStores.*/    # State persistence
+└── DotLangChain.Extensions.*/     # Extension libraries
+
+tests/
+├── DotLangChain.Tests.Unit/       # Unit tests (xUnit)
+├── DotLangChain.Tests.Integration/# Integration tests (Testcontainers)
+└── DotLangChain.Tests.Benchmarks/ # Performance benchmarks (BenchmarkDotNet)
+
+samples/
+├── DotLangChain.Samples.RAG/      # RAG examples
+├── DotLangChain.Samples.Agent/    # Agent examples
+└── DotLangChain.Samples.MultiAgent/# Multi-agent examples
+```
+
+## Design Patterns
+
+### Core Patterns
+- **Provider Pattern**: All external services (LLMs, vector stores) use provider pattern
+- **Builder Pattern**: Graph construction, configuration
+- **Factory Pattern**: Service instance creation
+- **Decorator Pattern**: Caching, retry, observability
+- **Strategy Pattern**: Pluggable implementations (splitters, providers)
+
+### Anti-Patterns to Avoid
+- ❌ Service locator pattern (use DI)
+- ❌ Static mutable state
+- ❌ Catching generic `Exception` (catch specific types)
+- ❌ Blocking async code (use `async/await` properly)
+- ❌ Public mutable properties (use `init` or private setters)
+
+## Error Handling
+
+### Exception Hierarchy
+All exceptions inherit from `DotLangChainException`:
+- `DocumentException` (DLC001-*) - Document operations
+- `EmbeddingException` (DLC002-*) - Embedding operations
+- `VectorStoreException` (DLC003-*) - Vector store operations
+- `LLMException` (DLC004-*) - LLM operations
+- `GraphException` (DLC005-*) - Graph execution
+- `ToolException` (DLC006-*) - Tool execution
+- `SecurityException` (DLC007-*) - Security violations
+
+### Error Handling Guidelines
+- Always include error codes (format: DLC{Category}-{SubCategory}-{Specific})
+- Provide meaningful error messages with context
+- Include inner exceptions for debugging
+- Use structured logging with exception context
+
+## Testing Requirements
+
+### Test Coverage
+- Core logic: ≥ 90%
+- Providers: ≥ 80%
+- Overall: ≥ 80%
+
+### Test Types
+- **Unit Tests**: xUnit, FluentAssertions, NSubstitute
+- **Integration Tests**: Testcontainers.NET for real services
+- **Benchmarks**: BenchmarkDotNet for performance tests
+
+### Test Organization
+- One test file per class/component
+- Use AAA pattern (Arrange-Act-Assert)
+- Test names: `{MethodName}_{Scenario}_{ExpectedResult}`
+- Use traits for categorization: `[Trait("Category", "Unit")]`
+
+## Performance Guidelines
+
+### Targets (see PERFORMANCE_BENCHMARKS.md)
+- Document loading: ≥ 100 pages/second
+- Embedding cache: < 1ms P99
+- Vector search: < 50ms P95
+- Graph node overhead: < 100μs per node
+
+### Optimization Strategies
+- Use object pooling for frequently allocated objects
+- Prefer `Span<T>`/`Memory<T>` for zero-allocation operations
+- Use `IAsyncEnumerable<T>` for streaming large datasets
+- Implement caching for expensive operations (embeddings, tokenization)
+
+## Security Requirements
+
+### OWASP Compliance
+- All API keys/secrets via `IConfiguration`
+- TLS 1.2+ for all external communications
+- Input sanitization for prompt injection prevention
+- Parameterized queries for vector stores
+- Secure defaults, no secrets in logs
+- URL validation for document loaders
+
+### Security Practices
+- Always sanitize user input
+- Never log secrets or API keys
+- Validate all inputs from external sources
+- Use secure defaults (TLS, encryption)
+
+## Documentation Requirements
+
+### XML Documentation
+- All public APIs must have XML documentation
+- Include parameter descriptions
+- Include return value descriptions
+- Include exception documentation
+- Include example code where helpful
+
+### Code Examples
+```csharp
+/// <summary>
+/// Loads a document from a file path.
+/// </summary>
+/// <param name="filePath">Path to the document file.</param>
+/// <param name="metadata">Optional metadata to attach to the document.</param>
+/// <param name="cancellationToken">Cancellation token.</param>
+/// <returns>The loaded document.</returns>
+/// <exception cref="DocumentException">Thrown when the document cannot be loaded.</exception>
+/// <example>
+/// <code>
+/// var document = await loader.LoadAsync("document.pdf");
+/// </code>
+/// </example>
+public Task<Document> LoadAsync(string filePath, DocumentMetadata? metadata = null, CancellationToken cancellationToken = default);
+```
+
+## Dependency Management
+
+### Common Dependencies
+- `Microsoft.Extensions.*` - DI, Configuration, Logging (v9.0.0)
+- `System.Text.Json` - JSON serialization (v9.0.0)
+- `Polly` - Resilience patterns (v8.5.0)
+- `OpenTelemetry.*` - Observability (v1.10.0, optional)
+- `xUnit` - Testing (v2.8.0)
+- `FluentAssertions` - Test assertions (v6.12.0)
+- `NSubstitute` - Mocking (v5.1.0)
+- `Testcontainers.NET` - Integration tests (v4.0.0)
+- `BenchmarkDotNet` - Performance benchmarks (v0.14.0)
+
+### Package Versioning
+- All packages in a release use the same version (SemVer 2.0.0)
+- Dependencies specify exact versions for production
+- Security updates applied within 7 days
+
+## Update Guidelines
+
+### When to Update Files
+- **SESSION_STATE.md**: At milestones, before context compression
+- **TASK_LIST.md**: As tasks are completed
+- **LESSONS_LEARNED.md**: When decisions are made or insights gained
+- **Documentation**: When APIs change or new features added
+
+### Before Context Compression
+1. Update SESSION_STATE.md with current progress
+2. Update TASK_LIST.md with completed tasks
+3. Update LESSONS_LEARNED.md with new insights
+4. Commit all changes with descriptive message
+
+## Git Workflow
+
+### Branching
+- `main` - Production-ready code
+- `develop` - Development branch
+- `feature/*` - Feature branches
+- `bugfix/*` - Bug fix branches
+- `release/*` - Release preparation
+
+### Commit Messages
+- Format: `type(scope): description`
+- Types: `feat`, `fix`, `docs`, `test`, `refactor`, `perf`, `chore`
+- Examples:
+  - `feat(core): add recursive character text splitter`
+  - `fix(providers): handle OpenAI rate limits correctly`
+  - `docs(api): update embedding service documentation`
+
+## AI Assistant Guidelines
+
+### When Assisting with Code
+1. Check SESSION_STATE.md for current context
+2. Review relevant documentation files
+3. Follow established patterns from LESSONS_LEARNED.md
+4. Maintain consistency with existing code style
+5. Include XML documentation for new public APIs
+6. Write tests for new functionality
+
+### When Suggesting Changes
+- Consider impact on existing code
+- Check for breaking changes (require major version bump)
+- Ensure OWASP compliance
+- Verify performance implications
+- Update documentation as needed
+
+### Code Generation Priorities
+1. **Correctness**: Code must be functionally correct
+2. **Security**: Follow security best practices
+3. **Performance**: Meet performance targets
+4. **Maintainability**: Code should be clear and well-documented
+5. **Consistency**: Follow established patterns
+
+## Quick Reference
+
+### Key Commands
+```bash
+# Build
+dotnet build --configuration Release
+
+# Test
+dotnet test --configuration Release
+
+# Pack
+dotnet pack --configuration Release --output ./artifacts
+
+# Format
+dotnet format --verify-no-changes
+```
+
+### File Locations
+- Solution: `DotLangChain.sln`
+- Build props: `Directory.Build.props`
+- Task list: `TASK_LIST.md`
+- Session state: `SESSION_STATE.md`
+- Startup guide: `START_HERE.md`
+
+## Additional Notes
+
+- Always check SESSION_STATE.md before making major changes
+- Update task list as you complete work
+- Document decisions in LESSONS_LEARNED.md
+- Keep documentation in sync with code
+- Follow semantic versioning for releases
+
