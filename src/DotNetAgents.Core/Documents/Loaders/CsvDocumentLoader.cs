@@ -85,8 +85,6 @@ public class CsvDocumentLoader : IDocumentLoader
         }
         
         return updatedDocuments;
-
-        return documents;
     }
 
     private Task<IReadOnlyList<Document>> LoadFromContentAsync(
