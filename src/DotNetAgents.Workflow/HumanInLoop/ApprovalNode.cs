@@ -43,26 +43,26 @@ public class ApprovalNode<TState> : GraphNode<TState> where TState : class
             var workflowRunId = GetWorkflowRunId(state) ?? Guid.NewGuid().ToString("N");
             
             // Request approval
-            var approved = await _approvalHandler.RequestApprovalAsync(
+            var approved = await approvalHandler.RequestApprovalAsync(
                 workflowRunId,
-                name,
+                nodeName,
                 state,
-                _approvalMessage,
+                approvalMessage,
                 ct).ConfigureAwait(false);
 
             if (!approved)
             {
                 // Wait for approval if not immediately granted
-                if (_timeout.HasValue)
+                if (timeout.HasValue)
                 {
-                    using var timeoutCts = new CancellationTokenSource(_timeout.Value);
+                    using var timeoutCts = new CancellationTokenSource(timeout.Value);
                     using var linkedCts = CancellationTokenSource.CreateLinkedTokenSource(ct, timeoutCts.Token);
                     
                     var startTime = DateTime.UtcNow;
-                    while (DateTime.UtcNow - startTime < _timeout.Value)
+                    while (DateTime.UtcNow - startTime < timeout.Value)
                     {
                         await Task.Delay(TimeSpan.FromMilliseconds(100), linkedCts.Token).ConfigureAwait(false);
-                        approved = await _approvalHandler.IsApprovedAsync(workflowRunId, name, linkedCts.Token).ConfigureAwait(false);
+                        approved = await approvalHandler.IsApprovedAsync(workflowRunId, nodeName, linkedCts.Token).ConfigureAwait(false);
                         if (approved)
                         {
                             break;
@@ -72,7 +72,7 @@ public class ApprovalNode<TState> : GraphNode<TState> where TState : class
                     if (!approved)
                     {
                         throw new AgentException(
-                            $"Approval timeout after {_timeout.Value.TotalSeconds} seconds for node '{name}'.",
+                            $"Approval timeout after {timeout.Value.TotalSeconds} seconds for node '{nodeName}'.",
                             ErrorCategory.WorkflowError);
                     }
                 }
@@ -82,17 +82,17 @@ public class ApprovalNode<TState> : GraphNode<TState> where TState : class
                     while (!approved)
                     {
                         await Task.Delay(TimeSpan.FromMilliseconds(500), ct).ConfigureAwait(false);
-                        approved = await _approvalHandler.IsApprovedAsync(workflowRunId, name, ct).ConfigureAwait(false);
+                        approved = await approvalHandler.IsApprovedAsync(workflowRunId, nodeName, ct).ConfigureAwait(false);
                     }
                 }
             }
 
             // Check if approval was actually granted
-            approved = await _approvalHandler.IsApprovedAsync(workflowRunId, name, ct).ConfigureAwait(false);
+            approved = await approvalHandler.IsApprovedAsync(workflowRunId, nodeName, ct).ConfigureAwait(false);
             if (!approved)
             {
                 throw new AgentException(
-                    $"Approval was rejected for node '{name}'.",
+                    $"Approval was rejected for node '{nodeName}'.",
                     ErrorCategory.WorkflowError);
             }
 
