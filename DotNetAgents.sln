@@ -65,6 +65,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DotNetAgents.Storage.SqlSer
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DotNetAgents.Storage.PostgreSQL", "src\DotNetAgents.Storage.PostgreSQL\DotNetAgents.Storage.PostgreSQL.csproj", "{5977BF3C-E131-48FC-B389-AA3C12F91AE6}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DotNetAgents.VectorStores.Pinecone", "src\DotNetAgents.VectorStores.Pinecone\DotNetAgents.VectorStores.Pinecone.csproj", "{1283CA6A-B9A9-49E4-93AB-5A6B9D252808}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -411,6 +413,18 @@ Global
 		{5977BF3C-E131-48FC-B389-AA3C12F91AE6}.Release|x64.Build.0 = Release|Any CPU
 		{5977BF3C-E131-48FC-B389-AA3C12F91AE6}.Release|x86.ActiveCfg = Release|Any CPU
 		{5977BF3C-E131-48FC-B389-AA3C12F91AE6}.Release|x86.Build.0 = Release|Any CPU
+		{1283CA6A-B9A9-49E4-93AB-5A6B9D252808}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1283CA6A-B9A9-49E4-93AB-5A6B9D252808}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1283CA6A-B9A9-49E4-93AB-5A6B9D252808}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{1283CA6A-B9A9-49E4-93AB-5A6B9D252808}.Debug|x64.Build.0 = Debug|Any CPU
+		{1283CA6A-B9A9-49E4-93AB-5A6B9D252808}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{1283CA6A-B9A9-49E4-93AB-5A6B9D252808}.Debug|x86.Build.0 = Debug|Any CPU
+		{1283CA6A-B9A9-49E4-93AB-5A6B9D252808}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1283CA6A-B9A9-49E4-93AB-5A6B9D252808}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1283CA6A-B9A9-49E4-93AB-5A6B9D252808}.Release|x64.ActiveCfg = Release|Any CPU
+		{1283CA6A-B9A9-49E4-93AB-5A6B9D252808}.Release|x64.Build.0 = Release|Any CPU
+		{1283CA6A-B9A9-49E4-93AB-5A6B9D252808}.Release|x86.ActiveCfg = Release|Any CPU
+		{1283CA6A-B9A9-49E4-93AB-5A6B9D252808}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -444,5 +458,6 @@ Global
 		{185F9775-14F3-481A-B6CA-DFC72DB3AAD8} = {5D20AA90-6969-D8BD-9DCD-8634F4692FDA}
 		{D9125201-F2B8-4220-8B51-64C9B9C33975} = {827E0CD3-B72D-47B6-A68D-7590B98EB39B}
 		{5977BF3C-E131-48FC-B389-AA3C12F91AE6} = {827E0CD3-B72D-47B6-A68D-7590B98EB39B}
+		{1283CA6A-B9A9-49E4-93AB-5A6B9D252808} = {827E0CD3-B72D-47B6-A68D-7590B98EB39B}
 	EndGlobalSection
 EndGlobal
