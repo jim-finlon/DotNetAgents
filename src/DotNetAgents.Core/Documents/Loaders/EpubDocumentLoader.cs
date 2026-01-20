@@ -71,9 +71,16 @@ public class EpubDocumentLoader : IDocumentLoader
             if (!string.IsNullOrWhiteSpace(epubBook.Title))
                 baseMetadata["title"] = epubBook.Title;
 
-            var authors = epubBook.Author;
-            if (authors != null && authors.Count > 0)
-                baseMetadata["author"] = string.Join(", ", authors);
+            try
+            {
+                var authors = epubBook.Author();
+                if (authors != null && authors.Count > 0)
+                    baseMetadata["author"] = string.Join(", ", authors);
+            }
+            catch
+            {
+                // Author may not be available in all EPUBs
+            }
 
             if (SplitByChapter)
             {
