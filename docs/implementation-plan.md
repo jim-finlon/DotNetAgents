@@ -401,6 +401,7 @@ DotNetAgents/
   - ✅ Basic Chain example
   - ✅ Agent with Tools example
   - ✅ Workflow example
+  - ✅ RAG (Retrieval-Augmented Generation) example
 
 ### Phase 7: Workflow Engine (Weeks 19-23) ✅ COMPLETED
 
