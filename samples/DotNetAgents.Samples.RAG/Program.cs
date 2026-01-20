@@ -80,7 +80,7 @@ class Program
                 ["content"] = chunk.Content
             };
             
-            await vectorStore.AddAsync(
+            await vectorStore.UpsertAsync(
                 $"chunk_{i}",
                 embedding,
                 metadata,
@@ -144,41 +144,51 @@ Answer:");
     {
         return new List<Document>
         {
-            new Document(
-                content: @"Artificial Intelligence (AI) is a branch of computer science that aims to create 
+            new Document
+            {
+                Content = @"Artificial Intelligence (AI) is a branch of computer science that aims to create 
 intelligent machines capable of performing tasks that typically require human intelligence. 
 These tasks include learning, reasoning, problem-solving, perception, and language understanding. 
 AI systems can be categorized into narrow AI, which is designed for specific tasks, and general AI, 
 which would have human-like cognitive abilities across a wide range of tasks.",
-                metadata: new Dictionary<string, object> { ["id"] = "doc1", ["title"] = "Introduction to AI", ["source"] = "sample" }),
+                Metadata = new Dictionary<string, object> { ["id"] = "doc1", ["title"] = "Introduction to AI", ["source"] = "sample" }
+            },
 
-            new Document(
-                content: @"Machine Learning is a subset of AI that enables systems to learn and improve 
+            new Document
+            {
+                Content = @"Machine Learning is a subset of AI that enables systems to learn and improve 
 from experience without being explicitly programmed. It uses algorithms to analyze data, identify patterns, 
 and make predictions or decisions. Common applications include image recognition, natural language processing, 
 recommendation systems, and autonomous vehicles.",
-                metadata: new Dictionary<string, object> { ["id"] = "doc2", ["title"] = "Machine Learning Basics", ["source"] = "sample" }),
+                Metadata = new Dictionary<string, object> { ["id"] = "doc2", ["title"] = "Machine Learning Basics", ["source"] = "sample" }
+            },
 
-            new Document(
-                content: @"Deep Learning is a specialized form of machine learning that uses neural networks 
+            new Document
+            {
+                Content = @"Deep Learning is a specialized form of machine learning that uses neural networks 
 with multiple layers to model and understand complex patterns. It has revolutionized fields such as computer vision, 
 speech recognition, and natural language processing. Deep learning models require large amounts of data and 
 computational resources but can achieve remarkable accuracy.",
-                metadata: new Dictionary<string, object> { ["id"] = "doc3", ["title"] = "Deep Learning Overview", ["source"] = "sample" }),
+                Metadata = new Dictionary<string, object> { ["id"] = "doc3", ["title"] = "Deep Learning Overview", ["source"] = "sample" }
+            },
 
-            new Document(
-                content: @"AI applications are widespread across industries. In healthcare, AI assists in 
+            new Document
+            {
+                Content = @"AI applications are widespread across industries. In healthcare, AI assists in 
 medical diagnosis and drug discovery. In finance, it's used for fraud detection and algorithmic trading. 
 In transportation, AI powers autonomous vehicles and traffic management systems. In customer service, 
 AI chatbots provide 24/7 support. The potential applications continue to grow as technology advances.",
-                metadata: new Dictionary<string, object> { ["id"] = "doc4", ["title"] = "AI Applications", ["source"] = "sample" }),
+                Metadata = new Dictionary<string, object> { ["id"] = "doc4", ["title"] = "AI Applications", ["source"] = "sample" }
+            },
 
-            new Document(
-                content: @"Challenges in AI development include data quality and availability, algorithmic bias, 
+            new Document
+            {
+                Content = @"Challenges in AI development include data quality and availability, algorithmic bias, 
 explainability and transparency, computational requirements, and ethical concerns. Ensuring AI systems are fair, 
 transparent, and beneficial to society requires ongoing research and careful consideration of these challenges. 
 Regulation and standards are also evolving to address these concerns.",
-                metadata: new Dictionary<string, object> { ["id"] = "doc5", ["title"] = "AI Challenges", ["source"] = "sample" })
+                Metadata = new Dictionary<string, object> { ["id"] = "doc5", ["title"] = "AI Challenges", ["source"] = "sample" }
+            }
         };
     }
 
