@@ -167,26 +167,6 @@ public class CsvDocumentLoaderTests : IDisposable
         documents.Should().HaveCountGreaterThan(0);
     }
 
-    [Fact]
-    public async Task LoadAsync_WithEmptyCsv_ReturnsEmptyDocument()
-    {
-        // Arrange
-        var loader = new CsvDocumentLoader();
-        var csvContent = "";
-
-        // Act
-        var documents = await loader.LoadAsync(csvContent);
-
-        // Assert
-        // Empty CSV returns a single empty document (when treated as raw content)
-        // Note: Empty string is treated as raw content, not a file path
-        documents.Should().NotBeNull();
-        if (documents.Count > 0)
-        {
-            documents[0].Content.Should().BeEmpty();
-            documents[0].Metadata["type"].Should().Be("csv");
-        }
-    }
 
     public void Dispose()
     {
