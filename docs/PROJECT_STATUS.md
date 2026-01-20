@@ -1,7 +1,8 @@
 # DotNetAgents Library - Project Status
 
 **Last Updated:** January 2025  
-**Status:** Active Development
+**Status:** Active Development  
+**Target Framework:** .NET 10 (LTS)
 
 ## Overview
 
@@ -152,7 +153,7 @@ DotNetAgents is an enterprise-grade .NET 8 library that replicates LangChain and
 - **LLM Providers:** 12
 - **Built-in Tools:** 9
 - **Test Coverage:** >85% (target)
-- **Target Framework:** .NET 8
+- **Target Framework:** .NET 10 (LTS)
 - **License:** MIT
 
 ## Architecture
