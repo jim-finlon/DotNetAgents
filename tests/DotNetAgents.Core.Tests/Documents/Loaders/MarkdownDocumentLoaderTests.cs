@@ -144,5 +144,7 @@ var code = ""example"";
                 // Ignore cleanup errors
             }
         }
+
+        GC.SuppressFinalize(this);
     }
 }

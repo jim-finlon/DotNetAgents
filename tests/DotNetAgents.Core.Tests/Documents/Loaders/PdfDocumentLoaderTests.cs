@@ -154,5 +154,7 @@ public class PdfDocumentLoaderTests : IDisposable
         {
             // Ignore cleanup errors
         }
+
+        GC.SuppressFinalize(this);
     }
 }

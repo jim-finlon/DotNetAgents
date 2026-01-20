@@ -133,5 +133,7 @@ public class TextDocumentLoaderTests : IDisposable
                 // Ignore cleanup errors
             }
         }
+
+        GC.SuppressFinalize(this);
     }
 }
