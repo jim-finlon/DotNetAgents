@@ -58,7 +58,7 @@ DotNetAgents is an enterprise-grade .NET 8 library that replicates LangChain and
 
 #### Phase 5: Memory & Retrieval ✅ (Mostly)
 - ✅ Memory interfaces and implementations
-- ✅ Document loaders (Text, PDF, Markdown)
+- ✅ Document loaders (Text, PDF, Markdown, CSV, Excel)
 - ✅ Vector store abstraction
 - ✅ In-memory vector store
 - ✅ Text splitter (`CharacterTextSplitter`)
@@ -136,8 +136,7 @@ DotNetAgents is an enterprise-grade .NET 8 library that replicates LangChain and
 - Comprehensive integration tests
 
 #### Medium Priority
-- Additional built-in tools (email, weather, Wikipedia)
-- More document loaders (Excel, CSV)
+- ✅ Additional document loaders (Excel, CSV)
 - Performance benchmarks
 - Migration guide from Python LangChain
 
