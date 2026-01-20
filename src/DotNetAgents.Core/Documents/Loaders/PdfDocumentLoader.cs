@@ -1,18 +1,35 @@
 using System.Text;
+using UglyToad.PdfPig;
+using UglyToad.PdfPig.Content;
 
 namespace DotNetAgents.Core.Documents.Loaders;
 
 /// <summary>
-/// Loads PDF documents from file system.
+/// Loads PDF documents from file system using PdfPig library.
 /// </summary>
 public class PdfDocumentLoader : IDocumentLoader
 {
+    /// <summary>
+    /// Gets or sets whether to split PDF into separate documents per page.
+    /// Default is true (one document per page).
+    /// </summary>
+    public bool SplitByPage { get; set; } = true;
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="PdfDocumentLoader"/> class.
+    /// </summary>
+    /// <param name="splitByPage">Whether to split PDF into separate documents per page. Default is true.</param>
+    public PdfDocumentLoader(bool splitByPage = true)
+    {
+        SplitByPage = splitByPage;
+    }
+
     /// <summary>
     /// Loads a PDF document from a file path.
     /// </summary>
     /// <param name="source">The file path to the PDF file.</param>
     /// <param name="cancellationToken">Cancellation token to cancel the operation.</param>
-    /// <returns>A list of documents, one per page.</returns>
+    /// <returns>A list of documents, one per page if SplitByPage is true, otherwise a single document.</returns>
     public Task<IReadOnlyList<Document>> LoadAsync(
         string source,
         CancellationToken cancellationToken = default)
@@ -29,7 +46,7 @@ public class PdfDocumentLoader : IDocumentLoader
         return LoadFromFileAsync(source, cancellationToken);
     }
 
-    private static Task<IReadOnlyList<Document>> LoadFromFileAsync(
+    private Task<IReadOnlyList<Document>> LoadFromFileAsync(
         string filePath,
         CancellationToken cancellationToken)
     {
@@ -37,50 +54,88 @@ public class PdfDocumentLoader : IDocumentLoader
 
         try
         {
-            // For now, use a simple text extraction approach
-            // In production, you would use a PDF library like iTextSharp or PdfPig
-            // This is a placeholder implementation
             var documents = new List<Document>();
             var fileName = Path.GetFileName(filePath);
+            var fileInfo = new FileInfo(filePath);
 
-            // Read PDF as binary and attempt basic text extraction
-            // Note: This is a simplified implementation. For production use, integrate a proper PDF library
-            var fileBytes = File.ReadAllBytes(filePath);
-            
-            // Basic text extraction from PDF (this is very limited)
-            // In a real implementation, you would use iTextSharp or PdfPig
-            var text = ExtractTextFromPdf(fileBytes);
+            using var document = PdfDocument.Open(filePath);
+            var totalPages = document.NumberOfPages;
 
-            documents.Add(new Document
+            if (SplitByPage)
             {
-                Content = text,
-                Metadata = new Dictionary<string, object>
+                // Create one document per page
+                for (int pageNumber = 1; pageNumber <= totalPages; pageNumber++)
                 {
-                    ["source"] = filePath,
-                    ["filename"] = fileName,
-                    ["type"] = "pdf",
-                    ["page_count"] = 1 // Simplified - would need proper PDF parsing
+                    cancellationToken.ThrowIfCancellationRequested();
+
+                    var page = document.GetPage(pageNumber);
+                    var text = ExtractTextFromPage(page);
+
+                    documents.Add(new Document
+                    {
+                        Content = text,
+                        PageNumber = pageNumber,
+                        Metadata = new Dictionary<string, object>
+                        {
+                            ["source"] = filePath,
+                            ["filename"] = fileName,
+                            ["type"] = "pdf",
+                            ["page"] = pageNumber,
+                            ["total_pages"] = totalPages,
+                            ["file_size"] = fileInfo.Length,
+                            ["created_at"] = fileInfo.CreationTimeUtc
+                        }
+                    });
                 }
-            });
+            }
+            else
+            {
+                // Combine all pages into a single document
+                var allText = new StringBuilder();
+                for (int pageNumber = 1; pageNumber <= totalPages; pageNumber++)
+                {
+                    cancellationToken.ThrowIfCancellationRequested();
+
+                    var page = document.GetPage(pageNumber);
+                    var pageText = ExtractTextFromPage(page);
+                    allText.AppendLine($"--- Page {pageNumber} ---");
+                    allText.AppendLine(pageText);
+                    allText.AppendLine();
+                }
+
+                documents.Add(new Document
+                {
+                    Content = allText.ToString(),
+                    Metadata = new Dictionary<string, object>
+                    {
+                        ["source"] = filePath,
+                        ["filename"] = fileName,
+                        ["type"] = "pdf",
+                        ["page_count"] = totalPages,
+                        ["file_size"] = fileInfo.Length,
+                        ["created_at"] = fileInfo.CreationTimeUtc
+                    }
+                });
+            }
 
             return Task.FromResult<IReadOnlyList<Document>>(documents);
         }
-        catch (Exception ex)
+        catch (Exception ex) when (ex is not OperationCanceledException)
         {
             throw new InvalidOperationException($"Failed to load PDF file: {filePath}", ex);
         }
     }
 
-    private static string ExtractTextFromPdf(byte[] pdfBytes)
+    private static string ExtractTextFromPage(Page page)
     {
-        // Placeholder implementation - returns a message indicating PDF support needs a library
-        // For production use, integrate a PDF library like:
-        // - iTextSharp.LGPLv2.Core (free, LGPL license)
-        // - PdfPig (free, Apache 2.0 license)
-        // - PdfSharp (free, MIT license)
-        
-        return $"[PDF content extraction requires a PDF library. File size: {pdfBytes.Length} bytes. " +
-               $"To enable PDF support, integrate a library like PdfPig or iTextSharp.LGPLv2.Core. " +
-               $"This is a placeholder implementation.]";
+        var textBuilder = new StringBuilder();
+
+        foreach (var word in page.GetWords())
+        {
+            textBuilder.Append(word.Text);
+            textBuilder.Append(' ');
+        }
+
+        return textBuilder.ToString().Trim();
     }
 }
