@@ -91,6 +91,20 @@ public class SemanticTextSplitter : ITextSplitter
         return chunks.Select(c => c.Content).ToList();
     }
 
+    /// <inheritdoc/>
+    public async Task<IReadOnlyList<Document>> SplitAsync(
+        Document document,
+        CancellationToken cancellationToken = default)
+    {
+        ArgumentNullException.ThrowIfNull(document);
+
+        var chunks = await SplitDocumentsAsync(
+            new[] { document },
+            cancellationToken).ConfigureAwait(false);
+        
+        return chunks;
+    }
+
     private async Task<List<Document>> MergeSemanticChunksAsync(
         IReadOnlyList<Document> chunks,
         CancellationToken cancellationToken)

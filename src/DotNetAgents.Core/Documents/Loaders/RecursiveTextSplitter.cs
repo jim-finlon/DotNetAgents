@@ -72,6 +72,17 @@ public class RecursiveTextSplitter : ITextSplitter
         return Task.FromResult<IReadOnlyList<string>>(texts);
     }
 
+    /// <inheritdoc/>
+    public Task<IReadOnlyList<Document>> SplitAsync(
+        Document document,
+        CancellationToken cancellationToken = default)
+    {
+        ArgumentNullException.ThrowIfNull(document);
+
+        var chunks = SplitText(document.Content, document.Metadata);
+        return Task.FromResult<IReadOnlyList<Document>>(chunks);
+    }
+
     private List<Document> SplitText(string text, IDictionary<string, object> baseMetadata)
     {
         if (string.IsNullOrEmpty(text))
