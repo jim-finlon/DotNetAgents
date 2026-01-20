@@ -77,5 +77,5 @@ public class ApprovalNodeTests
         exception.Category.Should().Be(ErrorCategory.WorkflowError);
     }
 
-    private record TestState(int Value);
+    public record TestState(int Value);
 }
