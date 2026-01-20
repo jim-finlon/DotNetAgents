@@ -189,15 +189,20 @@ The library will provide a comprehensive framework for building AI agents, chain
 - Support tool registry/discovery
 - Support tool validation
 
-#### FR-13: Built-in Tools
+#### FR-13: Built-in Tools ✅ COMPLETED
 **Priority:** Medium  
 **Description:** The library SHOULD provide common built-in tools.
 
 **Requirements:**
-- Calculator tool
-- Web search tool
-- File system operations (with security controls)
-- Database query tools (with parameterization)
+- ✅ Calculator tool
+- ✅ Web search tool (DuckDuckGo)
+- ✅ File system operations (with security controls)
+- ✅ Database query tools (with parameterization)
+- ✅ HTTP/API Client tool
+- ✅ JSON/YAML Parser tool
+- ✅ URL Fetch tool (web scraping)
+- ✅ Text Processing tool (regex, encoding, string manipulation)
+- ✅ DateTime tool
 
 #### FR-14: Agent Executor
 **Priority:** High  
