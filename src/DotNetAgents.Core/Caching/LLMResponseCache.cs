@@ -9,7 +9,7 @@ namespace DotNetAgents.Core.Caching;
 /// </summary>
 /// <typeparam name="TInput">The type of the input.</typeparam>
 /// <typeparam name="TOutput">The type of the output.</typeparam>
-public class LLMResponseCache<TInput, TOutput> : ILLMResponseCache<TInput, TOutput>
+public class LLMResponseCache<TInput, TOutput> : ILLMResponseCache<TInput, TOutput> where TOutput : class
 {
     private readonly ICache _cache;
     private readonly TimeSpan _defaultExpiration;

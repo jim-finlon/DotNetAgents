@@ -5,7 +5,7 @@ namespace DotNetAgents.Core.Caching;
 /// </summary>
 /// <typeparam name="TInput">The type of the input.</typeparam>
 /// <typeparam name="TOutput">The type of the output.</typeparam>
-public interface ILLMResponseCache<TInput, TOutput>
+public interface ILLMResponseCache<TInput, TOutput> where TOutput : class
 {
     /// <summary>
     /// Gets a cached response for the given input.
