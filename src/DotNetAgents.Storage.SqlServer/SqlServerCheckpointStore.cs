@@ -41,44 +41,46 @@ public class SqlServerCheckpointStore<TState> : ICheckpointStore<TState> where T
 
     /// <inheritdoc/>
     public async Task<string> SaveAsync(
-        string runId,
-        TState state,
+        Checkpoint<TState> checkpoint,
         CancellationToken cancellationToken = default)
     {
-        ArgumentException.ThrowIfNullOrWhiteSpace(runId);
-        ArgumentNullException.ThrowIfNull(state);
+        ArgumentNullException.ThrowIfNull(checkpoint);
+        ArgumentException.ThrowIfNullOrWhiteSpace(checkpoint.Id);
+        ArgumentException.ThrowIfNullOrWhiteSpace(checkpoint.RunId);
 
         try
         {
-            var serializedState = await _serializer.SerializeAsync(state, cancellationToken).ConfigureAwait(false);
-            var checkpointId = Guid.NewGuid().ToString("N");
-
             using var connection = new SqlConnection(_connectionString);
             await connection.OpenAsync(cancellationToken).ConfigureAwait(false);
 
             var command = new SqlCommand(
-                $@"INSERT INTO [{_tableName}] (CheckpointId, RunId, State, CreatedAt, ExpiresAt)
-                   VALUES (@CheckpointId, @RunId, @State, @CreatedAt, @ExpiresAt)",
+                $@"INSERT INTO [{_tableName}] (CheckpointId, RunId, State, NodeName, CreatedAt, StateVersion, ExpiresAt)
+                   VALUES (@CheckpointId, @RunId, @State, @NodeName, @CreatedAt, @StateVersion, @ExpiresAt)",
                 connection);
 
-            command.Parameters.AddWithValue("@CheckpointId", checkpointId);
-            command.Parameters.AddWithValue("@RunId", runId);
-            command.Parameters.AddWithValue("@State", serializedState);
-            command.Parameters.AddWithValue("@CreatedAt", DateTime.UtcNow);
-            command.Parameters.AddWithValue("@ExpiresAt", DateTime.UtcNow.AddDays(30)); // Default 30-day expiration
+            command.Parameters.AddWithValue("@CheckpointId", checkpoint.Id);
+            command.Parameters.AddWithValue("@RunId", checkpoint.RunId);
+            command.Parameters.AddWithValue("@State", checkpoint.SerializedState);
+            command.Parameters.AddWithValue("@NodeName", checkpoint.NodeName ?? (object)DBNull.Value);
+            command.Parameters.AddWithValue("@CreatedAt", checkpoint.CreatedAt);
+            command.Parameters.AddWithValue("@StateVersion", checkpoint.StateVersion);
+            
+            // Calculate expiration (30 days from creation if not specified)
+            var expiresAt = checkpoint.CreatedAt.AddDays(30);
+            command.Parameters.AddWithValue("@ExpiresAt", expiresAt);
 
             await command.ExecuteNonQueryAsync(cancellationToken).ConfigureAwait(false);
 
             _logger?.LogInformation(
                 "Checkpoint saved. RunId: {RunId}, CheckpointId: {CheckpointId}",
-                runId,
-                checkpointId);
+                checkpoint.RunId,
+                checkpoint.Id);
 
-            return checkpointId;
+            return checkpoint.Id;
         }
         catch (SqlException ex)
         {
-            _logger?.LogError(ex, "Failed to save checkpoint. RunId: {RunId}", runId);
+            _logger?.LogError(ex, "Failed to save checkpoint. RunId: {RunId}", checkpoint.RunId);
             throw;
         }
     }
@@ -96,7 +98,7 @@ public class SqlServerCheckpointStore<TState> : ICheckpointStore<TState> where T
             await connection.OpenAsync(cancellationToken).ConfigureAwait(false);
 
             var command = new SqlCommand(
-                $@"SELECT CheckpointId, RunId, State, CreatedAt, ExpiresAt
+                $@"SELECT CheckpointId, RunId, State, NodeName, CreatedAt, StateVersion
                    FROM [{_tableName}]
                    WHERE CheckpointId = @CheckpointId AND (ExpiresAt IS NULL OR ExpiresAt > @Now)",
                 connection);
@@ -111,21 +113,22 @@ public class SqlServerCheckpointStore<TState> : ICheckpointStore<TState> where T
                 return null;
             }
 
+            var checkpointIdValue = reader.GetString(reader.GetOrdinal("CheckpointId"));
             var runId = reader.GetString(reader.GetOrdinal("RunId"));
             var serializedState = reader.GetString(reader.GetOrdinal("State"));
+            var nodeNameOrdinal = reader.GetOrdinal("NodeName");
+            var nodeName = reader.IsDBNull(nodeNameOrdinal) ? string.Empty : reader.GetString(nodeNameOrdinal);
             var createdAt = reader.GetDateTime(reader.GetOrdinal("CreatedAt"));
-            var expiresAtOrdinal = reader.GetOrdinal("ExpiresAt");
-            var expiresAt = reader.IsDBNull(expiresAtOrdinal) ? (DateTime?)null : reader.GetDateTime(expiresAtOrdinal);
-
-            var state = await _serializer.DeserializeAsync(serializedState, cancellationToken).ConfigureAwait(false);
+            var stateVersion = reader.GetInt32(reader.GetOrdinal("StateVersion"));
 
             return new Checkpoint<TState>
             {
-                CheckpointId = checkpointId,
+                Id = checkpointIdValue,
                 RunId = runId,
-                State = state,
+                NodeName = nodeName,
+                SerializedState = serializedState,
                 CreatedAt = createdAt,
-                ExpiresAt = expiresAt
+                StateVersion = stateVersion
             };
         }
         catch (SqlException ex)
@@ -148,7 +151,7 @@ public class SqlServerCheckpointStore<TState> : ICheckpointStore<TState> where T
             await connection.OpenAsync(cancellationToken).ConfigureAwait(false);
 
             var command = new SqlCommand(
-                $@"SELECT TOP 1 CheckpointId, RunId, State, CreatedAt, ExpiresAt
+                $@"SELECT TOP 1 CheckpointId, RunId, State, NodeName, CreatedAt, StateVersion
                    FROM [{_tableName}]
                    WHERE RunId = @RunId AND (ExpiresAt IS NULL OR ExpiresAt > @Now)
                    ORDER BY CreatedAt DESC",
@@ -164,21 +167,21 @@ public class SqlServerCheckpointStore<TState> : ICheckpointStore<TState> where T
                 return null;
             }
 
-            var checkpointId = reader.GetString(reader.GetOrdinal("CheckpointId"));
+            var checkpointIdValue = reader.GetString(reader.GetOrdinal("CheckpointId"));
             var serializedState = reader.GetString(reader.GetOrdinal("State"));
+            var nodeNameOrdinal = reader.GetOrdinal("NodeName");
+            var nodeName = reader.IsDBNull(nodeNameOrdinal) ? string.Empty : reader.GetString(nodeNameOrdinal);
             var createdAt = reader.GetDateTime(reader.GetOrdinal("CreatedAt"));
-            var expiresAtOrdinal = reader.GetOrdinal("ExpiresAt");
-            var expiresAt = reader.IsDBNull(expiresAtOrdinal) ? (DateTime?)null : reader.GetDateTime(expiresAtOrdinal);
-
-            var state = await _serializer.DeserializeAsync(serializedState, cancellationToken).ConfigureAwait(false);
+            var stateVersion = reader.GetInt32(reader.GetOrdinal("StateVersion"));
 
             return new Checkpoint<TState>
             {
-                CheckpointId = checkpointId,
+                Id = checkpointIdValue,
                 RunId = runId,
-                State = state,
+                NodeName = nodeName,
+                SerializedState = serializedState,
                 CreatedAt = createdAt,
-                ExpiresAt = expiresAt
+                StateVersion = stateVersion
             };
         }
         catch (SqlException ex)
@@ -189,7 +192,61 @@ public class SqlServerCheckpointStore<TState> : ICheckpointStore<TState> where T
     }
 
     /// <inheritdoc/>
-    public async Task<bool> DeleteAsync(
+    public async Task<IReadOnlyList<Checkpoint<TState>>> ListAsync(
+        string runId,
+        CancellationToken cancellationToken = default)
+    {
+        ArgumentException.ThrowIfNullOrWhiteSpace(runId);
+
+        try
+        {
+            using var connection = new SqlConnection(_connectionString);
+            await connection.OpenAsync(cancellationToken).ConfigureAwait(false);
+
+            var command = new SqlCommand(
+                $@"SELECT CheckpointId, RunId, State, NodeName, CreatedAt, StateVersion
+                   FROM [{_tableName}]
+                   WHERE RunId = @RunId AND (ExpiresAt IS NULL OR ExpiresAt > @Now)
+                   ORDER BY CreatedAt ASC",
+                connection);
+
+            command.Parameters.AddWithValue("@RunId", runId);
+            command.Parameters.AddWithValue("@Now", DateTime.UtcNow);
+
+            var checkpoints = new List<Checkpoint<TState>>();
+
+            using var reader = await command.ExecuteReaderAsync(cancellationToken).ConfigureAwait(false);
+            while (await reader.ReadAsync(cancellationToken).ConfigureAwait(false))
+            {
+                var checkpointIdValue = reader.GetString(reader.GetOrdinal("CheckpointId"));
+                var serializedState = reader.GetString(reader.GetOrdinal("State"));
+                var nodeNameOrdinal = reader.GetOrdinal("NodeName");
+                var nodeName = reader.IsDBNull(nodeNameOrdinal) ? string.Empty : reader.GetString(nodeNameOrdinal);
+                var createdAt = reader.GetDateTime(reader.GetOrdinal("CreatedAt"));
+                var stateVersion = reader.GetInt32(reader.GetOrdinal("StateVersion"));
+
+                checkpoints.Add(new Checkpoint<TState>
+                {
+                    Id = checkpointIdValue,
+                    RunId = runId,
+                    NodeName = nodeName,
+                    SerializedState = serializedState,
+                    CreatedAt = createdAt,
+                    StateVersion = stateVersion
+                });
+            }
+
+            return checkpoints;
+        }
+        catch (SqlException ex)
+        {
+            _logger?.LogError(ex, "Failed to list checkpoints. RunId: {RunId}", runId);
+            throw;
+        }
+    }
+
+    /// <inheritdoc/>
+    public async Task DeleteAsync(
         string checkpointId,
         CancellationToken cancellationToken = default)
     {
@@ -206,14 +263,9 @@ public class SqlServerCheckpointStore<TState> : ICheckpointStore<TState> where T
 
             command.Parameters.AddWithValue("@CheckpointId", checkpointId);
 
-            var rowsAffected = await command.ExecuteNonQueryAsync(cancellationToken).ConfigureAwait(false);
+            await command.ExecuteNonQueryAsync(cancellationToken).ConfigureAwait(false);
 
-            _logger?.LogInformation(
-                "Checkpoint deleted. CheckpointId: {CheckpointId}, RowsAffected: {RowsAffected}",
-                checkpointId,
-                rowsAffected);
-
-            return rowsAffected > 0;
+            _logger?.LogInformation("Checkpoint deleted. CheckpointId: {CheckpointId}", checkpointId);
         }
         catch (SqlException ex)
         {
@@ -223,7 +275,9 @@ public class SqlServerCheckpointStore<TState> : ICheckpointStore<TState> where T
     }
 
     /// <inheritdoc/>
-    public async Task<int> CleanupExpiredAsync(CancellationToken cancellationToken = default)
+    public async Task<int> DeleteOlderThanAsync(
+        DateTime olderThan,
+        CancellationToken cancellationToken = default)
     {
         try
         {
@@ -231,20 +285,20 @@ public class SqlServerCheckpointStore<TState> : ICheckpointStore<TState> where T
             await connection.OpenAsync(cancellationToken).ConfigureAwait(false);
 
             var command = new SqlCommand(
-                $@"DELETE FROM [{_tableName}] WHERE ExpiresAt IS NOT NULL AND ExpiresAt < @Now",
+                $@"DELETE FROM [{_tableName}] WHERE CreatedAt < @OlderThan",
                 connection);
 
-            command.Parameters.AddWithValue("@Now", DateTime.UtcNow);
+            command.Parameters.AddWithValue("@OlderThan", olderThan);
 
             var rowsAffected = await command.ExecuteNonQueryAsync(cancellationToken).ConfigureAwait(false);
 
-            _logger?.LogInformation("Cleaned up {Count} expired checkpoints", rowsAffected);
+            _logger?.LogInformation("Deleted {Count} checkpoints older than {OlderThan}", rowsAffected, olderThan);
 
             return rowsAffected;
         }
         catch (SqlException ex)
         {
-            _logger?.LogError(ex, "Failed to cleanup expired checkpoints");
+            _logger?.LogError(ex, "Failed to delete old checkpoints");
             throw;
         }
     }
@@ -263,10 +317,13 @@ public class SqlServerCheckpointStore<TState> : ICheckpointStore<TState> where T
                            CheckpointId NVARCHAR(50) PRIMARY KEY,
                            RunId NVARCHAR(100) NOT NULL,
                            State NVARCHAR(MAX) NOT NULL,
+                           NodeName NVARCHAR(200) NULL,
                            CreatedAt DATETIME2 NOT NULL,
+                           StateVersion INT NOT NULL DEFAULT 1,
                            ExpiresAt DATETIME2 NULL,
                            INDEX IX_RunId (RunId),
-                           INDEX IX_ExpiresAt (ExpiresAt)
+                           INDEX IX_ExpiresAt (ExpiresAt),
+                           INDEX IX_CreatedAt (CreatedAt)
                        )
                    END",
                 connection);
