@@ -172,44 +172,7 @@ public class PineconeVectorStore : IVectorStore
     }
 
     /// <inheritdoc/>
-    public async Task<bool> DeleteAsync(
-        string id,
-        CancellationToken cancellationToken = default)
-    {
-        ArgumentException.ThrowIfNullOrWhiteSpace(id);
-
-        try
-        {
-            var request = new PineconeDeleteRequest
-            {
-                Ids = new[] { id }
-            };
-
-            var json = JsonSerializer.Serialize(request);
-            var content = new StringContent(json, Encoding.UTF8, "application/json");
-            var response = await _httpClient.PostAsync(
-                $"{_baseUrl}/vectors/delete",
-                content,
-                cancellationToken).ConfigureAwait(false);
-
-            response.EnsureSuccessStatusCode();
-
-            _logger?.LogDebug("Deleted vector. Id: {Id}", id);
-
-            return true;
-        }
-        catch (HttpRequestException ex)
-        {
-            _logger?.LogError(ex, "Failed to delete vector. Id: {Id}", id);
-            throw new AgentException(
-                $"Failed to delete vector from Pinecone: {ex.Message}",
-                ErrorCategory.ProviderError,
-                ex);
-        }
-    }
-
-    /// <inheritdoc/>
-    public async Task<int> DeleteManyAsync(
+    public async Task<int> DeleteAsync(
         IEnumerable<string> ids,
         CancellationToken cancellationToken = default)
     {
@@ -244,48 +207,6 @@ public class PineconeVectorStore : IVectorStore
             _logger?.LogError(ex, "Failed to delete vectors");
             throw new AgentException(
                 $"Failed to delete vectors from Pinecone: {ex.Message}",
-                ErrorCategory.ProviderError,
-                ex);
-        }
-    }
-
-    /// <inheritdoc/>
-    public async Task<VectorSearchResult?> GetAsync(
-        string id,
-        CancellationToken cancellationToken = default)
-    {
-        ArgumentException.ThrowIfNullOrWhiteSpace(id);
-
-        try
-        {
-            var response = await _httpClient.GetAsync(
-                $"{_baseUrl}/vectors/fetch?ids={Uri.EscapeDataString(id)}",
-                cancellationToken).ConfigureAwait(false);
-
-            response.EnsureSuccessStatusCode();
-
-            var fetchResponse = await response.Content.ReadFromJsonAsync<PineconeFetchResponse>(
-                cancellationToken: cancellationToken).ConfigureAwait(false);
-
-            if (fetchResponse?.Vectors == null || !fetchResponse.Vectors.TryGetValue(id, out var vectorData))
-            {
-                return null;
-            }
-
-            return new VectorSearchResult
-            {
-                Id = id,
-                Score = 1.0f, // Fetch doesn't return a score
-                Metadata = vectorData.Metadata != null
-                    ? ConvertMetadata(vectorData.Metadata)
-                    : new Dictionary<string, object>()
-            };
-        }
-        catch (HttpRequestException ex)
-        {
-            _logger?.LogError(ex, "Failed to fetch vector. Id: {Id}", id);
-            throw new AgentException(
-                $"Failed to fetch vector from Pinecone: {ex.Message}",
                 ErrorCategory.ProviderError,
                 ex);
         }
