@@ -64,9 +64,7 @@ public class WebSearchTool : ITool
 
         if (string.IsNullOrWhiteSpace(query))
         {
-            throw new AgentException(
-                "Query cannot be null or empty.",
-                ErrorCategory.ValidationError);
+            return ToolResult.Failure("Query cannot be null or empty.");
         }
 
         var maxResults = 5;

@@ -49,9 +49,7 @@ public class CalculatorTool : ITool
 
         if (string.IsNullOrWhiteSpace(expression))
         {
-            throw new AgentException(
-                "Expression cannot be null or empty.",
-                ErrorCategory.ValidationError);
+            return ToolResult.Failure("Expression cannot be null or empty.");
         }
 
         try
