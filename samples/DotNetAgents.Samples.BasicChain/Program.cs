@@ -77,11 +77,13 @@ class Program
         var template = new PromptTemplate("You are a helpful assistant. Answer the following question:\n\nQuestion: {question}\n\nAnswer:");
 
         // Create a chain that formats the prompt and calls the LLM
-        var chain = ChainBuilder<string, string>
-            .Create()
-            .WithLLM(llm)
-            .WithPromptTemplate(template)
-            .Build();
+        // Note: ChainBuilder expects string input/output, so we'll format the prompt manually
+        var chain = new Runnable<Dictionary<string, object>, string>(async (variables, ct) =>
+        {
+            var formattedPrompt = await template.FormatAsync(variables, ct).ConfigureAwait(false);
+            var result = await llm.GenerateAsync(formattedPrompt, cancellationToken: ct).ConfigureAwait(false);
+            return result;
+        });
 
         var variables = new Dictionary<string, object>
         {
