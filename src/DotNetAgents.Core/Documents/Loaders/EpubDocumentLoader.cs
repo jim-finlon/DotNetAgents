@@ -71,16 +71,8 @@ public class EpubDocumentLoader : IDocumentLoader
             if (!string.IsNullOrWhiteSpace(epubBook.Title))
                 baseMetadata["title"] = epubBook.Title;
 
-            try
-            {
-                var authors = epubBook.Author();
-                if (authors != null && authors.Count > 0)
-                    baseMetadata["author"] = string.Join(", ", authors);
-            }
-            catch
-            {
-                // Author may not be available in all EPUBs
-            }
+            // Note: Additional metadata (Author, Publisher, etc.) can be accessed via epubBook.Content
+            // For now, we focus on extracting the text content
 
             if (SplitByChapter)
             {
