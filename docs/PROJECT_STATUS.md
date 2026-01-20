@@ -105,6 +105,7 @@ DotNetAgents is an enterprise-grade .NET 8 library that replicates LangChain and
 - ✅ Checkpoint store interface
 - ✅ In-memory checkpoint store
 - ✅ SQL Server checkpoint store
+- ✅ PostgreSQL checkpoint store
 - ✅ JSON state serializer
 - ✅ Resume from checkpoint logic
 - ✅ Dependency injection extensions

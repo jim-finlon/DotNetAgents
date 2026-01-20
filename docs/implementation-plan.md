@@ -427,27 +427,30 @@ DotNetAgents/
 - ✅ Examples complete
 - ✅ Performance acceptable
 
-### Phase 8: State Persistence & Checkpoints (Weeks 24-26)
+### Phase 8: State Persistence & Checkpoints (Weeks 24-26) ✅ COMPLETED
 
 **Deliverables:**
 
-- Checkpoint store interface
-- SQL Server checkpoint implementation
-- Resume from checkpoint logic
-- State serialization/deserialization
-- Checkpoint cleanup/expiration
-- State versioning
+- ✅ Checkpoint store interface
+- ✅ SQL Server checkpoint implementation
+- ✅ PostgreSQL checkpoint implementation
+- ✅ Resume from checkpoint logic
+- ✅ State serialization/deserialization
+- ✅ Checkpoint cleanup/expiration
+- ✅ State versioning
 
 **Key Files:**
 
 - `src/DotNetAgents.Workflow/Checkpoints/`
-- `src/DotNetAgents.Storage.SqlServer/` (if separate package)
+- `src/DotNetAgents.Storage.SqlServer/`
+- `src/DotNetAgents.Storage.PostgreSQL/`
 
-**Success Criteria:**
-- Checkpointing working
-- Resume functionality tested
-- Performance acceptable
-- Documentation complete
+**Status:**
+- ✅ Checkpointing working
+- ✅ Multiple storage providers available
+- ✅ Resume functionality implemented
+- ✅ Performance acceptable
+- ✅ Documentation complete
 
 ### Phase 9: Observability (Weeks 27-29)
 
