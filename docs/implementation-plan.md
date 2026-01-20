@@ -397,31 +397,34 @@ DotNetAgents/
 - ✅ Tool system functional
 - ✅ Agent executor working
 - ✅ All built-in tools implemented and tested
-- ⏳ Sample examples (pending)
+- ✅ Sample examples:
+  - ✅ Basic Chain example
+  - ✅ Agent with Tools example
+  - ✅ Workflow example
 
-### Phase 7: Workflow Engine (Weeks 19-23)
+### Phase 7: Workflow Engine (Weeks 19-23) ✅ COMPLETED
 
 **Deliverables:**
 
-- StateGraph implementation
-- Graph execution engine
-- Node and edge definitions
-- State management
-- Graph validation
-- Simple workflow example
-- Fluent API for graph building
+- ✅ StateGraph implementation
+- ✅ Graph execution engine
+- ✅ Node and edge definitions
+- ✅ State management
+- ✅ Graph validation
+- ✅ Simple workflow example
+- ✅ Fluent API for graph building (`WorkflowBuilder`)
 
 **Key Files:**
 
 - `src/DotNetAgents.Workflow/Graph/`
 - `src/DotNetAgents.Workflow/Execution/`
-- `samples/WorkflowExample/`
+- `samples/DotNetAgents.Samples.Workflow/`
 
-**Success Criteria:**
-- Workflow engine functional
-- State management working
-- Examples complete
-- Performance acceptable
+**Status:**
+- ✅ Workflow engine functional
+- ✅ State management working
+- ✅ Examples complete
+- ✅ Performance acceptable
 
 ### Phase 8: State Persistence & Checkpoints (Weeks 24-26)
 
