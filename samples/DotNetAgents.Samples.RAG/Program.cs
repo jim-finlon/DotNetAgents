@@ -1,10 +1,10 @@
 ﻿using DotNetAgents.Core.Chains;
 using DotNetAgents.Core.Documents;
 using DotNetAgents.Core.Documents.Loaders;
-using DotNetAgents.Core.Memory.Implementations;
 using DotNetAgents.Core.Models;
 using DotNetAgents.Core.Prompts;
-using DotNetAgents.Core.VectorStores.Implementations;
+using DotNetAgents.Core.Retrieval;
+using DotNetAgents.Core.Retrieval.Implementations;
 using DotNetAgents.Providers.OpenAI;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -54,7 +54,7 @@ class Program
         // Step 2: Split documents into chunks
         Console.WriteLine("Step 2: Splitting documents into chunks...");
         var textSplitter = new CharacterTextSplitter(chunkSize: 200, chunkOverlap: 50);
-        var chunks = new List<IDocument>();
+        var chunks = new List<Document>();
         
         foreach (var doc in documents)
         {
@@ -68,31 +68,48 @@ class Program
         Console.WriteLine("Step 3: Creating embeddings and storing in vector store...");
         var vectorStore = new InMemoryVectorStore();
         
-        foreach (var chunk in chunks)
+        for (int i = 0; i < chunks.Count; i++)
         {
+            var chunk = chunks[i];
             var embedding = await embeddingModel.GenerateEmbeddingAsync(
                 chunk.Content,
                 cancellationToken: default).ConfigureAwait(false);
             
+            var metadata = new Dictionary<string, object>(chunk.Metadata)
+            {
+                ["content"] = chunk.Content
+            };
+            
             await vectorStore.AddAsync(
-                chunk.Id,
+                $"chunk_{i}",
                 embedding,
-                chunk,
+                metadata,
                 cancellationToken: default).ConfigureAwait(false);
         }
         
         Console.WriteLine($"Stored {chunks.Count} document chunks with embeddings.\n");
 
-        // Step 4: Create retrieval chain
-        Console.WriteLine("Step 4: Creating retrieval chain...");
-        var retrievalChain = new RetrievalChain<string, IReadOnlyList<IDocument>>(
+        // Step 4: Create prompt template for RAG
+        Console.WriteLine("Step 4: Creating RAG prompt template...");
+        var promptTemplate = new PromptTemplate(
+            @"Use the following context to answer the question. If the context doesn't contain 
+enough information to answer the question, say so.
+
+Context:
+{context}
+
+Question: {query}
+
+Answer:");
+
+        // Step 5: Create RAG chain using RetrievalChain
+        Console.WriteLine("Step 5: Creating RAG chain...");
+        var ragChain = new RetrievalChain<Dictionary<string, object>, string>(
+            promptTemplate,
+            llm,
             vectorStore,
             embeddingModel,
             topK: 3);
-
-        // Step 5: Create RAG chain that combines retrieval with LLM
-        Console.WriteLine("Step 5: Creating RAG chain...");
-        var ragChain = CreateRAGChain(llm, retrievalChain);
         Console.WriteLine("RAG chain ready!\n");
 
         // Step 6: Ask questions
@@ -110,7 +127,8 @@ class Program
             
             try
             {
-                var answer = await ragChain.InvokeAsync(question, cancellationToken: default).ConfigureAwait(false);
+                var input = new Dictionary<string, object> { ["query"] = question };
+                var answer = await ragChain.InvokeAsync(input, cancellationToken: default).ConfigureAwait(false);
                 Console.WriteLine($"Answer: {answer}\n");
             }
             catch (Exception ex)
@@ -122,85 +140,46 @@ class Program
         Console.WriteLine("RAG example completed!");
     }
 
-    private static List<IDocument> CreateSampleDocuments()
+    private static List<Document> CreateSampleDocuments()
     {
-        return new List<IDocument>
+        return new List<Document>
         {
             new Document(
-                id: "doc1",
                 content: @"Artificial Intelligence (AI) is a branch of computer science that aims to create 
 intelligent machines capable of performing tasks that typically require human intelligence. 
 These tasks include learning, reasoning, problem-solving, perception, and language understanding. 
 AI systems can be categorized into narrow AI, which is designed for specific tasks, and general AI, 
 which would have human-like cognitive abilities across a wide range of tasks.",
-                metadata: new Dictionary<string, object> { ["title"] = "Introduction to AI", ["source"] = "sample" }),
+                metadata: new Dictionary<string, object> { ["id"] = "doc1", ["title"] = "Introduction to AI", ["source"] = "sample" }),
 
             new Document(
-                id: "doc2",
                 content: @"Machine Learning is a subset of AI that enables systems to learn and improve 
 from experience without being explicitly programmed. It uses algorithms to analyze data, identify patterns, 
 and make predictions or decisions. Common applications include image recognition, natural language processing, 
 recommendation systems, and autonomous vehicles.",
-                metadata: new Dictionary<string, object> { ["title"] = "Machine Learning Basics", ["source"] = "sample" }),
+                metadata: new Dictionary<string, object> { ["id"] = "doc2", ["title"] = "Machine Learning Basics", ["source"] = "sample" }),
 
             new Document(
-                id: "doc3",
                 content: @"Deep Learning is a specialized form of machine learning that uses neural networks 
 with multiple layers to model and understand complex patterns. It has revolutionized fields such as computer vision, 
 speech recognition, and natural language processing. Deep learning models require large amounts of data and 
 computational resources but can achieve remarkable accuracy.",
-                metadata: new Dictionary<string, object> { ["title"] = "Deep Learning Overview", ["source"] = "sample" }),
+                metadata: new Dictionary<string, object> { ["id"] = "doc3", ["title"] = "Deep Learning Overview", ["source"] = "sample" }),
 
             new Document(
-                id: "doc4",
                 content: @"AI applications are widespread across industries. In healthcare, AI assists in 
 medical diagnosis and drug discovery. In finance, it's used for fraud detection and algorithmic trading. 
 In transportation, AI powers autonomous vehicles and traffic management systems. In customer service, 
 AI chatbots provide 24/7 support. The potential applications continue to grow as technology advances.",
-                metadata: new Dictionary<string, object> { ["title"] = "AI Applications", ["source"] = "sample" }),
+                metadata: new Dictionary<string, object> { ["id"] = "doc4", ["title"] = "AI Applications", ["source"] = "sample" }),
 
             new Document(
-                id: "doc5",
                 content: @"Challenges in AI development include data quality and availability, algorithmic bias, 
 explainability and transparency, computational requirements, and ethical concerns. Ensuring AI systems are fair, 
 transparent, and beneficial to society requires ongoing research and careful consideration of these challenges. 
 Regulation and standards are also evolving to address these concerns.",
-                metadata: new Dictionary<string, object> { ["title"] = "AI Challenges", ["source"] = "sample" })
+                metadata: new Dictionary<string, object> { ["id"] = "doc5", ["title"] = "AI Challenges", ["source"] = "sample" })
         };
     }
 
-    private static IRunnable<string, string> CreateRAGChain(
-        ILLMModel<string, string> llm,
-        RetrievalChain retrievalChain)
-    {
-        // Create a chain that:
-        // 1. Retrieves relevant documents based on the query
-        // 2. Formats them into a context
-        // 3. Uses the LLM to generate an answer based on the context
-
-        return new Runnable<string, string>(async (query, ct) =>
-        {
-            // Retrieve relevant documents
-            var retrievedDocs = await retrievalChain.InvokeAsync(query, cancellationToken: ct).ConfigureAwait(false);
-
-            // Format context from retrieved documents
-            var context = string.Join("\n\n", retrievedDocs.Select((doc, idx) => 
-                $"[Document {idx + 1}]\n{doc.Content}"));
-
-            // Create prompt with context
-            var prompt = $@"Use the following context to answer the question. If the context doesn't contain 
-enough information to answer the question, say so.
-
-Context:
-{context}
-
-Question: {query}
-
-Answer:";
-
-            // Generate answer using LLM
-            var answer = await llm.GenerateAsync(prompt, cancellationToken: ct).ConfigureAwait(false);
-            return answer;
-        });
-    }
 }
