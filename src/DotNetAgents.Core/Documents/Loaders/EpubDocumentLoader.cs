@@ -71,23 +71,9 @@ public class EpubDocumentLoader : IDocumentLoader
             if (!string.IsNullOrWhiteSpace(epubBook.Title))
                 baseMetadata["title"] = epubBook.Title;
 
-            if (epubBook.Author != null && epubBook.Author.Count > 0)
-                baseMetadata["author"] = string.Join(", ", epubBook.Author);
-
-            if (!string.IsNullOrWhiteSpace(epubBook.Description))
-                baseMetadata["description"] = epubBook.Description;
-
-            if (!string.IsNullOrWhiteSpace(epubBook.Publisher))
-                baseMetadata["publisher"] = epubBook.Publisher;
-
-            if (epubBook.PublishDate != null)
-                baseMetadata["publish_date"] = epubBook.PublishDate.Value.ToString("yyyy-MM-dd");
-
-            if (epubBook.Subjects != null && epubBook.Subjects.Count > 0)
-                baseMetadata["subjects"] = string.Join(", ", epubBook.Subjects);
-
-            if (!string.IsNullOrWhiteSpace(epubBook.Language))
-                baseMetadata["language"] = epubBook.Language;
+            var authors = epubBook.Author;
+            if (authors != null && authors.Count > 0)
+                baseMetadata["author"] = string.Join(", ", authors);
 
             if (SplitByChapter)
             {
@@ -163,7 +149,15 @@ public class EpubDocumentLoader : IDocumentLoader
         try
         {
             cancellationToken.ThrowIfCancellationRequested();
-            var htmlContent = await chapter.ReadContentAsTextAsync().ConfigureAwait(false);
+            
+            // VersOne.Epub provides Content property directly
+            var htmlContent = chapter.Content;
+            if (string.IsNullOrWhiteSpace(htmlContent))
+            {
+                // Try async read if Content is not available
+                htmlContent = await Task.Run(() => chapter.Content, cancellationToken).ConfigureAwait(false);
+            }
+            
             if (string.IsNullOrWhiteSpace(htmlContent))
                 return string.Empty;
 
@@ -171,7 +165,7 @@ public class EpubDocumentLoader : IDocumentLoader
             var textContent = ExtractTextFromHtml(htmlContent);
             return textContent;
         }
-        catch
+        catch (Exception ex) when (ex is not OperationCanceledException)
         {
             return string.Empty;
         }
