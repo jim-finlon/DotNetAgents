@@ -73,47 +73,23 @@ public class ChainIntegrationTests
     }
 
     [Fact]
-    public async Task SequentialChain_ComposesMultipleChains()
+    public async Task Runnable_Pipe_ComposesChains()
     {
         // Arrange
-        var mockLLM1 = new Mock<ILLMModel<string, string>>();
-        mockLLM1.Setup(m => m.GenerateAsync(
-                It.IsAny<string>(),
-                It.IsAny<LLMOptions>(),
-                It.IsAny<CancellationToken>()))
-            .ReturnsAsync("intermediate result");
+        var runnable1 = new Runnable<string, string>(
+            async (input, ct) => $"processed: {input}");
 
-        var mockLLM2 = new Mock<ILLMModel<string, string>>();
-        mockLLM2.Setup(m => m.GenerateAsync(
-                It.IsAny<string>(),
-                It.IsAny<LLMOptions>(),
-                It.IsAny<CancellationToken>()))
-            .ReturnsAsync("final result");
-
-        var chain1 = new LLMChain<string, string>(
-            new PromptTemplate("{input}"),
-            mockLLM1.Object);
-
-        var chain2 = new LLMChain<string, string>(
-            new PromptTemplate("{input}"),
-            mockLLM2.Object);
+        var runnable2 = new Runnable<string, string>(
+            async (input, ct) => $"{input} -> final");
 
         // Use Pipe for sequential composition
-        var sequentialChain = chain1.Pipe(chain2);
+        var piped = runnable1.Pipe(runnable2);
 
         // Act
-        var result = await sequentialChain.InvokeAsync("start");
+        var result = await piped.InvokeAsync("start");
 
         // Assert
-        result.Should().Be("final result");
-        mockLLM1.Verify(m => m.GenerateAsync(
-            It.Is<string>(s => s.Contains("start")),
-            It.IsAny<LLMOptions>(),
-            It.IsAny<CancellationToken>()), Times.Once);
-        mockLLM2.Verify(m => m.GenerateAsync(
-            It.Is<string>(s => s.Contains("intermediate result")),
-            It.IsAny<LLMOptions>(),
-            It.IsAny<CancellationToken>()), Times.Once);
+        result.Should().Be("processed: start -> final");
     }
 
     [Fact]

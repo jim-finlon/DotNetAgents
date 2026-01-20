@@ -118,7 +118,7 @@ public class AgentIntegrationTests
         toolRegistry.Register(new CalculatorTool());
 
         var promptTemplate = new ReActPromptTemplate();
-        var executor = new AgentExecutor(mockLLM.Object, toolRegistry, promptTemplate);
+        var executor = new AgentExecutor(mockLLM.Object, toolRegistry, promptTemplate, maxIterations: 3);
 
         // Act
         var result = await executor.InvokeAsync("What is 1 + 1?");
