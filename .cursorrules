@@ -1,0 +1,503 @@
+# DotNetAgents Library - Cursor Rules
+
+## Project Overview
+This is an enterprise-grade, open-source .NET 8 library that replicates LangChain and LangGraph functionality in C#. The project targets .NET developers building agentic AI systems.
+
+## Core Principles
+
+### 1. Quality First
+- Write production-ready code from day one
+- No shortcuts or technical debt
+- Comprehensive error handling
+- Defensive programming practices
+- All public APIs must be well-documented
+
+### 2. Architecture
+- **Modular Design**: Code is structured as separate projects (Core, Providers, Workflow, etc.)
+- **Dependency Inversion**: Core has ZERO dependencies on integrations
+- **Interface-Based**: Prefer interfaces over concrete implementations
+- **SOLID Principles**: Strictly follow SOLID principles
+- **Separation of Concerns**: Clear boundaries between layers
+
+### 3. .NET 8 & C# 12 Standards
+- Target .NET 8 (LTS)
+- Use C# 12 features where appropriate
+- **Nullable Reference Types**: Always enabled, use `?` and `!` appropriately
+- **Records**: Use records for immutable data types (DTOs, state objects, configuration)
+- **Pattern Matching**: Use pattern matching where it improves readability
+- **File-Scoped Namespaces**: Use file-scoped namespaces (`namespace DotNetAgents.Core;`)
+
+## Coding Standards
+
+### Naming Conventions
+- **Interfaces**: Start with `I` (e.g., `ILLMModel`, `IPromptTemplate`)
+- **Classes**: PascalCase (e.g., `PromptTemplate`, `GraphExecutor`)
+- **Methods**: PascalCase (e.g., `GenerateAsync`, `ExecuteAsync`)
+- **Parameters**: camelCase (e.g., `cancellationToken`, `input`)
+- **Private Fields**: `_camelCase` with underscore prefix
+- **Constants**: `PascalCase` (e.g., `MaxRetries`, `DefaultTimeout`)
+- **Async Methods**: Always end with `Async` suffix
+
+### Code Style
+- Use 4 spaces for indentation (not tabs)
+- Maximum line length: 120 characters
+- Use `var` only when type is obvious from right-hand side
+- Prefer explicit types for public APIs
+- Use expression-bodied members when appropriate
+- Use `nameof()` instead of string literals for property/parameter names
+
+### Async/Await Patterns
+- **Always** use `async`/`await`, never use `.Result` or `.Wait()`
+- **Always** accept `CancellationToken` in async methods (except entry points where it's optional)
+- Use `IAsyncEnumerable<T>` for streaming operations
+- Use `ConfigureAwait(false)` in library code (not in application code)
+- Handle cancellation gracefully with `OperationCanceledException`
+
+### Error Handling
+- Use specific exception types (`AgentException`, `LLMException`, etc.)
+- Include correlation IDs in exceptions for tracing
+- Never swallow exceptions silently
+- Log exceptions before rethrowing
+- Use `throw;` (not `throw ex;`) to preserve stack trace
+
+### Null Safety
+- Use nullable reference types throughout
+- Mark nullable parameters with `?`
+- Use null-forgiving operator `!` only when absolutely certain
+- Use null-conditional operators (`?.`, `??`) appropriately
+- Validate null inputs in public methods
+
+## Project Structure Guidelines
+
+### Package Architecture
+- **Core Package**: Zero dependencies on integrations
+- **Provider Packages**: Each provider in separate project
+- **Metapackage**: References all packages for convenience
+- Follow dependency inversion principle strictly
+
+### File Organization
+- One public type per file (except related types like exceptions)
+- File name matches class/interface name
+- Group related files in folders by feature/domain
+- Use `Directory.Build.props` for shared properties
+
+### Namespace Organization
+```
+DotNetAgents.Core.{Feature}
+DotNetAgents.Providers.{ProviderName}
+DotNetAgents.Workflow.{Feature}
+DotNetAgents.Configuration
+DotNetAgents.Observability.{Feature}
+DotNetAgents.Security.{Feature}
+```
+
+## API Design Guidelines
+
+### Public APIs
+- Design for extensibility and testability
+- Use interfaces for all public contracts
+- Prefer composition over inheritance
+- Make APIs discoverable and intuitive
+- Provide fluent APIs where appropriate
+
+### Method Signatures
+- Keep parameter lists short (max 5-6 parameters)
+- Use options objects for complex configurations
+- Provide sensible defaults
+- Use overloads for convenience methods
+- Always include XML documentation comments
+
+### Example:
+```csharp
+/// <summary>
+/// Generates a response using the LLM model.
+/// </summary>
+/// <param name="input">The input to process.</param>
+/// <param name="options">Optional configuration for the generation.</param>
+/// <param name="cancellationToken">Cancellation token to cancel the operation.</param>
+/// <returns>The generated output.</returns>
+/// <exception cref="AgentException">Thrown when generation fails.</exception>
+public Task<TOutput> GenerateAsync(
+    TInput input,
+    LLMOptions? options = null,
+    CancellationToken cancellationToken = default);
+```
+
+## Dependency Injection
+
+### Registration
+- Use `Microsoft.Extensions.DependencyInjection`
+- Register interfaces, not concrete types
+- Use extension methods for service registration (`AddDotNetAgents()`, `AddOpenAI()`, etc.)
+- Support both `IServiceCollection` and `IHostBuilder`
+
+### Lifetime Management
+- **Singleton**: For stateless services (factories, configuration)
+- **Scoped**: For request-scoped services (execution context)
+- **Transient**: For services that should be created fresh each time
+
+### Example:
+```csharp
+public static IServiceCollection AddDotNetAgents(
+    this IServiceCollection services,
+    Action<AgentConfiguration>? configure = null)
+{
+    services.AddSingleton<ILLMModelFactory, LLMModelFactory>();
+    services.AddScoped<IExecutionContextProvider, ExecutionContextProvider>();
+    return services;
+}
+```
+
+## Testing Standards
+
+### Test Coverage
+- **Minimum 85% code coverage** for all projects
+- Test all public APIs
+- Test error paths and edge cases
+- Test async/await patterns
+- Test cancellation scenarios
+
+### Test Organization
+- One test class per class/interface being tested
+- Use descriptive test method names: `MethodName_Scenario_ExpectedResult`
+- Use `[Fact]` for xUnit tests
+- Use `[Theory]` with `[InlineData]` for parameterized tests
+- Group related tests with `#region`
+
+### Test Patterns
+- Use `Moq` for mocking dependencies
+- Use `FluentAssertions` for assertions
+- Use `IAsyncDisposable` for test cleanup
+- Use test data builders for complex objects
+- Create contract test base classes for interfaces
+
+### Example:
+```csharp
+public class PromptTemplateTests
+{
+    [Fact]
+    public async Task FormatAsync_WithValidVariables_ReturnsFormattedString()
+    {
+        // Arrange
+        var template = new PromptTemplate("Hello {name}!");
+        var variables = new Dictionary<string, object> { ["name"] = "World" };
+        
+        // Act
+        var result = await template.FormatAsync(variables);
+        
+        // Assert
+        result.Should().Be("Hello World!");
+    }
+    
+    [Fact]
+    public async Task FormatAsync_WithMissingVariable_ThrowsException()
+    {
+        // Arrange
+        var template = new PromptTemplate("Hello {name}!");
+        var variables = new Dictionary<string, object>();
+        
+        // Act & Assert
+        await Assert.ThrowsAsync<ArgumentException>(
+            () => template.FormatAsync(variables));
+    }
+}
+```
+
+## Documentation Standards
+
+### XML Documentation
+- **All public APIs** must have XML documentation comments
+- Include `<summary>`, `<param>`, `<returns>`, `<exception>` tags
+- Use `<see cref="">` for type references
+- Use `<seealso cref="">` for related APIs
+- Include code examples in `<example>` tags for complex APIs
+
+### README Files
+- Each project should have a README.md
+- Include purpose, usage examples, and key APIs
+- Link to main documentation
+
+### Code Comments
+- Use comments to explain "why", not "what"
+- Avoid obvious comments
+- Use `// TODO:` for planned improvements
+- Use `// NOTE:` for important implementation details
+- Remove commented-out code before committing
+
+## Security Best Practices
+
+### Secrets Management
+- **Never** hardcode API keys or secrets
+- Use `ISecretsProvider` for all secret access
+- Support Azure Key Vault, AWS Secrets Manager, environment variables
+- Validate secrets at startup, not at runtime
+
+### Input Validation
+- Validate all inputs in public methods
+- Use `ISanitizer` for input sanitization
+- Detect prompt injection attempts
+- Validate tool inputs against schemas
+- Use `ArgumentNullException` for null checks
+
+### Data Protection
+- Encrypt sensitive data at rest
+- Use TLS 1.2+ for all external calls
+- Mask PII in logs
+- Never log secrets or API keys
+- Use secure credential storage
+
+## Performance Guidelines
+
+### Async Operations
+- Use `async`/`await` throughout
+- Avoid blocking calls (`Task.Result`, `.Wait()`)
+- Use `IAsyncEnumerable<T>` for streaming
+- Batch operations when possible
+- Use `ConfigureAwait(false)` in library code
+
+### Caching
+- Cache embeddings and LLM responses when appropriate
+- Use multi-level caching (memory, distributed, persistent)
+- Implement cache invalidation strategies
+- Monitor cache hit rates
+
+### Resource Management
+- Implement `IDisposable` or `IAsyncDisposable` for resources
+- Use `using` statements or `await using` for disposal
+- Pool HTTP clients via `IHttpClientFactory`
+- Avoid memory leaks (event handlers, timers, etc.)
+
+### Optimization
+- Profile before optimizing
+- Use `Span<T>` and `Memory<T>` for zero-allocation scenarios
+- Avoid premature optimization
+- Measure performance with benchmarks
+- Document performance characteristics
+
+## Error Handling Patterns
+
+### Exception Types
+- Create specific exception types (`AgentException`, `LLMException`, etc.)
+- Include correlation IDs for tracing
+- Include context in exception messages
+- Use `Exception.Data` for additional context
+
+### Retry Logic
+- Implement retry with exponential backoff
+- Use `Polly` for complex retry scenarios
+- Respect `CancellationToken` in retry loops
+- Log retry attempts
+
+### Circuit Breaker
+- Implement circuit breaker for external calls
+- Track failure rates
+- Provide fallback mechanisms when possible
+
+## Logging Standards
+
+### Structured Logging
+- Use `Microsoft.Extensions.Logging`
+- Use structured logging (parameters, not string interpolation)
+- Include correlation IDs in logs
+- Use appropriate log levels:
+  - `Trace`: Very detailed, for debugging
+  - `Debug`: Detailed information for debugging
+  - `Information`: General information
+  - `Warning`: Warning messages
+  - `Error`: Error messages
+  - `Critical`: Critical failures
+
+### Example:
+```csharp
+_logger.LogInformation(
+    "LLM call completed. Model: {ModelName}, Tokens: {TokenCount}, Duration: {Duration}ms",
+    modelName,
+    tokenCount,
+    duration.TotalMilliseconds);
+```
+
+## Open Source Best Practices
+
+### Code Quality
+- Follow all coding standards strictly
+- Write self-documenting code
+- Keep functions small and focused
+- Avoid magic numbers (use constants)
+- Use meaningful variable names
+
+### Git Practices
+- Write clear, descriptive commit messages
+- Use conventional commits format: `type(scope): description`
+- Types: `feat`, `fix`, `docs`, `test`, `refactor`, `perf`, `chore`
+- Keep commits focused (one logical change per commit)
+- Create meaningful branch names
+
+### Pull Requests
+- Keep PRs focused and small
+- Include tests for new features
+- Update documentation
+- Request reviews from maintainers
+- Address all review comments
+
+## Specific Project Guidelines
+
+### Core Package Rules
+- **ZERO dependencies** on provider packages
+- All interfaces defined in Core
+- No concrete implementations of providers in Core
+- Use dependency inversion throughout
+
+### Provider Package Rules
+- Each provider in separate project
+- Depend only on Core package
+- Implement Core interfaces
+- Provide extension methods for DI registration
+- Include provider-specific tests
+
+### Workflow Package Rules
+- Depends on Core
+- State must be serializable
+- Support checkpointing
+- Handle cancellation properly
+- Provide fluent API for graph building
+
+### Configuration Rules
+- Support multiple configuration sources
+- Validate configuration at startup
+- Provide fluent builder API
+- Support environment-specific configs
+- Document all configuration options
+
+## Code Review Checklist
+
+Before submitting code, ensure:
+- [ ] All tests pass
+- [ ] Code coverage meets 85% minimum
+- [ ] XML documentation complete
+- [ ] No hardcoded secrets
+- [ ] Error handling implemented
+- [ ] Cancellation tokens used
+- [ ] Async/await used correctly
+- [ ] Nullable reference types handled
+- [ ] No compiler warnings
+- [ ] Code follows style guidelines
+- [ ] Performance considered
+- [ ] Security reviewed
+
+## Tools and Analyzers
+
+### Required Analyzers
+- StyleCop.Analyzers
+- Microsoft.CodeAnalysis.NetAnalyzers
+- Nullable reference type warnings enabled
+- Treat warnings as errors in release builds
+
+### Recommended Tools
+- JetBrains ReSharper / Rider
+- SonarLint
+- .NET Code Formatter
+- BenchmarkDotNet for performance testing
+
+## Examples of Good Code
+
+### Good: Interface-Based Design
+```csharp
+public interface ILLMModel<TInput, TOutput>
+{
+    Task<TOutput> GenerateAsync(
+        TInput input,
+        LLMOptions? options = null,
+        CancellationToken cancellationToken = default);
+}
+
+public class OpenAIModel : ILLMModel<ChatMessage[], ChatMessage>
+{
+    // Implementation
+}
+```
+
+### Good: Proper Async/Await
+```csharp
+public async Task<TOutput> GenerateAsync(
+    TInput input,
+    LLMOptions? options = null,
+    CancellationToken cancellationToken = default)
+{
+    if (input == null)
+        throw new ArgumentNullException(nameof(input));
+    
+    try
+    {
+        var result = await _httpClient.PostAsync(
+            _endpoint,
+            content,
+            cancellationToken).ConfigureAwait(false);
+        
+        return await DeserializeAsync<TOutput>(result, cancellationToken)
+            .ConfigureAwait(false);
+    }
+    catch (HttpRequestException ex)
+    {
+        _logger.LogError(ex, "Failed to call LLM API");
+        throw new LLMException("LLM call failed", ex);
+    }
+}
+```
+
+### Good: Proper Disposal
+```csharp
+public class ResourceManager : IAsyncDisposable
+{
+    private readonly HttpClient _httpClient;
+    private bool _disposed;
+    
+    public async ValueTask DisposeAsync()
+    {
+        if (_disposed)
+            return;
+        
+        _httpClient?.Dispose();
+        await CleanupAsync().ConfigureAwait(false);
+        _disposed = true;
+    }
+}
+```
+
+## Anti-Patterns to Avoid
+
+### ❌ Don't Do This:
+- Use `.Result` or `.Wait()` on async methods
+- Catch and swallow exceptions silently
+- Hardcode API keys or secrets
+- Create circular dependencies
+- Use `dynamic` types unnecessarily
+- Ignore cancellation tokens
+- Create memory leaks (event handlers, timers)
+- Write code without tests
+- Skip XML documentation
+- Use `var` for unclear types in public APIs
+
+### ✅ Do This Instead:
+- Use `async`/`await` properly
+- Handle exceptions appropriately
+- Use `ISecretsProvider`
+- Follow dependency inversion
+- Use strong typing
+- Respect cancellation tokens
+- Properly dispose resources
+- Write comprehensive tests
+- Document all public APIs
+- Use explicit types for clarity
+
+## Final Notes
+
+- **Quality over speed**: Take time to do it right
+- **Test everything**: Write tests as you code
+- **Document as you go**: Don't leave documentation for later
+- **Review your code**: Self-review before submitting
+- **Ask for help**: Don't struggle alone, ask the team
+- **Learn continuously**: Stay updated with .NET best practices
+
+---
+
+**Remember**: We're building a world-class, enterprise-grade, open-source library. Every line of code matters. Write code you'd be proud to show to the best developers in the industry.
