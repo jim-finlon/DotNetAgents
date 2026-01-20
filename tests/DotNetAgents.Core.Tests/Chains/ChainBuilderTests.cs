@@ -123,7 +123,7 @@ public class ChainBuilderTests
         // Arrange
         var builder = ChainBuilder<string, string>.Create();
         var mockLLM = new Mock<ILLMModel<string, string>>();
-        mockLLM.Setup(m => m.GenerateAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()))
+        mockLLM.Setup(m => m.GenerateAsync(It.IsAny<string>(), It.IsAny<LLMOptions?>(), It.IsAny<CancellationToken>()))
                .ReturnsAsync("test output");
 
         // Act
@@ -134,13 +134,13 @@ public class ChainBuilderTests
     }
 
     [Fact]
-    public void Build_WithRetryPolicy_WrapsWithRetry()
+    public async Task Build_WithRetryPolicy_WrapsWithRetry()
     {
         // Arrange
         var builder = ChainBuilder<string, string>.Create();
         var mockLLM = new Mock<ILLMModel<string, string>>();
-        mockLLM.SetupSequence(m => m.GenerateAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()))
-                .ThrowsAsync(new Exception("First attempt fails"))
+        mockLLM.SetupSequence(m => m.GenerateAsync(It.IsAny<string>(), It.IsAny<LLMOptions?>(), It.IsAny<CancellationToken>()))
+                .ThrowsAsync(new InvalidOperationException("First attempt fails"))
                 .ReturnsAsync("success");
 
         // Act
@@ -149,10 +149,10 @@ public class ChainBuilderTests
             .WithRetryPolicy(1, TimeSpan.FromMilliseconds(10))
             .Build();
 
-        var result = chain.InvokeAsync("test").Result;
+        var result = await chain.InvokeAsync("test");
 
         // Assert
         result.Should().Be("success");
-        mockLLM.Verify(m => m.GenerateAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()), Times.Exactly(2));
+        mockLLM.Verify(m => m.GenerateAsync(It.IsAny<string>(), It.IsAny<LLMOptions?>(), It.IsAny<CancellationToken>()), Times.Exactly(2));
     }
 }
