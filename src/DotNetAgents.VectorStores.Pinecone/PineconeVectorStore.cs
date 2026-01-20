@@ -149,8 +149,8 @@ public class PineconeVectorStore : IVectorStore
             {
                 Id = match.Id ?? string.Empty,
                 Score = match.Score ?? 0.0f,
-                Metadata = match.Metadata != null
-                    ? ConvertMetadata(match.Metadata)
+                Metadata = match.Metadata.HasValue
+                    ? ConvertMetadata(match.Metadata.Value)
                     : new Dictionary<string, object>()
             }).ToList();
 
