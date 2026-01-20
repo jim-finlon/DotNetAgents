@@ -71,7 +71,7 @@ class Program
         for (int i = 0; i < chunks.Count; i++)
         {
             var chunk = chunks[i];
-            var embedding = await embeddingModel.GenerateEmbeddingAsync(
+            var embedding = await embeddingModel.EmbedAsync(
                 chunk.Content,
                 cancellationToken: default).ConfigureAwait(false);
             
