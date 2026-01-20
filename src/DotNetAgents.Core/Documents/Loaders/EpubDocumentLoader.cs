@@ -92,7 +92,7 @@ public class EpubDocumentLoader : IDocumentLoader
             if (SplitByChapter)
             {
                 // Create one document per chapter
-                var chapters = epubBook.Chapters;
+                var chapters = epubBook.ReadingOrder;
                 int chapterIndex = 0;
 
                 foreach (var chapter in chapters)
@@ -105,7 +105,7 @@ public class EpubDocumentLoader : IDocumentLoader
 
                     var chapterMetadata = new Dictionary<string, object>(baseMetadata)
                     {
-                        ["chapter_title"] = chapter.Title ?? $"Chapter {chapterIndex + 1}",
+                        ["chapter_title"] = chapter.FileName ?? $"Chapter {chapterIndex + 1}",
                         ["chapter_number"] = chapterIndex + 1,
                         ["chapter_id"] = chapter.FileName ?? string.Empty
                     };
@@ -124,7 +124,7 @@ public class EpubDocumentLoader : IDocumentLoader
             {
                 // Combine all chapters into a single document
                 var allContent = new StringBuilder();
-                var chapters = epubBook.Chapters;
+                var chapters = epubBook.ReadingOrder;
                 int chapterIndex = 0;
 
                 foreach (var chapter in chapters)
@@ -135,7 +135,7 @@ public class EpubDocumentLoader : IDocumentLoader
                     if (string.IsNullOrWhiteSpace(chapterContent))
                         continue;
 
-                    allContent.AppendLine($"--- {chapter.Title ?? $"Chapter {chapterIndex + 1}"} ---");
+                    allContent.AppendLine($"--- Chapter {chapterIndex + 1} ---");
                     allContent.AppendLine(chapterContent);
                     allContent.AppendLine();
                     chapterIndex++;
@@ -158,7 +158,7 @@ public class EpubDocumentLoader : IDocumentLoader
         }
     }
 
-    private static async Task<string> ExtractChapterContentAsync(EpubChapter chapter, CancellationToken cancellationToken)
+    private static async Task<string> ExtractChapterContentAsync(EpubTextContentFile chapter, CancellationToken cancellationToken)
     {
         try
         {
