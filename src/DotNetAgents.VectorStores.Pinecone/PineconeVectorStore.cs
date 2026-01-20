@@ -96,7 +96,7 @@ public class PineconeVectorStore : IVectorStore
             _logger?.LogError(ex, "Failed to upsert vector. Id: {Id}", id);
             throw new AgentException(
                 $"Failed to upsert vector to Pinecone: {ex.Message}",
-                ErrorCategory.ProviderError,
+                ErrorCategory.Unknown,
                 ex);
         }
     }
@@ -166,7 +166,7 @@ public class PineconeVectorStore : IVectorStore
             _logger?.LogError(ex, "Failed to search vectors in Pinecone");
             throw new AgentException(
                 $"Failed to search vectors in Pinecone: {ex.Message}",
-                ErrorCategory.ProviderError,
+                ErrorCategory.Unknown,
                 ex);
         }
     }
@@ -207,7 +207,7 @@ public class PineconeVectorStore : IVectorStore
             _logger?.LogError(ex, "Failed to delete vectors");
             throw new AgentException(
                 $"Failed to delete vectors from Pinecone: {ex.Message}",
-                ErrorCategory.ProviderError,
+                ErrorCategory.Unknown,
                 ex);
         }
     }
