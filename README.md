@@ -1,14 +1,14 @@
 # DotNetAgents
 
-[![.NET](https://img.shields.io/badge/.NET-8.0-512BD4?logo=dotnet)](https://dotnet.microsoft.com/)
+[![.NET](https://img.shields.io/badge/.NET-10.0-512BD4?logo=dotnet)](https://dotnet.microsoft.com/)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 [![NuGet](https://img.shields.io/nuget/v/DotNetAgents.svg)](https://www.nuget.org/packages/DotNetAgents)
 
-> **Enterprise-grade .NET 8 library for building AI agents, chains, and workflows - A native C# alternative to LangChain and LangGraph**
+> **Enterprise-grade .NET 10 library for building AI agents, chains, and workflows - A native C# alternative to LangChain and LangGraph, compatible with Microsoft Agent Framework**
 
 ## 🎯 Overview
 
-DotNetAgents is a comprehensive, production-ready .NET 8 library that brings the power of LangChain and LangGraph to C# developers. Build sophisticated AI agents, chains, and stateful workflows with enterprise-grade quality, security, and performance.
+DotNetAgents is a comprehensive, production-ready .NET 10 library that brings the power of LangChain and LangGraph to C# developers. Build sophisticated AI agents, chains, and stateful workflows with enterprise-grade quality, security, and performance. Compatible with Microsoft Agent Framework for enhanced orchestration capabilities.
 
 ## ✨ Features
 
@@ -147,8 +147,8 @@ Integrations & Infrastructure
 
 ## 🧪 Requirements
 
-- .NET 8.0 or later
-- C# 12 or later
+- .NET 10.0 or later (LTS)
+- C# 13 or later
 
 ## 🤝 Contributing
 
@@ -157,7 +157,7 @@ We welcome contributions! Please see our [Contributing Guide](CONTRIBUTING.md) f
 ### Development Setup
 
 1. Clone the repository
-2. Install .NET 8 SDK
+2. Install .NET 10 SDK
 3. Restore dependencies: `dotnet restore`
 4. Build: `dotnet build`
 5. Run tests: `dotnet test`
@@ -182,7 +182,8 @@ See [Implementation Plan](docs/implementation-plan.md) for detailed roadmap.
 ## 🙏 Acknowledgments
 
 - Inspired by [LangChain](https://www.langchain.com/) and [LangGraph](https://www.langchain.com/langgraph)
-- Built with .NET 8 and C# 12
+- Built with .NET 10 and C# 13
+- Compatible with Microsoft Agent Framework
 
 ## 📧 Contact
 
