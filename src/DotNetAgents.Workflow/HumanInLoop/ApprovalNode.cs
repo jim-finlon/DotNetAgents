@@ -25,18 +25,20 @@ public class ApprovalNode<TState> : GraphNode<TState> where TState : class
         IApprovalHandler<TState> approvalHandler,
         string? approvalMessage = null,
         TimeSpan? timeout = null)
-        : base(name, async (state, ct) =>
-        {
-            // This will be replaced by the actual handler
-            return state;
-        })
+        : base(name, CreateHandler(approvalHandler ?? throw new ArgumentNullException(nameof(approvalHandler)), name, approvalMessage, timeout))
     {
-        _approvalHandler = approvalHandler ?? throw new ArgumentNullException(nameof(approvalHandler));
+        _approvalHandler = approvalHandler;
         _approvalMessage = approvalMessage;
         _timeout = timeout;
+    }
 
-        // Replace the handler with our approval logic
-        Handler = async (state, ct) =>
+    private static Func<TState, CancellationToken, Task<TState>> CreateHandler(
+        IApprovalHandler<TState> approvalHandler,
+        string nodeName,
+        string? approvalMessage,
+        TimeSpan? timeout)
+    {
+        return async (state, ct) =>
         {
             var workflowRunId = GetWorkflowRunId(state) ?? Guid.NewGuid().ToString("N");
             
