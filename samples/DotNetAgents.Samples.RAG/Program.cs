@@ -4,8 +4,7 @@ using DotNetAgents.Core.Documents.Loaders;
 using DotNetAgents.Core.Memory.Implementations;
 using DotNetAgents.Core.Models;
 using DotNetAgents.Core.Prompts;
-using DotNetAgents.Core.Retrieval;
-using DotNetAgents.Core.VectorStores;
+using DotNetAgents.Core.VectorStores.Implementations;
 using DotNetAgents.Providers.OpenAI;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -86,7 +85,7 @@ class Program
 
         // Step 4: Create retrieval chain
         Console.WriteLine("Step 4: Creating retrieval chain...");
-        var retrievalChain = new RetrievalChain(
+        var retrievalChain = new RetrievalChain<string, IReadOnlyList<IDocument>>(
             vectorStore,
             embeddingModel,
             topK: 3);
@@ -182,7 +181,7 @@ Regulation and standards are also evolving to address these concerns.",
         return new Runnable<string, string>(async (query, ct) =>
         {
             // Retrieve relevant documents
-            var retrievedDocs = await retrievalChain.RetrieveAsync(query, cancellationToken: ct).ConfigureAwait(false);
+            var retrievedDocs = await retrievalChain.InvokeAsync(query, cancellationToken: ct).ConfigureAwait(false);
 
             // Format context from retrieved documents
             var context = string.Join("\n\n", retrievedDocs.Select((doc, idx) => 
