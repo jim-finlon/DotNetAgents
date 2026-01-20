@@ -385,15 +385,4 @@ public class PineconeVectorStore : IVectorStore
         public string[]? Ids { get; init; }
     }
 
-    private record PineconeFetchResponse
-    {
-        [JsonPropertyName("vectors")]
-        public Dictionary<string, PineconeVectorData>? Vectors { get; init; }
-    }
-
-    private record PineconeVectorData
-    {
-        [JsonPropertyName("metadata")]
-        public JsonElement? Metadata { get; init; }
-    }
 }
