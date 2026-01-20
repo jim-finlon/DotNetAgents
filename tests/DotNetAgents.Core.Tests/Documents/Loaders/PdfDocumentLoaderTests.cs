@@ -122,11 +122,24 @@ public class PdfDocumentLoaderTests : IDisposable
     {
         // Arrange
         var loader = new PdfDocumentLoader();
+        var tempFile = Path.Combine(Path.GetTempPath(), $"test_cancel_{Guid.NewGuid()}.pdf");
+        _tempFiles.Add(tempFile);
+        
+        // Create a minimal valid PDF file for testing cancellation
+        // PDF header: %PDF-1.4
+        var pdfBytes = new byte[]
+        {
+            0x25, 0x50, 0x44, 0x46, 0x2D, 0x31, 0x2E, 0x34, // %PDF-1.4
+            0x0A, 0x25, 0xE2, 0xE3, 0xCF, 0xD3, // Binary comment
+            0x0A
+        };
+        await File.WriteAllBytesAsync(tempFile, pdfBytes);
+        
         var cts = new CancellationTokenSource();
         cts.Cancel();
 
         // Act & Assert
-        await Assert.ThrowsAnyAsync<OperationCanceledException>(() => loader.LoadAsync(_testPdfPath, cts.Token));
+        await Assert.ThrowsAnyAsync<OperationCanceledException>(() => loader.LoadAsync(tempFile, cts.Token));
     }
 
     public void Dispose()
