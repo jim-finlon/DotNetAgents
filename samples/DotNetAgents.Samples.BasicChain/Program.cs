@@ -88,7 +88,7 @@ class Program
             ["question"] = "Explain quantum computing in simple terms."
         };
 
-        var result = await chain.InvokeAsync(variables, cancellationToken: default).ConfigureAwait(false);
+        var result = await chain.InvokeAsync(variables, options: null, cancellationToken: default).ConfigureAwait(false);
         Console.WriteLine($"Question: Explain quantum computing in simple terms.");
         Console.WriteLine($"Answer: {result}");
     }
