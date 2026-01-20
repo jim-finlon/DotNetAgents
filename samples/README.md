@@ -55,6 +55,23 @@ cd DotNetAgents.Samples.Workflow
 dotnet run
 ```
 
+### 4. RAG (Retrieval-Augmented Generation)
+
+Demonstrates a RAG pipeline with document loading, chunking, embeddings, and retrieval.
+
+**Features:**
+- Document loading and chunking
+- Embedding generation
+- Vector store integration
+- Retrieval chain
+- Context-aware question answering
+
+**Run:**
+```bash
+cd DotNetAgents.Samples.RAG
+dotnet run
+```
+
 ## Setting Up
 
 1. Set your OpenAI API key:
