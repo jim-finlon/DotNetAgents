@@ -108,7 +108,7 @@ class Program
         };
 
         Console.WriteLine("Executing workflow...\n");
-        var finalState = await executor.ExecuteAsync("workflow-run-1", initialState).ConfigureAwait(false);
+        var finalState = await executor.ExecuteAsync("workflow-run-1", initialState, cancellationToken: default).ConfigureAwait(false);
 
         Console.WriteLine("\nWorkflow completed!");
         Console.WriteLine($"\nFinal Result:\n{finalState.FinalResult}");

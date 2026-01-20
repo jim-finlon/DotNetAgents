@@ -60,7 +60,7 @@ class Program
     private static async Task RunSimpleChainExample(ILLMModel<string, string> llm)
     {
         // Create a simple chain that just calls the LLM
-        var chain = new Runnable<string, string>(async (input, options, ct) =>
+        var chain = new Runnable<string, string>(async (input, ct) =>
         {
             var response = await llm.GenerateAsync(input, cancellationToken: ct).ConfigureAwait(false);
             return response;
@@ -100,19 +100,19 @@ class Program
         // 2. Generates a follow-up question
         // 3. Answers the follow-up question
 
-        var summaryChain = new Runnable<string, string>(async (input, options, ct) =>
+        var summaryChain = new Runnable<string, string>(async (input, ct) =>
         {
             var prompt = $"Summarize the following text in one sentence:\n\n{input}";
             return await llm.GenerateAsync(prompt, cancellationToken: ct).ConfigureAwait(false);
         });
 
-        var questionChain = new Runnable<string, string>(async (input, options, ct) =>
+        var questionChain = new Runnable<string, string>(async (input, ct) =>
         {
             var prompt = $"Based on this summary, generate one follow-up question:\n\nSummary: {input}\n\nQuestion:";
             return await llm.GenerateAsync(prompt, cancellationToken: ct).ConfigureAwait(false);
         });
 
-        var answerChain = new Runnable<string, string>(async (input, options, ct) =>
+        var answerChain = new Runnable<string, string>(async (input, ct) =>
         {
             var prompt = $"Answer this question briefly:\n\n{input}";
             return await llm.GenerateAsync(prompt, cancellationToken: ct).ConfigureAwait(false);
