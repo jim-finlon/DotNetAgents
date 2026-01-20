@@ -56,7 +56,7 @@ public class EpubDocumentLoader : IDocumentLoader
 
         try
         {
-            var epubBook = await EpubReader.ReadBookAsync(filePath, cancellationToken).ConfigureAwait(false);
+            var epubBook = await EpubReader.ReadBookAsync(filePath).ConfigureAwait(false);
 
             var baseMetadata = new Dictionary<string, object>
             {
@@ -162,7 +162,8 @@ public class EpubDocumentLoader : IDocumentLoader
     {
         try
         {
-            var htmlContent = await chapter.ReadHtmlContentAsync(cancellationToken).ConfigureAwait(false);
+            cancellationToken.ThrowIfCancellationRequested();
+            var htmlContent = await chapter.ReadContentAsTextAsync().ConfigureAwait(false);
             if (string.IsNullOrWhiteSpace(htmlContent))
                 return string.Empty;
 
