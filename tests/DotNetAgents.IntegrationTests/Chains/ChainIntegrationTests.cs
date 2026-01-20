@@ -98,9 +98,8 @@ public class ChainIntegrationTests
             new PromptTemplate("{input}"),
             mockLLM2.Object);
 
-        var sequentialChain = new SequentialChain<string, string, string, string>(
-            chain1,
-            chain2);
+        // Use Pipe for sequential composition
+        var sequentialChain = chain1.Pipe(chain2);
 
         // Act
         var result = await sequentialChain.InvokeAsync("start");
