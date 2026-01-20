@@ -112,9 +112,11 @@ public class WorkflowBuilderTests
         builder.AddNode("start", async (state, ct) => state);
         builder.AddNode("even", async (state, ct) => state);
         builder.AddNode("odd", async (state, ct) => state);
-        builder.AddEdge("start", "even", state => state.Value % 2 == 0);
-        builder.AddEdge("start", "odd", state => state.Value % 2 != 0);
+        builder.AddConditionalEdge("start", "even", state => state.Value % 2 == 0);
+        builder.AddConditionalEdge("start", "odd", state => state.Value % 2 != 0);
         builder.SetEntryPoint("start");
+        builder.AddExitPoint("even");
+        builder.AddExitPoint("odd");
 
         // Act
         var graph = builder.Build();
