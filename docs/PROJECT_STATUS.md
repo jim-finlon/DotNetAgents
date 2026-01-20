@@ -62,9 +62,11 @@ DotNetAgents is an enterprise-grade .NET 8 library that replicates LangChain and
 - ✅ Vector store abstraction
 - ✅ In-memory vector store
 - ✅ Text splitter (`CharacterTextSplitter`)
+- ✅ Advanced chunking strategies:
+  - ✅ RecursiveTextSplitter (multi-separator splitting)
+  - ✅ SemanticTextSplitter (embedding-based semantic grouping)
 - ✅ Retrieval chain
 - ⏳ Pinecone integration (pending)
-- ⏳ Advanced chunking strategies (pending)
 
 #### Phase 6: Tools & Agents ✅
 **17 Built-in Tools:**
@@ -122,8 +124,8 @@ DotNetAgents is an enterprise-grade .NET 8 library that replicates LangChain and
 ### ⏳ Pending Work
 
 #### High Priority
-- Sample applications and examples
-- Advanced chunking strategies (recursive, semantic)
+- ✅ Sample applications and examples (4 samples completed)
+- ✅ Advanced chunking strategies (recursive, semantic)
 - Pinecone vector store integration
 - SQL Server checkpoint store implementation
 - Comprehensive integration tests
