@@ -366,7 +366,7 @@ DotNetAgents/
 
 - ✅ Tool interface and registry (`ITool`, `ToolRegistry`)
 - ✅ Simple agent executor (ReAct pattern) (`AgentExecutor`)
-- ✅ Built-in tools:
+- ✅ Built-in tools (17 total):
   - ✅ Calculator tool
   - ✅ Web search tool (DuckDuckGo)
   - ✅ DateTime tool
@@ -376,6 +376,14 @@ DotNetAgents/
   - ✅ JSON/YAML Parser tool
   - ✅ URL Fetch tool (web scraping)
   - ✅ Text Processing tool (regex, encoding, string manipulation)
+  - ✅ Shell Command tool (with security restrictions)
+  - ✅ Memory Storage tool (key-value storage)
+  - ✅ Wikipedia Search tool
+  - ✅ Weather tool (OpenWeatherMap integration)
+  - ✅ Email tool (SMTP)
+  - ✅ Hash Generator tool (MD5, SHA1, SHA256, SHA384, SHA512)
+  - ✅ Random Data Generator tool
+  - ✅ CSV Reader tool
 - ✅ Tool schema validation
 - ✅ Tool execution permissions (via security controls)
 

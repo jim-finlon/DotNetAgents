@@ -67,7 +67,7 @@ DotNetAgents is an enterprise-grade .NET 8 library that replicates LangChain and
 - ⏳ Advanced chunking strategies (pending)
 
 #### Phase 6: Tools & Agents ✅
-**9 Built-in Tools:**
+**17 Built-in Tools:**
 - ✅ Calculator
 - ✅ Web Search (DuckDuckGo)
 - ✅ DateTime
@@ -77,6 +77,14 @@ DotNetAgents is an enterprise-grade .NET 8 library that replicates LangChain and
 - ✅ JSON/YAML Parser
 - ✅ URL Fetch (web scraping)
 - ✅ Text Processing (regex, encoding, string manipulation)
+- ✅ Shell Command (with security restrictions)
+- ✅ Memory Storage (key-value storage)
+- ✅ Wikipedia Search
+- ✅ Weather (OpenWeatherMap integration)
+- ✅ Email (SMTP)
+- ✅ Hash Generator (MD5, SHA1, SHA256, SHA384, SHA512)
+- ✅ Random Data Generator
+- ✅ CSV Reader
 
 **Agent System:**
 - ✅ Tool interface and registry

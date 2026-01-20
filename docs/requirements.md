@@ -203,6 +203,14 @@ The library will provide a comprehensive framework for building AI agents, chain
 - ✅ URL Fetch tool (web scraping)
 - ✅ Text Processing tool (regex, encoding, string manipulation)
 - ✅ DateTime tool
+- ✅ Shell Command tool (with security restrictions)
+- ✅ Memory Storage tool (key-value storage)
+- ✅ Wikipedia Search tool
+- ✅ Weather tool (OpenWeatherMap integration)
+- ✅ Email tool (SMTP)
+- ✅ Hash Generator tool (MD5, SHA1, SHA256, SHA384, SHA512)
+- ✅ Random Data Generator tool
+- ✅ CSV Reader tool
 
 #### FR-14: Agent Executor
 **Priority:** High  
