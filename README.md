@@ -32,11 +32,19 @@ DotNetAgents targets .NET 10 (LTS) to leverage cutting-edge AI optimizations and
 - **🔍 RAG**: Retrieval-Augmented Generation with document loaders and vector stores
 - **🛠️ Tools**: Extensible tool system for external integrations
 
-### LLM Provider Support
-- ✅ OpenAI (GPT-3.5, GPT-4, GPT-4 Turbo)
-- ✅ Azure OpenAI Service
-- ✅ Anthropic Claude
-- 🔄 Extensible for other providers
+### LLM Provider Support (12 Providers)
+- ✅ **OpenAI** (GPT-3.5, GPT-4, GPT-4 Turbo)
+- ✅ **Azure OpenAI Service**
+- ✅ **Anthropic Claude**
+- ✅ **Google Gemini**
+- ✅ **AWS Bedrock**
+- ✅ **Cohere**
+- ✅ **Groq**
+- ✅ **Mistral AI**
+- ✅ **Together AI**
+- ✅ **Ollama** (local)
+- ✅ **LM Studio** (local)
+- ✅ **vLLM** (local)
 
 ### Enterprise Features
 - 🔒 **Security**: Secrets management, input validation, rate limiting
@@ -139,6 +147,8 @@ DotNetAgents uses a modular package architecture:
 - **[Requirements](docs/requirements.md)** - Functional and non-functional requirements
 - **[Technical Specification](docs/technical-specification.md)** - Architecture and design details
 - **[Implementation Plan](docs/implementation-plan.md)** - Development roadmap
+- **[Comparison Guide](docs/comparison.md)** - DotNetAgents vs LangChain, LangGraph, and Microsoft Agent Framework
+- **[Project Status](docs/PROJECT_STATUS.md)** - Current development status and completed features
 - **[Contributing](CONTRIBUTING.md)** - How to contribute
 - **[Code of Conduct](CODE_OF_CONDUCT.md)** - Community guidelines
 

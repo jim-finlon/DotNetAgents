@@ -7,7 +7,7 @@
 ## 1. Introduction
 
 ### 1.1 Purpose
-This document defines the functional and non-functional requirements for the DotNetAgents library, an enterprise-grade .NET 8 library that replicates and adapts LangChain and LangGraph functionality for C# developers.
+This document defines the functional and non-functional requirements for the DotNetAgents library, an enterprise-grade .NET 10 library that replicates and adapts LangChain and LangGraph functionality for C# developers. Built on .NET 10 (LTS) to leverage AI optimizations and Microsoft Agent Framework compatibility.
 
 ### 1.2 Scope
 The library will provide a comprehensive framework for building AI agents, chains, and complex workflows with enterprise-grade quality, security, and performance standards. The project will be **open source** and target .NET developers building agentic systems.

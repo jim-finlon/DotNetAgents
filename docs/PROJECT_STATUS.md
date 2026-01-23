@@ -6,7 +6,7 @@
 
 ## Overview
 
-DotNetAgents is an enterprise-grade .NET 8 library that replicates LangChain and LangGraph functionality in C#. The project is open-source and targets .NET developers building agentic AI systems.
+DotNetAgents is an enterprise-grade .NET 10 library that replicates LangChain and LangGraph functionality in C#. The project is open-source and targets .NET developers building agentic AI systems. Built with .NET 10 (LTS) to leverage cutting-edge AI optimizations and Microsoft Agent Framework compatibility.
 
 ## Current Status Summary
 
@@ -151,7 +151,7 @@ DotNetAgents is an enterprise-grade .NET 8 library that replicates LangChain and
 
 - **Total Projects:** 20+
 - **LLM Providers:** 12
-- **Built-in Tools:** 9
+- **Built-in Tools:** 17
 - **Test Coverage:** >85% (target)
 - **Target Framework:** .NET 10 (LTS)
 - **License:** MIT

@@ -6,7 +6,7 @@
 
 ## Overview
 
-This plan outlines the development of a comprehensive .NET 8 library (`DotNetAgents`) that replicates and adapts LangChain and LangGraph functionality for C# developers. The library will enable building AI agents, chains, and complex workflows with enterprise-grade quality, security, and performance.
+This plan outlines the development of a comprehensive .NET 10 library (`DotNetAgents`) that replicates and adapts LangChain and LangGraph functionality for C# developers. The library enables building AI agents, chains, and complex workflows with enterprise-grade quality, security, and performance. Built on .NET 10 (LTS) to leverage AI optimizations and Microsoft Agent Framework compatibility.
 
 ## Architecture Overview
 

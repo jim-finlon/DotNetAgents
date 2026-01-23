@@ -2,7 +2,8 @@
 
 **Version:** 1.0  
 **Date:** 2024  
-**Status:** Draft
+**Status:** Active Development  
+**Target Framework:** .NET 10 (LTS)
 
 ## 1. Introduction
 
