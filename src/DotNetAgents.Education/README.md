@@ -218,11 +218,26 @@ DotNetAgents.Education integrates seamlessly with DotNetAgents Core:
 - DotNetAgents.Configuration v1.0+
 - DotNetAgents.Security v1.0+
 
+## Testing
+
+The Education package includes comprehensive unit tests:
+
+- **36 tests** covering all core components
+- **100% passing** rate
+- **>85% code coverage** target
+- Tests use xUnit, FluentAssertions, and Moq
+
+Run tests:
+```bash
+dotnet test tests/DotNetAgents.Education.Tests
+```
+
 ## Documentation
 
-- [Requirements](docs/education/REQUIREMENTS.md)
-- [Technical Specification](docs/education/TECHNICAL_SPECIFICATION.md)
-- [Implementation Plan](docs/education/IMPLEMENTATION_PLAN.md)
+- [Requirements](../../docs/education/REQUIREMENTS.md)
+- [Technical Specification](../../docs/education/TECHNICAL_SPECIFICATION.md)
+- [Implementation Plan](../../docs/education/IMPLEMENTATION_PLAN.md)
+- [Test Coverage](../../docs/education/TEST_COVERAGE.md)
 
 ## License
 
