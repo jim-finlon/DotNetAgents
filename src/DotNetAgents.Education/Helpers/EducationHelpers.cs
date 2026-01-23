@@ -21,8 +21,6 @@ public static class EducationHelpers
             GradeLevel.G6_8 => (11, 14),
             GradeLevel.G9_10 => (14, 16),
             GradeLevel.G11_12 => (16, 18),
-            GradeLevel.G11_12 => (16, 18),
-            _ => (18, 100)
             _ => (0, 0)
         };
     }
