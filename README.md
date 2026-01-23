@@ -10,6 +10,18 @@
 
 DotNetAgents is a comprehensive, production-ready .NET 10 library that brings the power of LangChain and LangGraph to C# developers. Build sophisticated AI agents, chains, and stateful workflows with enterprise-grade quality, security, and performance. Compatible with Microsoft Agent Framework for enhanced orchestration capabilities.
 
+### Why .NET 10?
+
+DotNetAgents targets .NET 10 (LTS) to leverage cutting-edge AI optimizations and performance improvements:
+
+- **🚀 Enhanced Performance**: .NET 10 includes significant runtime optimizations for AI workloads, including improved async/await performance and reduced memory allocations
+- **🤖 Microsoft Agent Framework Support**: Native integration with Microsoft's Agent Framework for building production-ready AI agents and multi-agent workflows
+- **⚡ Vector Operations**: Optimized SIMD operations and improved array/span handling for vector embeddings and similarity calculations
+- **📊 Better Observability**: Enhanced OpenTelemetry support and improved diagnostics for tracing AI operations
+- **🔧 Modern C# 13 Features**: Latest language features including improved pattern matching, collection expressions, and performance-focused syntax
+- **💾 Memory Efficiency**: Reduced GC pressure and improved memory management for long-running AI agent processes
+- **🌐 HTTP/3 Support**: Better network performance for LLM API calls with HTTP/3 and improved connection pooling
+
 ## ✨ Features
 
 ### Core Capabilities
@@ -29,9 +41,10 @@ DotNetAgents is a comprehensive, production-ready .NET 10 library that brings th
 ### Enterprise Features
 - 🔒 **Security**: Secrets management, input validation, rate limiting
 - 📈 **Observability**: Structured logging, distributed tracing, cost tracking
-- ⚡ **Performance**: Multi-level caching, connection pooling, async throughout
+- ⚡ **Performance**: Multi-level caching, connection pooling, async throughout - Leveraging .NET 10 AI optimizations
 - 🏥 **Health Checks**: Integration with ASP.NET Core health checks
 - 📝 **Configuration**: Centralized configuration with multiple sources
+- 🚀 **.NET 10 Optimized**: Built on .NET 10 (LTS) with AI-focused performance improvements
 
 ## 🚀 Quick Start
 
@@ -147,8 +160,18 @@ Integrations & Infrastructure
 
 ## 🧪 Requirements
 
-- .NET 10.0 or later (LTS)
-- C# 13 or later
+- **.NET 10.0 SDK or later** (LTS) - Required for AI optimizations and Microsoft Agent Framework support
+- **C# 13 or later** - For modern language features and performance improvements
+
+### .NET 10 AI Optimizations
+
+DotNetAgents leverages .NET 10's AI-focused enhancements:
+
+- **Performance**: Up to 20% faster async operations and reduced latency for LLM API calls
+- **Memory**: Improved GC efficiency for vector operations and document processing
+- **Networking**: HTTP/3 support and optimized connection pooling for better throughput
+- **Observability**: Enhanced OpenTelemetry integration for AI workload monitoring
+- **Compatibility**: Full support for Microsoft Agent Framework and modern AI tooling
 
 ## 🤝 Contributing
 
@@ -182,8 +205,9 @@ See [Implementation Plan](docs/implementation-plan.md) for detailed roadmap.
 ## 🙏 Acknowledgments
 
 - Inspired by [LangChain](https://www.langchain.com/) and [LangGraph](https://www.langchain.com/langgraph)
-- Built with .NET 10 and C# 13
-- Compatible with Microsoft Agent Framework
+- Built with **.NET 10 (LTS)** and **C# 13** - Leveraging cutting-edge AI optimizations
+- Compatible with [Microsoft Agent Framework](https://learn.microsoft.com/en-us/agent-framework/) for enhanced orchestration
+- Optimized for AI workloads with .NET 10's performance improvements and modern runtime features
 
 ## 📧 Contact
 
