@@ -31,6 +31,7 @@ DotNetAgents targets .NET 10 (LTS) to leverage cutting-edge AI optimizations and
 - **💾 Memory**: Short-term and long-term memory with vector-based storage
 - **🔍 RAG**: Retrieval-Augmented Generation with document loaders and vector stores
 - **🛠️ Tools**: Extensible tool system for external integrations
+- **📚 Education Extensions**: Specialized components for educational AI applications (pedagogy, safety, assessment, compliance)
 
 ### LLM Provider Support (12 Providers)
 - ✅ **OpenAI** (GPT-3.5, GPT-4, GPT-4 Turbo)
@@ -53,6 +54,15 @@ DotNetAgents targets .NET 10 (LTS) to leverage cutting-edge AI optimizations and
 - 🏥 **Health Checks**: Integration with ASP.NET Core health checks
 - 📝 **Configuration**: Centralized configuration with multiple sources
 - 🚀 **.NET 10 Optimized**: Built on .NET 10 (LTS) with AI-focused performance improvements
+
+### Educational Extensions (DotNetAgents.Education)
+- **🎓 Pedagogy**: Socratic dialogue engine, spaced repetition (SM2), mastery tracking
+- **🛡️ Safety**: COPPA-compliant content filtering, conversation monitoring, age-adaptive content
+- **📝 Assessment**: Question generation, response evaluation, misconception detection
+- **💾 Memory**: Student profiles, mastery state, learning sessions with resume capability
+- **🔍 Retrieval**: Curriculum-aware content retrieval with prerequisite checking
+- **✅ Compliance**: FERPA/GDPR compliance, RBAC, comprehensive audit logging
+- **🏢 Multi-Tenancy**: Tenant isolation, tenant-specific configuration
 
 ## 🚀 Quick Start
 
@@ -140,6 +150,8 @@ DotNetAgents uses a modular package architecture:
 - **`DotNetAgents.VectorStores.Pinecone`** - Pinecone integration
 - **`DotNetAgents.Configuration`** - Configuration management
 - **`DotNetAgents.Observability`** - Logging, tracing, metrics
+- **`DotNetAgents.Security`** - Security features
+- **`DotNetAgents.Education`** - Educational extensions (pedagogy, safety, assessment, compliance)
 - **`DotNetAgents`** - Metapackage (references all above)
 
 ## 📚 Documentation
@@ -151,6 +163,13 @@ DotNetAgents uses a modular package architecture:
 - **[Project Status](docs/PROJECT_STATUS.md)** - Current development status and completed features
 - **[Contributing](CONTRIBUTING.md)** - How to contribute
 - **[Code of Conduct](CODE_OF_CONDUCT.md)** - Community guidelines
+
+### Educational Extensions Documentation
+
+- **[Education Requirements](docs/education/REQUIREMENTS.md)** - Educational package requirements
+- **[Education Technical Specification](docs/education/TECHNICAL_SPECIFICATION.md)** - Architecture and algorithms
+- **[Education Implementation Plan](docs/education/IMPLEMENTATION_PLAN.md)** - Phased implementation roadmap
+- **[Education README](src/DotNetAgents.Education/README.md)** - Getting started guide and examples
 
 ## 🏗️ Architecture
 

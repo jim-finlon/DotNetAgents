@@ -25,6 +25,7 @@ DotNetAgents is a comprehensive .NET 10 library that provides native C# implemen
 | **Security** | ✅ Enterprise-grade | ⚠️ Basic | ⚠️ Basic | ⚠️ Basic |
 | **Performance** | ✅ .NET 10 optimized | ⚠️ Python overhead | ⚠️ Python overhead | ✅ .NET 10 optimized |
 | **Type Safety** | ✅ Strong typing | ⚠️ Dynamic typing | ⚠️ Dynamic typing | ✅ Strong typing |
+| **Educational Extensions** | ✅ Full package (pedagogy, safety, assessment, compliance) | ❌ Not included | ❌ Not included | ❌ Not included |
 
 ## Detailed Feature Comparison
 

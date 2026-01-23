@@ -4,8 +4,8 @@ This directory contains sample applications demonstrating how to use the DotNetA
 
 ## Prerequisites
 
-- .NET 8 SDK
-- OpenAI API key (set as `OPENAI_API_KEY` environment variable)
+- .NET 10 SDK
+- OpenAI API key (set as `OPENAI_API_KEY` environment variable) - Required for most samples
 
 ## Samples
 
@@ -71,6 +71,26 @@ Demonstrates a RAG pipeline with document loading, chunking, embeddings, and ret
 cd DotNetAgents.Samples.RAG
 dotnet run
 ```
+
+### 5. Education
+
+Demonstrates educational extensions for AI-powered tutoring, assessment, and learning management.
+
+**Features:**
+- Socratic dialogue engine
+- Spaced repetition (SM2 algorithm)
+- Mastery calculation and tracking
+- Content filtering (COPPA compliance)
+- Assessment generation and evaluation
+- Student profile management
+
+**Run:**
+```bash
+cd DotNetAgents.Samples.Education
+dotnet run
+```
+
+**Note:** This sample requires an OpenAI API key for full functionality (some features work without it).
 
 ## Setting Up
 
