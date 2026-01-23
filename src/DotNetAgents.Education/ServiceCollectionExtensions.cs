@@ -59,6 +59,11 @@ public static class ServiceCollectionExtensions
         services.AddScoped<IGdprComplianceService, GdprComplianceService>();
         services.AddScoped<IEducationAuditLogger, EducationAuditLogger>();
 
+        // Register infrastructure components
+        services.AddSingleton<Infrastructure.ITenantContextProvider, Infrastructure.AsyncLocalTenantContextProvider>();
+        services.AddScoped<Infrastructure.ITenantManager, Infrastructure.TenantManager>();
+        services.AddScoped<Infrastructure.EducationContentCache>();
+
         return services;
     }
 }
