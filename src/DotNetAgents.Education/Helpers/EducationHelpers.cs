@@ -91,7 +91,8 @@ public static class EducationHelpers
     public static string FormatMasteryScore(double score, int decimals = 1)
     {
         var percentage = score * 100;
-        return $"{percentage:F{decimals}}%";
+        var formatString = "F" + decimals;
+        return percentage.ToString(formatString, System.Globalization.CultureInfo.InvariantCulture) + "%";
     }
 
     /// <summary>
