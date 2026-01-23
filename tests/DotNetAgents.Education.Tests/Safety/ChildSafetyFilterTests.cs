@@ -84,7 +84,7 @@ public class ChildSafetyFilterTests
     public async Task FilterInputAsync_WithInappropriateContent_ShouldFlag()
     {
         // Arrange
-        var input = "This contains violence content";
+        var input = "This contains kill content";
         var context = new FilterContext
         {
             StudentId = "student-1",
@@ -95,8 +95,8 @@ public class ChildSafetyFilterTests
         var result = await _filter.FilterInputAsync(input, context);
 
         // Assert
-        // The filter may flag violence content - check if it's flagged or requires review
-        result.FlaggedCategories.Should().NotBeEmpty();
+        result.IsAllowed.Should().BeFalse();
+        result.FlaggedCategories.Should().Contain(ContentCategory.Violence);
         result.RequiresReview.Should().BeTrue();
     }
 }
