@@ -1,10 +1,12 @@
-# DotLangChain Educational Extensions - Implementation Plan
+# DotNetAgents Educational Extensions - Implementation Plan
 
 ## Overview
 
-This document outlines the implementation plan for extending DotLangChain to support the **Science Companion AI** educational platform. These extensions will be implemented as a new package: `DotLangChain.Education`.
+This document outlines the implementation plan for extending DotNetAgents to support the **Science Companion AI** educational platform. These extensions will be implemented as a new package: `DotNetAgents.Education`.
 
 **Related Project:** `/mnt/workspace/Obsidian_Shared/Research/Science/AI_Companion_Project/`
+
+**Note:** This plan extends the existing DotNetAgents library (not DotLangChain). DotNetAgents is the production-ready .NET 10 library for building AI agents, chains, and workflows.
 
 ---
 
@@ -19,10 +21,11 @@ This document outlines the implementation plan for extending DotLangChain to sup
 - [ ] Update CI/CD pipeline for .NET 10 SDK
 
 **Files to modify:**
-- `Directory.Build.props`
-- `src/DotLangChain.Abstractions/DotLangChain.Abstractions.csproj`
-- `src/DotLangChain.Core/DotLangChain.Core.csproj`
-- `tests/DotLangChain.Tests.Unit/DotLangChain.Tests.Unit.csproj`
+- `Directory.Build.props` (already targeting .NET 10 ✅)
+- All project files (already targeting .NET 10 ✅)
+- Update CI/CD pipeline for .NET 10 SDK (if needed)
+
+**Status:** ✅ DotNetAgents is already on .NET 10 - this phase is complete!
 
 ### 1.2 Microsoft.Extensions.AI Compatibility
 
@@ -34,34 +37,41 @@ This document outlines the implementation plan for extending DotLangChain to sup
 
 **New files:**
 ```
-src/DotLangChain.Extensions.AI/
-├── DotLangChain.Extensions.AI.csproj
+src/DotNetAgents.Extensions.AI/
+├── DotNetAgents.Extensions.AI.csproj
 ├── ChatClientAdapter.cs
 ├── EmbeddingGeneratorAdapter.cs
 └── ServiceCollectionExtensions.cs
 ```
 
+**Note:** DotNetAgents already has Microsoft Agent Framework compatibility layer (`DotNetAgents.AgentFramework`). This extension would add Microsoft.Extensions.AI compatibility.
+
 ---
 
-## Phase 2: DotLangChain.Education Package
+## Phase 2: DotNetAgents.Education Package
 
 ### 2.1 Project Setup
 
-- [ ] Create new project `DotLangChain.Education`
-- [ ] Add project references to Abstractions and Core
+- [ ] Create new project `DotNetAgents.Education`
+- [ ] Add project references to `DotNetAgents.Core` and `DotNetAgents.Workflow`
 - [ ] Configure package metadata for NuGet
 - [ ] Set up folder structure
 
 **Structure:**
 ```
-src/DotLangChain.Education/
-├── DotLangChain.Education.csproj
+src/DotNetAgents.Education/
+├── DotNetAgents.Education.csproj
 ├── Pedagogy/
 ├── Safety/
 ├── Assessment/
 ├── Memory/
 └── Retrieval/
 ```
+
+**Dependencies:**
+- `DotNetAgents.Core` - For core interfaces and abstractions
+- `DotNetAgents.Workflow` - For graph-based tutoring workflows
+- `DotNetAgents.Configuration` - For configuration management
 
 ### 2.2 Pedagogy Components
 
@@ -71,7 +81,7 @@ src/DotLangChain.Education/
 - [ ] Implement `SocraticDialogueEngine` with question scaffolding
 - [ ] Create `SocraticQuestionType` enum (Clarifying, Probing, Assumption, Implication, Viewpoint)
 - [ ] Implement `SocraticDialogueState` for graph-based tutoring
-- [ ] Create pre-built `SocraticTutorGraph` using `IGraphBuilder`
+- [ ] Create pre-built `SocraticTutorGraph` using `StateGraph<TState>` (DotNetAgents workflow engine)
 
 **Files:**
 ```
@@ -255,6 +265,7 @@ Safety/
 
 - [ ] Create `IAgeAdaptiveTransformer` interface
 - [ ] Implement `AgeAdaptiveMiddleware` for grade-level responses
+- [ ] Integrate with DotNetAgents `ISanitizer` for content filtering
 - [ ] Create grade-level vocabulary mappings
 - [ ] Implement complexity scoring
 - [ ] Add response length adjustments by age
@@ -354,10 +365,11 @@ Assessment/
 
 #### 2.5.1 Student Profile Memory
 
-- [ ] Create `IStudentProfileMemory` interface extending `IConversationMemory`
+- [ ] Create `IStudentProfileMemory` interface extending DotNetAgents `IMemory`
 - [ ] Implement `StudentProfileMemory` with learning preferences
 - [ ] Create `StudentProfile` record
 - [ ] Add preference learning from interactions
+- [ ] Integrate with DotNetAgents `IMemoryStore` for persistence
 
 **Files:**
 ```
@@ -367,6 +379,8 @@ Memory/
 ├── StudentProfile.cs
 └── LearningPreferences.cs
 ```
+
+**Integration:** Use DotNetAgents `IMemory` and `IMemoryStore` interfaces from `DotNetAgents.Core.Memory`
 
 #### 2.5.2 Mastery State Memory
 
@@ -404,10 +418,11 @@ Memory/
 
 #### 2.6.1 Curriculum-Aware Retriever
 
-- [ ] Create `ICurriculumAwareRetriever` interface
+- [ ] Create `ICurriculumAwareRetriever` interface extending DotNetAgents `IVectorStore`
 - [ ] Implement `CurriculumAwareRetriever` with grade filtering
 - [ ] Add prerequisite-aware retrieval
 - [ ] Implement curriculum metadata filtering
+- [ ] Integrate with DotNetAgents `RetrievalChain` for RAG workflows
 
 **Files:**
 ```
@@ -420,21 +435,23 @@ Retrieval/
 
 **Interface design:**
 ```csharp
-public interface ICurriculumAwareRetriever
+public interface ICurriculumAwareRetriever : IVectorStore
 {
-    Task<IReadOnlyList<CurriculumDocument>> RetrieveAsync(
+    Task<IReadOnlyList<Document>> RetrieveAsync(
         string query,
         GradeLevel gradeLevel,
         SubjectArea subject,
-        RetrievalOptions options,
+        VectorSearchOptions options,
         CancellationToken ct = default);
 
-    Task<IReadOnlyList<CurriculumDocument>> RetrieveWithPrerequisitesAsync(
+    Task<IReadOnlyList<Document>> RetrieveWithPrerequisitesAsync(
         ConceptId targetConcept,
         IReadOnlyDictionary<ConceptId, MasteryLevel> studentMastery,
         CancellationToken ct = default);
 }
 ```
+
+**Integration:** Extends DotNetAgents `IVectorStore` from `DotNetAgents.Core.Retrieval`
 
 #### 2.6.2 Prerequisite Checker
 
@@ -458,72 +475,50 @@ Retrieval/
 
 ### 3.1 pgvector Provider
 
-- [ ] Create `DotLangChain.VectorStores.Pgvector` project
-- [ ] Implement `PgvectorVectorStore` : `IVectorStore`
+- [ ] Create `DotNetAgents.VectorStores.Pgvector` project
+- [ ] Implement `PgvectorVectorStore` : `IVectorStore` (from DotNetAgents.Core)
 - [ ] Add connection pooling with Npgsql
 - [ ] Implement HNSW index support
 - [ ] Add batch upsert optimization
+- [ ] Follow DotNetAgents vector store patterns (similar to PineconeVectorStore)
 
 **Files:**
 ```
-src/DotLangChain.VectorStores.Pgvector/
-├── DotLangChain.VectorStores.Pgvector.csproj
+src/DotNetAgents.VectorStores.Pgvector/
+├── DotNetAgents.VectorStores.Pgvector.csproj
 ├── PgvectorVectorStore.cs
 ├── PgvectorOptions.cs
 └── ServiceCollectionExtensions.cs
 ```
 
+**Reference:** See `DotNetAgents.VectorStores.Pinecone` for implementation patterns
+
 ### 3.2 vLLM Provider
 
-- [ ] Create `DotLangChain.LLM.Vllm` project
-- [ ] Implement `VllmChatCompletionService` : `IChatCompletionService`
-- [ ] Add OpenAI-compatible API support
-- [ ] Implement streaming responses
-- [ ] Add health check support
+- [ ] ✅ **Already Implemented!** See `DotNetAgents.Providers.vLLM`
+- [ ] Review existing implementation for any enhancements needed
+- [ ] Ensure streaming support is complete
+- [ ] Add health check support if missing
 
-**Files:**
-```
-src/DotLangChain.LLM.Vllm/
-├── DotLangChain.LLM.Vllm.csproj
-├── VllmChatCompletionService.cs
-├── VllmOptions.cs
-└── ServiceCollectionExtensions.cs
-```
+**Status:** ✅ vLLM provider already exists in DotNetAgents
 
 ### 3.3 Ollama Provider
 
-- [ ] Create `DotLangChain.LLM.Ollama` project
-- [ ] Implement `OllamaChatCompletionService` : `IChatCompletionService`
-- [ ] Implement `OllamaEmbeddingService` : `IEmbeddingService`
-- [ ] Add model management support
-- [ ] Implement streaming responses
+- [ ] ✅ **Already Implemented!** See `DotNetAgents.Providers.Ollama`
+- [ ] Review existing implementation for embedding support
+- [ ] Add embedding service if missing
+- [ ] Ensure streaming support is complete
 
-**Files:**
-```
-src/DotLangChain.LLM.Ollama/
-├── DotLangChain.LLM.Ollama.csproj
-├── OllamaChatCompletionService.cs
-├── OllamaEmbeddingService.cs
-├── OllamaOptions.cs
-└── ServiceCollectionExtensions.cs
-```
+**Status:** ✅ Ollama provider already exists in DotNetAgents
 
 ### 3.4 Anthropic Claude Provider
 
-- [ ] Create `DotLangChain.LLM.Anthropic` project
-- [ ] Implement `AnthropicChatCompletionService` : `IChatCompletionService`
-- [ ] Add tool use support
-- [ ] Implement streaming responses
-- [ ] Add rate limiting and retry logic
+- [ ] ✅ **Already Implemented!** See `DotNetAgents.Providers.Anthropic`
+- [ ] Review existing implementation for tool use support
+- [ ] Ensure streaming support is complete
+- [ ] Verify rate limiting and retry logic (DotNetAgents has `RetryPolicy` and `CircuitBreaker`)
 
-**Files:**
-```
-src/DotLangChain.LLM.Anthropic/
-├── DotLangChain.LLM.Anthropic.csproj
-├── AnthropicChatCompletionService.cs
-├── AnthropicOptions.cs
-└── ServiceCollectionExtensions.cs
-```
+**Status:** ✅ Anthropic provider already exists in DotNetAgents
 
 ---
 
@@ -531,24 +526,29 @@ src/DotLangChain.LLM.Anthropic/
 
 ### 4.1 Socratic Tutor Graph
 
-- [ ] Create `SocraticTutorGraph` using `IGraphBuilder`
+- [ ] Create `SocraticTutorGraph` using DotNetAgents `StateGraph<TState>`
 - [ ] Implement nodes: assess, question, evaluate, hint, celebrate
 - [ ] Add conditional edges for mastery routing
 - [ ] Create state management for multi-turn conversations
+- [ ] Use DotNetAgents checkpointing for session persistence
+
+**Reference:** See `DotNetAgents.Workflow` for graph building patterns
 
 ### 4.2 Assessment Graph
 
-- [ ] Create `AdaptiveAssessmentGraph`
+- [ ] Create `AdaptiveAssessmentGraph` using DotNetAgents `StateGraph<TState>`
 - [ ] Implement adaptive difficulty adjustment
 - [ ] Add early termination conditions
 - [ ] Create comprehensive result reporting
+- [ ] Integrate with DotNetAgents checkpointing for resume capability
 
 ### 4.3 Lesson Graph
 
-- [ ] Create `LessonDeliveryGraph`
+- [ ] Create `LessonDeliveryGraph` using DotNetAgents `StateGraph<TState>`
 - [ ] Implement concept introduction flow
 - [ ] Add practice problem integration
 - [ ] Create mastery check gates
+- [ ] Use DotNetAgents workflow engine for stateful execution
 
 ---
 
@@ -591,32 +591,27 @@ src/DotLangChain.LLM.Anthropic/
 ## Dependencies to Add
 
 ```xml
-<!-- DotLangChain.Education.csproj -->
+<!-- DotNetAgents.Education.csproj -->
 <ItemGroup>
   <PackageReference Include="Microsoft.Extensions.AI" Version="9.0.0" />
   <PackageReference Include="Microsoft.Extensions.AI.Abstractions" Version="9.0.0" />
 </ItemGroup>
+<ItemGroup>
+  <ProjectReference Include="..\DotNetAgents.Core\DotNetAgents.Core.csproj" />
+  <ProjectReference Include="..\DotNetAgents.Workflow\DotNetAgents.Workflow.csproj" />
+  <ProjectReference Include="..\DotNetAgents.Configuration\DotNetAgents.Configuration.csproj" />
+</ItemGroup>
 
-<!-- DotLangChain.VectorStores.Pgvector.csproj -->
+<!-- DotNetAgents.VectorStores.Pgvector.csproj -->
 <ItemGroup>
   <PackageReference Include="Npgsql" Version="9.0.0" />
   <PackageReference Include="Pgvector" Version="0.3.0" />
 </ItemGroup>
-
-<!-- DotLangChain.LLM.Vllm.csproj -->
 <ItemGroup>
-  <PackageReference Include="Microsoft.Extensions.Http" Version="9.0.0" />
+  <ProjectReference Include="..\DotNetAgents.Core\DotNetAgents.Core.csproj" />
 </ItemGroup>
 
-<!-- DotLangChain.LLM.Ollama.csproj -->
-<ItemGroup>
-  <PackageReference Include="OllamaSharp" Version="4.0.0" />
-</ItemGroup>
-
-<!-- DotLangChain.LLM.Anthropic.csproj -->
-<ItemGroup>
-  <PackageReference Include="Anthropic.SDK" Version="3.0.0" />
-</ItemGroup>
+<!-- Note: vLLM, Ollama, and Anthropic providers already exist in DotNetAgents -->
 ```
 
 ---
