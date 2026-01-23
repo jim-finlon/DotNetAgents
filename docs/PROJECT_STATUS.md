@@ -171,6 +171,8 @@ DotNetAgents is an enterprise-grade .NET 10 library that replicates LangChain an
 - 22 major implementations completed
 - Full DI integration
 - Multi-tenancy support
+- 36 unit tests (100% passing)
+- Sample application demonstrating all features
 
 ### ⏳ Pending Work
 
