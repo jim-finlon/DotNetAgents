@@ -1,7 +1,7 @@
 # DotNetAgents Library - Cursor Rules
 
 ## Project Overview
-This is an enterprise-grade, open-source .NET 8 library that replicates LangChain and LangGraph functionality in C#. The project targets .NET developers building agentic AI systems.
+This is an enterprise-grade, open-source .NET 10 library that replicates LangChain and LangGraph functionality in C#. The project targets .NET developers building agentic AI systems. Built on .NET 10 (LTS) to leverage AI optimizations and Microsoft Agent Framework compatibility.
 
 ## Core Principles
 
@@ -19,9 +19,9 @@ This is an enterprise-grade, open-source .NET 8 library that replicates LangChai
 - **SOLID Principles**: Strictly follow SOLID principles
 - **Separation of Concerns**: Clear boundaries between layers
 
-### 3. .NET 8 & C# 12 Standards
-- Target .NET 8 (LTS)
-- Use C# 12 features where appropriate
+### 3. .NET 10 & C# 13 Standards
+- Target .NET 10 (LTS)
+- Use C# 13 features where appropriate
 - **Nullable Reference Types**: Always enabled, use `?` and `!` appropriately
 - **Records**: Use records for immutable data types (DTOs, state objects, configuration)
 - **Pattern Matching**: Use pattern matching where it improves readability

@@ -1,699 +1,418 @@
-# DotNetAgents Library - Requirements Document
-
-**Version:** 1.0  
-**Date:** 2024  
-**Status:** Draft
-
-## 1. Introduction
-
-### 1.1 Purpose
-This document defines the functional and non-functional requirements for the DotNetAgents library, an enterprise-grade .NET 10 library that replicates and adapts LangChain and LangGraph functionality for C# developers. Built on .NET 10 (LTS) to leverage AI optimizations and Microsoft Agent Framework compatibility.
-
-### 1.2 Scope
-The library will provide a comprehensive framework for building AI agents, chains, and complex workflows with enterprise-grade quality, security, and performance standards. The project will be **open source** and target .NET developers building agentic systems.
-
-### 1.3 Definitions and Acronyms
-- **LLM**: Large Language Model
-- **RAG**: Retrieval-Augmented Generation
-- **MVP**: Minimum Viable Product
-- **DI**: Dependency Injection
-- **OTel**: OpenTelemetry
-- **OSS**: Open Source Software
-
-## 2. Business Requirements
-
-### 2.1 Business Objectives
-- Provide a native C# alternative to Python's LangChain and LangGraph libraries
-- Enable .NET developers to build agentic systems without switching languages
-- Support production-grade applications with security, performance, and reliability requirements
-- Build a thriving open source community around the library
-- Create a rock-solid, complete solution (not rushed MVP)
-
-### 2.2 Success Criteria
-- Complete feature set: chains, LLM calls, agents, workflows, memory, retrieval
-- Multiple LLM providers integrated and tested (OpenAI, Azure, Anthropic)
-- Workflow engine supports stateful, resumable workflows with checkpoints
-- Comprehensive test coverage (>85%)
-- Performance benchmarks meet enterprise targets
-- Security audit passed
-- Complete documentation and sample applications
-- NuGet packages published (modular packages + metapackage)
-- Open source community established
-- Migration guide from Python LangChain available
-
-### 2.3 Target Users
-- .NET developers building agentic AI systems
-- Teams migrating from Python LangChain to C#
-- Organizations requiring enterprise-grade security and compliance
-- Developers building production AI agents and workflows
-- Open source contributors and community members
-
-## 3. Functional Requirements
-
-### 3.1 Core Abstractions
-
-#### FR-1: LLM Model Interface
-**Priority:** Critical  
-**Description:** The library MUST provide a generic interface `ILLMModel<TInput, TOutput>` that abstracts LLM provider implementations.
-
-**Requirements:**
-- Support synchronous and asynchronous execution
-- Support streaming responses via `IAsyncEnumerable<T>`
-- Support batch processing
-- Provide error handling and retry mechanisms
-- Support configurable parameters (temperature, max tokens, etc.)
-
-#### FR-2: Embedding Model Interface
-**Priority:** Critical  
-**Description:** The library MUST provide an interface `IEmbeddingModel` for generating embeddings from text.
-
-**Requirements:**
-- Support async/await pattern
-- Support batch embedding generation
-- Return consistent vector dimensions
-- Support multiple embedding models
-
-#### FR-3: Prompt Template Engine
-**Priority:** Critical  
-**Description:** The library MUST provide a prompt template system with variable substitution.
-
-**Requirements:**
-- Support variable placeholders (e.g., `{variable}`)
-- Support nested templates
-- Support formatting options
-- Support template validation
-- Cache compiled templates for performance
-
-#### FR-4: Runnable/Chain Interface
-**Priority:** Critical  
-**Description:** The library MUST provide a `IRunnable<TInput, TOutput>` interface for composing chains of operations.
-
-**Requirements:**
-- Support sequential composition
-- Support parallel execution
-- Support conditional branching
-- Support async/await throughout
-- Support streaming
-- Support batch processing
-
-### 3.2 LLM Provider Integrations
-
-#### FR-5: OpenAI Provider
-**Priority:** Critical  
-**Description:** The library MUST support OpenAI's GPT models (GPT-3.5, GPT-4, GPT-4 Turbo).
-
-**Requirements:**
-- Support chat completions API
-- Support streaming responses
-- Support function calling/tool use
-- Handle rate limiting
-- Support Azure OpenAI endpoint configuration
-
-#### FR-6: Azure OpenAI Provider
-**Priority:** Critical  
-**Description:** The library MUST support Azure OpenAI Service.
-
-**Requirements:**
-- Support Azure-specific authentication
-- Support custom endpoints
-- Support deployment names
-- Support Azure-specific error handling
-
-#### FR-7: Anthropic Provider
-**Priority:** High  
-**Description:** The library MUST support Anthropic's Claude models.
-
-**Requirements:**
-- Support Claude API
-- Support streaming responses
-- Support tool use
-- Handle rate limiting
-
-### 3.3 Memory and Retrieval
-
-#### FR-8: Memory Interface
-**Priority:** High  
-**Description:** The library MUST provide memory interfaces for short-term and long-term memory.
-
-**Requirements:**
-- Support session-based memory
-- Support persistent memory across sessions
-- Support vector-based memory storage
-- Support memory summarization
-- Support memory pruning/aging
-
-#### FR-9: Vector Store Interface
-**Priority:** High  
-**Description:** The library MUST provide a `IVectorStore` interface for vector database operations.
-
-**Requirements:**
-- Support upsert operations
-- Support similarity search
-- Support metadata filtering
-- Support batch operations
-- Support deletion operations
-
-#### FR-10: Document Loaders
-**Priority:** High  
-**Description:** The library MUST provide document loaders for common file formats.
-
-**Requirements:**
-- Support plain text files
-- Support PDF files
-- Support Markdown files
-- Support structured data (JSON, CSV)
-- Support chunking strategies
-- Support metadata extraction
-
-#### FR-11: RAG Pipeline
-**Priority:** High  
-**Description:** The library MUST support Retrieval-Augmented Generation workflows.
-
-**Requirements:**
-- Support document ingestion
-- Support embedding generation
-- Support vector storage
-- Support retrieval with ranking
-- Support context injection into prompts
-
-### 3.4 Tools and Agents
-
-#### FR-12: Tool Interface
-**Priority:** High  
-**Description:** The library MUST provide a `ITool` interface for external integrations.
-
-**Requirements:**
-- Support input/output schemas
-- Support async execution
-- Support error handling
-- Support tool registry/discovery
-- Support tool validation
-
-#### FR-13: Built-in Tools ✅ COMPLETED
-**Priority:** Medium  
-**Description:** The library SHOULD provide common built-in tools.
-
-**Requirements:**
-- ✅ Calculator tool
-- ✅ Web search tool (DuckDuckGo)
-- ✅ File system operations (with security controls)
-- ✅ Database query tools (with parameterization)
-- ✅ HTTP/API Client tool
-- ✅ JSON/YAML Parser tool
-- ✅ URL Fetch tool (web scraping)
-- ✅ Text Processing tool (regex, encoding, string manipulation)
-- ✅ DateTime tool
-- ✅ Shell Command tool (with security restrictions)
-- ✅ Memory Storage tool (key-value storage)
-- ✅ Wikipedia Search tool
-- ✅ Weather tool (OpenWeatherMap integration)
-- ✅ Email tool (SMTP)
-- ✅ Hash Generator tool (MD5, SHA1, SHA256, SHA384, SHA512)
-- ✅ Random Data Generator tool
-- ✅ CSV Reader tool
-
-#### FR-14: Agent Executor
-**Priority:** High  
-**Description:** The library MUST provide an agent executor that can use tools and make decisions.
-
-**Requirements:**
-- Support ReAct (Reasoning + Acting) pattern
-- Support tool calling
-- Support decision loops
-- Support max iteration limits
-- Support early stopping conditions
-
-### 3.5 Workflow Engine (LangGraph-like)
-
-#### FR-15: State Graph
-**Priority:** High  
-**Description:** The library MUST provide a `StateGraph<TState>` for defining workflows.
-
-**Requirements:**
-- Support node definitions
-- Support edge definitions (conditional and unconditional)
-- Support state typing
-- Support graph validation
-- Support graph serialization
-
-#### FR-16: Graph Execution
-**Priority:** High  
-**Description:** The library MUST provide a graph executor that can run workflows.
-
-**Requirements:**
-- Support synchronous execution
-- Support asynchronous execution
-- Support state management
-- Support node execution tracking
-- Support error handling and recovery
-
-#### FR-17: Checkpointing
-**Priority:** High  
-**Description:** The library MUST support workflow state checkpointing for resumability.
-
-**Requirements:**
-- Support checkpoint creation at configurable intervals
-- Support checkpoint storage in persistent storage
-- Support checkpoint retrieval
-- Support workflow resume from checkpoint
-- Support checkpoint cleanup/expiration
-
-#### FR-18: Human-in-the-Loop
-**Priority:** Medium  
-**Description:** The library SHOULD support human approval/intervention points in workflows.
-
-**Requirements:**
-- Support approval nodes
-- Support workflow pause/resume
-- Support state inspection
-- Support manual state modification
-- Support callback mechanisms
-
-### 3.6 Streaming Support
-
-#### FR-19: Streaming Responses
-**Priority:** High  
-**Description:** The library MUST support streaming responses from LLMs.
-
-**Requirements:**
-- Support token-by-token streaming
-- Support `IAsyncEnumerable<T>` pattern
-- Support cancellation tokens
-- Support partial result handling
-
-### 3.7 Observability
-
-#### FR-20: Logging
-**Priority:** High  
-**Description:** The library MUST support structured logging.
-
-**Requirements:**
-- Integrate with `Microsoft.Extensions.Logging`
-- Support log levels (Trace, Debug, Info, Warning, Error)
-- Support contextual logging
-- Support sensitive data masking
-
-#### FR-21: Tracing
-**Priority:** High  
-**Description:** The library MUST support distributed tracing.
-
-**Requirements:**
-- Integrate with OpenTelemetry
-- Support trace context propagation
-- Support span creation for operations
-- Support trace export
-
-#### FR-22: Metrics
-**Priority:** High  
-**Description:** The library MUST support performance metrics collection.
-
-**Requirements:**
-- Track LLM call latency
-- Track token usage
-- Track cost estimates
-- Track error rates
-- Support metric export
-- Per-workflow cost tracking
-- Per-model cost breakdown
-
-#### FR-23: Cost Tracking
-**Priority:** High  
-**Description:** The library MUST provide cost tracking capabilities.
-
-**Requirements:**
-- Track costs per LLM call
-- Track costs per workflow execution
-- Support cost estimation
-- Provide cost summaries by time period
-- Support budget alerts
-- Export cost data
-
-#### FR-24: Configuration Management
-**Priority:** High  
-**Description:** The library MUST provide a centralized configuration system.
-
-**Requirements:**
-- Support appsettings.json configuration
-- Support environment variables
-- Support Azure Key Vault integration
-- Configuration validation
-- Fluent API for configuration
-- Runtime configuration updates
-
-#### FR-25: Health Checks
-**Priority:** Medium  
-**Description:** The library SHOULD provide health check implementations.
-
-**Requirements:**
-- LLM provider connectivity checks
-- Vector store connectivity checks
-- Checkpoint store connectivity checks
-- Integration with ASP.NET Core health checks
-- Custom health check support
-
-#### FR-26: Rate Limiting
-**Priority:** High  
-**Description:** The library MUST support rate limiting.
-
-**Requirements:**
-- Per-API-key rate limiting
-- Per-user rate limiting
-- Sliding window algorithm
-- Configurable limits
-- Rate limit information API
-
-#### FR-27: Fluent API
-**Priority:** High  
-**Description:** The library MUST provide fluent APIs for common operations.
-
-**Requirements:**
-- Chain builder fluent API
-- Configuration builder fluent API
-- Workflow builder fluent API
-- Intuitive and discoverable API surface
-
-#### FR-28: Source Generators
-**Priority:** Medium  
-**Description:** The library SHOULD provide source generators for compile-time safety.
-
-**Requirements:**
-- Prompt template source generator
-- Tool schema generator
-- State type generator
-- Compile-time validation
-
-#### FR-29: Diagnostic Analyzers
-**Priority:** Medium  
-**Description:** The library SHOULD provide diagnostic analyzers.
-
-**Requirements:**
-- Detect missing cancellation tokens
-- Detect improper async usage
-- Validate prompt templates
-- Suggest best practices
-
-## 4. Non-Functional Requirements
-
-### 4.1 Performance
-
-#### NFR-1: Latency
-**Priority:** High  
-**Description:** The library MUST minimize latency overhead.
-
-**Requirements:**
-- Core abstractions add <10ms overhead per operation
-- Support efficient async/await patterns
-- Support connection pooling
-- Support request batching
-
-#### NFR-2: Throughput
-**Priority:** Medium  
-**Description:** The library SHOULD support high-throughput scenarios.
-
-**Requirements:**
-- Support parallel execution
-- Support concurrent requests
-- Support efficient resource utilization
-
-#### NFR-3: Scalability
-**Priority:** High  
-**Description:** The library MUST support horizontal scaling.
-
-**Requirements:**
-- Stateless design where possible
-- Support distributed state storage
-- Support load balancing
-
-### 4.2 Security
-
-#### NFR-4: Secrets Management
-**Priority:** Critical  
-**Description:** The library MUST support secure secrets management.
-
-**Requirements:**
-- No hardcoded API keys
-- Integration with Azure Key Vault
-- Integration with AWS Secrets Manager
-- Support for environment variables
-- Support for secure credential storage
-
-#### NFR-5: Input Validation
-**Priority:** Critical  
-**Description:** The library MUST validate and sanitize all inputs.
-
-**Requirements:**
-- Prompt injection protection
-- Input sanitization
-- Output validation
-- Schema validation for tool inputs
-
-#### NFR-6: Data Protection
-**Priority:** Critical  
-**Description:** The library MUST protect sensitive data.
-
-**Requirements:**
-- Encryption at rest for checkpoints
-- TLS for all external calls
-- PII handling guidelines
-- Support for data masking in logs
-
-#### NFR-7: Access Control
-**Priority:** High  
-**Description:** The library SHOULD support access control mechanisms.
-
-**Requirements:**
-- Tool execution permissions
-- State access controls
-- Audit logging
-
-### 4.3 Reliability
-
-#### NFR-8: Error Handling
-**Priority:** High  
-**Description:** The library MUST provide robust error handling.
-
-**Requirements:**
-- Retry logic with exponential backoff
-- Circuit breaker pattern support
-- Graceful degradation
-- Clear error messages
-
-#### NFR-9: Fault Tolerance
-**Priority:** High  
-**Description:** The library MUST handle failures gracefully.
-
-**Requirements:**
-- Support checkpoint recovery
-- Support workflow resume
-- Support partial failure handling
-- Support timeout handling
-
-### 4.4 Maintainability
-
-#### NFR-10: Code Quality
-**Priority:** High  
-**Description:** The library MUST follow .NET best practices.
-
-**Requirements:**
-- Follow SOLID principles
-- Comprehensive XML documentation
-- Code analysis rules (StyleCop, etc.)
-- Consistent code style
-
-#### NFR-11: Testability
-**Priority:** High  
-**Description:** The library MUST be highly testable.
-
-**Requirements:**
-- Dependency injection throughout
-- Mockable interfaces
-- Test utilities and helpers
-- >80% code coverage
-
-#### NFR-12: Extensibility
-**Priority:** High  
-**Description:** The library MUST be extensible.
-
-**Requirements:**
-- Plugin architecture for providers
-- Custom tool support
-- Custom memory implementations
-- Custom checkpoint stores
-
-### 4.5 Usability
-
-#### NFR-13: API Design
-**Priority:** High  
-**Description:** The library MUST provide an intuitive API.
-
-**Requirements:**
-- Fluent API where appropriate
-- Clear naming conventions
-- Consistent patterns
-- Minimal boilerplate
-
-#### NFR-14: Documentation
-**Priority:** High  
-**Description:** The library MUST provide comprehensive documentation.
-
-**Requirements:**
-- API reference documentation
-- Getting started guide
-- Architecture documentation
-- Sample applications
-- Migration guides
-
-### 4.6 Compatibility
-
-#### NFR-15: .NET Version
-**Priority:** Critical  
-**Description:** The library MUST target .NET 8.
-
-**Requirements:**
-- .NET 8 LTS support
-- Support for modern C# features
-- Support for async/await patterns
-- Support for nullable reference types
-
-#### NFR-16: Platform Support
-**Priority:** High  
-**Description:** The library MUST support major platforms.
-
-**Requirements:**
-- Windows support
-- Linux support
-- macOS support
-- Container support (Docker)
-
-## 5. Constraints
-
-### 5.1 Technical Constraints
-- Must use .NET 8 or later
-- Must support async/await patterns
-- Must be compatible with dependency injection frameworks
-- Must support nullable reference types
-
-### 5.2 Business Constraints
-- MVP must be delivered within 20 weeks
-- Must maintain backward compatibility after v1.0
-- Must follow semantic versioning
-
-### 5.3 Regulatory Constraints
-- Must comply with data protection regulations (GDPR, etc.)
-- Must support audit logging
-- Must support data retention policies
-
-## 6. Assumptions
-
-1. Users have .NET 8 SDK installed
-2. Users have access to LLM provider APIs (OpenAI, Azure, Anthropic)
-3. Users understand basic async/await patterns in C#
-4. Enterprise users have access to secrets management solutions
-
-## 7. Dependencies
-
-### 7.1 External Dependencies
-- .NET 8 runtime
-- LLM provider APIs (OpenAI, Azure OpenAI, Anthropic)
-- Vector database services (Pinecone, Weaviate, etc.)
-- Storage services (SQL Server, PostgreSQL, Azure Blob Storage)
-
-### 7.2 Internal Dependencies
-- Microsoft.Extensions.DependencyInjection
-- Microsoft.Extensions.Logging
-- System.Text.Json
-- System.Net.Http
-- OpenTelemetry libraries
-
-## 8. Risks and Mitigations
-
-### 8.1 Technical Risks
-- **Risk:** LLM provider API changes  
-  **Mitigation:** Abstract provider implementations, version API contracts
-
-- **Risk:** Performance issues with complex workflows  
-  **Mitigation:** Performance testing, optimization, caching strategies
-
-- **Risk:** State management complexity  
-  **Mitigation:** Clear state contracts, comprehensive testing, documentation
-
-### 8.2 Business Risks
-- **Risk:** Scope creep  
-  **Mitigation:** Strict MVP definition, phased delivery
-
-- **Risk:** Adoption challenges  
-  **Mitigation:** Comprehensive documentation, samples, community support
-
-## 9. Acceptance Criteria
-
-The library will be considered complete when:
-
-1. All critical and high-priority functional requirements are implemented
-2. All critical and high-priority non-functional requirements are met
-3. Test coverage exceeds 85%
-4. Security audit is passed
-5. Performance benchmarks meet targets
-6. Documentation is complete (API docs, guides, samples)
-7. Sample applications are provided and working
-8. NuGet packages are published (modular + metapackage)
-9. Open source infrastructure is in place (license, contributing guidelines, etc.)
-10. Migration guide from Python LangChain is available
-11. Community feedback has been incorporated
-12. v1.0.0 release is published
-
-## 10. Open Source Requirements
-
-### 10.1 License
-**Priority:** Critical  
-**Description:** The library MUST use an open source license.
-
-**Requirements:**
-- MIT License recommended (permissive, widely accepted)
-- License file included in repository
-- License headers in source files
-- Clear licensing terms
-
-### 10.2 Contribution Guidelines
-**Priority:** High  
-**Description:** The library MUST provide contribution guidelines.
-
-**Requirements:**
-- CONTRIBUTING.md document
-- Code of conduct (Contributor Covenant recommended)
-- Issue templates
-- PR templates
-- Development setup guide
-- Coding standards document
-
-### 10.3 Community Support
-**Priority:** High  
-**Description:** The library MUST support community contributions.
-
-**Requirements:**
-- Clear contribution process
-- Code review process
-- Issue triage process
-- Release process documentation
-- Community guidelines
-
-### 10.4 Documentation for Contributors
-**Priority:** High  
-**Description:** The library MUST provide documentation for contributors.
-
-**Requirements:**
-- Architecture documentation
-- Development setup guide
-- Testing guidelines
-- Code style guide
-- Release process
-
-## 11. Change Management
-
-This requirements document will be versioned and changes will be tracked. Major changes require stakeholder approval.
+# DotLangChain Requirements Document
+
+**Project Name:** DotLangChain  
+**Version:** 1.0.0  
+**Date:** December 7, 2025  
+**Status:** Draft  
 
 ---
 
-**Document Control:**
-- **Author:** Development Team
-- **Reviewers:** Architecture Team, Security Team
-- **Approval:** Product Owner
+## 1. Executive Summary
+
+DotLangChain is a .NET 9 library providing enterprise-grade document ingestion, embedding generation, vector storage integration, and agent orchestration capabilities. The library serves as a native .NET alternative to LangChain and LangGraph, optimized for performance, security, and seamless integration with existing .NET ecosystems.
+
+---
+
+## 2. Project Objectives
+
+### 2.1 Primary Objectives
+
+- Provide a unified, strongly-typed API for document ingestion across multiple formats
+- Enable flexible agent orchestration through a graph-based execution model
+- Support both cloud-based and local LLM inference endpoints
+- Achieve production-grade reliability suitable for enterprise and healthcare environments
+- Maintain full OWASP compliance for security-sensitive deployments
+
+### 2.2 Secondary Objectives
+
+- Minimize external dependencies where practical
+- Enable AOT (Ahead-of-Time) compilation for edge deployment scenarios
+- Provide comprehensive observability through OpenTelemetry integration
+- Support horizontal scaling through stateless design patterns
+
+---
+
+## 3. Stakeholders
+
+| Role | Responsibilities |
+|------|------------------|
+| Library Consumers | .NET developers integrating AI capabilities into applications |
+| Platform Engineers | Teams deploying and scaling AI infrastructure |
+| Security Teams | Ensuring compliance with organizational security policies |
+| DevOps | CI/CD pipeline integration and package distribution |
+
+---
+
+## 4. Functional Requirements
+
+### 4.1 Document Ingestion Module
+
+#### FR-4.1.1 Document Loaders
+
+The system SHALL support loading documents from the following sources:
+
+| ID | Format | Priority | Description |
+|----|--------|----------|-------------|
+| FR-4.1.1.1 | PDF | High | Extract text, tables, and metadata from PDF files |
+| FR-4.1.1.2 | DOCX | High | Parse Microsoft Word documents including styles |
+| FR-4.1.1.3 | XLSX | Medium | Extract data from Excel spreadsheets |
+| FR-4.1.1.4 | HTML | High | Parse HTML with configurable tag handling |
+| FR-4.1.1.5 | Markdown | High | Parse markdown with frontmatter support |
+| FR-4.1.1.6 | Plain Text | High | Load .txt, .csv, .json, .xml files |
+| FR-4.1.1.7 | Email | Medium | Parse .eml and .msg formats |
+| FR-4.1.1.8 | Images | Medium | OCR extraction via pluggable providers |
+
+#### FR-4.1.2 Text Splitting/Chunking
+
+The system SHALL provide the following chunking strategies:
+
+| ID | Strategy | Description |
+|----|----------|-------------|
+| FR-4.1.2.1 | Character-based | Split by character count with overlap |
+| FR-4.1.2.2 | Token-based | Split by token count using configurable tokenizer |
+| FR-4.1.2.3 | Sentence-based | Split on sentence boundaries |
+| FR-4.1.2.4 | Paragraph-based | Split on paragraph boundaries |
+| FR-4.1.2.5 | Semantic | Split based on embedding similarity thresholds |
+| FR-4.1.2.6 | Recursive | Hierarchical splitting with fallback strategies |
+| FR-4.1.2.7 | Code-aware | Language-specific splitting for source code |
+
+#### FR-4.1.3 Metadata Handling
+
+- FR-4.1.3.1: The system SHALL preserve source document metadata
+- FR-4.1.3.2: The system SHALL support custom metadata injection
+- FR-4.1.3.3: The system SHALL track chunk lineage (parent document, position)
+- FR-4.1.3.4: The system SHALL support metadata filtering during retrieval
+
+### 4.2 Embedding Module
+
+#### FR-4.2.1 Embedding Providers
+
+The system SHALL support the following embedding providers:
+
+| ID | Provider | Priority |
+|----|----------|----------|
+| FR-4.2.1.1 | OpenAI (text-embedding-3-*) | High |
+| FR-4.2.1.2 | Azure OpenAI | High |
+| FR-4.2.1.3 | Ollama (local) | High |
+| FR-4.2.1.4 | HuggingFace Inference API | Medium |
+| FR-4.2.1.5 | Cohere | Medium |
+| FR-4.2.1.6 | Custom HTTP endpoints | High |
+| FR-4.2.1.7 | ONNX Runtime (local models) | Medium |
+
+#### FR-4.2.2 Embedding Operations
+
+- FR-4.2.2.1: The system SHALL support batch embedding with configurable batch sizes
+- FR-4.2.2.2: The system SHALL implement automatic retry with exponential backoff
+- FR-4.2.2.3: The system SHALL cache embeddings with configurable TTL
+- FR-4.2.2.4: The system SHALL normalize embeddings when required by provider
+
+### 4.3 Vector Store Module
+
+#### FR-4.3.1 Vector Store Providers
+
+The system SHALL provide abstractions for the following vector stores:
+
+| ID | Store | Priority |
+|----|-------|----------|
+| FR-4.3.1.1 | Qdrant | High |
+| FR-4.3.1.2 | Milvus | Medium |
+| FR-4.3.1.3 | Pinecone | Medium |
+| FR-4.3.1.4 | PostgreSQL (pgvector) | High |
+| FR-4.3.1.5 | Redis (RediSearch) | Medium |
+| FR-4.3.1.6 | Elasticsearch | Medium |
+| FR-4.3.1.7 | In-Memory (development/testing) | High |
+| FR-4.3.1.8 | SQLite (sqlite-vec) | Medium |
+
+#### FR-4.3.2 Vector Operations
+
+- FR-4.3.2.1: The system SHALL support similarity search with configurable metrics (cosine, euclidean, dot product)
+- FR-4.3.2.2: The system SHALL support hybrid search (vector + keyword)
+- FR-4.3.2.3: The system SHALL support metadata filtering during search
+- FR-4.3.2.4: The system SHALL support MMR (Maximal Marginal Relevance) retrieval
+- FR-4.3.2.5: The system SHALL support upsert, delete, and update operations
+- FR-4.3.2.6: The system SHALL support namespaces/collections/partitions
+
+### 4.4 LLM Integration Module
+
+#### FR-4.4.1 LLM Providers
+
+The system SHALL support the following LLM providers:
+
+| ID | Provider | Priority |
+|----|----------|----------|
+| FR-4.4.1.1 | OpenAI (GPT-4, GPT-4o, o1, o3) | High |
+| FR-4.4.1.2 | Azure OpenAI | High |
+| FR-4.4.1.3 | Anthropic Claude | High |
+| FR-4.4.1.4 | Ollama (local) | High |
+| FR-4.4.1.5 | vLLM (local) | High |
+| FR-4.4.1.6 | Google Gemini | Medium |
+| FR-4.4.1.7 | AWS Bedrock | Medium |
+| FR-4.4.1.8 | Groq | Medium |
+
+#### FR-4.4.2 LLM Operations
+
+- FR-4.4.2.1: The system SHALL support streaming responses via `IAsyncEnumerable<T>`
+- FR-4.4.2.2: The system SHALL support function/tool calling with strongly-typed definitions
+- FR-4.4.2.3: The system SHALL support structured output (JSON mode)
+- FR-4.4.2.4: The system SHALL support vision/multimodal inputs
+- FR-4.4.2.5: The system SHALL implement token counting and context window management
+- FR-4.4.2.6: The system SHALL support prompt templates with variable substitution
+
+### 4.5 Agent Orchestration Module (Graph Engine)
+
+#### FR-4.5.1 Graph Definition
+
+- FR-4.5.1.1: The system SHALL support defining agents as directed graphs
+- FR-4.5.1.2: The system SHALL support conditional edges based on state
+- FR-4.5.1.3: The system SHALL support parallel node execution
+- FR-4.5.1.4: The system SHALL support subgraph composition
+- FR-4.5.1.5: The system SHALL support cycles (loops) with configurable limits
+- FR-4.5.1.6: The system SHALL support human-in-the-loop interruption points
+
+#### FR-4.5.2 State Management
+
+- FR-4.5.2.1: The system SHALL provide strongly-typed state containers
+- FR-4.5.2.2: The system SHALL support state persistence for long-running workflows
+- FR-4.5.2.3: The system SHALL support state checkpointing and rollback
+- FR-4.5.2.4: The system SHALL support distributed state via pluggable backends
+- FR-4.5.2.5: The system SHALL maintain message/conversation history within state
+
+#### FR-4.5.3 Tool System
+
+- FR-4.5.3.1: The system SHALL support tool definition via attributes
+- FR-4.5.3.2: The system SHALL support tool definition via fluent API
+- FR-4.5.3.3: The system SHALL auto-generate JSON schemas for tool parameters
+- FR-4.5.3.4: The system SHALL support async tool execution
+- FR-4.5.3.5: The system SHALL support tool result validation
+
+#### FR-4.5.4 Built-in Patterns
+
+The system SHALL provide pre-built agent patterns:
+
+| ID | Pattern | Description |
+|----|---------|-------------|
+| FR-4.5.4.1 | ReAct | Reasoning and Acting loop |
+| FR-4.5.4.2 | Plan-and-Execute | Planning phase followed by execution |
+| FR-4.5.4.3 | Reflection | Self-critique and improvement loop |
+| FR-4.5.4.4 | Multi-Agent | Supervisor/worker agent coordination |
+| FR-4.5.4.5 | RAG | Retrieval-Augmented Generation pipeline |
+
+### 4.6 Memory Module
+
+#### FR-4.6.1 Memory Types
+
+- FR-4.6.1.1: The system SHALL support conversation buffer memory
+- FR-4.6.1.2: The system SHALL support sliding window memory
+- FR-4.6.1.3: The system SHALL support summary memory (LLM-generated summaries)
+- FR-4.6.1.4: The system SHALL support entity memory (extracted entities)
+- FR-4.6.1.5: The system SHALL support vector-based semantic memory
+
+### 4.7 Chain/Pipeline Module
+
+#### FR-4.7.1 Chain Operations
+
+- FR-4.7.1.1: The system SHALL support sequential chain composition
+- FR-4.7.1.2: The system SHALL support parallel chain execution
+- FR-4.7.1.3: The system SHALL support branching based on conditions
+- FR-4.7.1.4: The system SHALL support fallback chains on failure
+- FR-4.7.1.5: The system SHALL support chain serialization/deserialization
+
+---
+
+## 5. Non-Functional Requirements
+
+### 5.1 Performance Requirements
+
+| ID | Requirement | Target |
+|----|-------------|--------|
+| NFR-5.1.1 | Document ingestion throughput | ≥100 pages/second for text extraction |
+| NFR-5.1.2 | Embedding latency (cached) | <1ms P99 |
+| NFR-5.1.3 | Graph node execution overhead | <100μs per node transition |
+| NFR-5.1.4 | Memory allocation | Minimize allocations; support pooling |
+| NFR-5.1.5 | Streaming first-token latency | <50ms overhead beyond provider latency |
+| NFR-5.1.6 | Concurrent request handling | Linear scaling to 10,000+ concurrent operations |
+
+### 5.2 Scalability Requirements
+
+| ID | Requirement |
+|----|-------------|
+| NFR-5.2.1 | All components SHALL be stateless to enable horizontal scaling |
+| NFR-5.2.2 | State persistence SHALL support distributed backends |
+| NFR-5.2.3 | Batch operations SHALL support configurable parallelism |
+| NFR-5.2.4 | Connection pooling SHALL be implemented for all external services |
+
+### 5.3 Reliability Requirements
+
+| ID | Requirement |
+|----|-------------|
+| NFR-5.3.1 | All external calls SHALL implement retry with exponential backoff |
+| NFR-5.3.2 | Circuit breaker pattern SHALL be implemented for provider failover |
+| NFR-5.3.3 | Graceful degradation SHALL be supported when providers are unavailable |
+| NFR-5.3.4 | All operations SHALL support cancellation via CancellationToken |
+| NFR-5.3.5 | Idempotency SHALL be supported for state-modifying operations |
+
+### 5.4 Security Requirements (OWASP Compliance)
+
+| ID | OWASP Category | Requirement |
+|----|----------------|-------------|
+| NFR-5.4.1 | A01:2021 Broken Access Control | All API keys/secrets SHALL be handled via IConfiguration with secure providers |
+| NFR-5.4.2 | A02:2021 Cryptographic Failures | TLS 1.2+ SHALL be enforced for all external communications |
+| NFR-5.4.3 | A03:2021 Injection | All user inputs in prompts SHALL be sanitized; parameterized queries for vector stores |
+| NFR-5.4.4 | A04:2021 Insecure Design | Threat modeling SHALL be performed; security by default |
+| NFR-5.4.5 | A05:2021 Security Misconfiguration | Secure defaults SHALL be enforced; no secrets in logs |
+| NFR-5.4.6 | A06:2021 Vulnerable Components | Dependency scanning SHALL be integrated into CI/CD |
+| NFR-5.4.7 | A07:2021 Auth Failures | Provider credentials SHALL support rotation without restart |
+| NFR-5.4.8 | A08:2021 Data Integrity | Document checksums SHALL be validated; signed packages |
+| NFR-5.4.9 | A09:2021 Logging Failures | Security events SHALL be logged; PII SHALL be redacted |
+| NFR-5.4.10 | A10:2021 SSRF | URL validation SHALL be enforced for document loaders |
+
+#### NFR-5.4.11 Prompt Injection Mitigation
+
+- Input sanitization for all user-provided content
+- Support for content filtering/moderation hooks
+- Structured output validation
+- Guardrail integration points
+
+#### NFR-5.4.12 Data Protection
+
+- Support for data encryption at rest (delegated to storage providers)
+- PII detection and redaction hooks
+- Audit logging for sensitive operations
+- Data retention policy support
+
+### 5.5 Observability Requirements
+
+| ID | Requirement |
+|----|-------------|
+| NFR-5.5.1 | OpenTelemetry tracing SHALL be implemented for all operations |
+| NFR-5.5.2 | Metrics SHALL be exposed for Prometheus/OTEL collection |
+| NFR-5.5.3 | Structured logging SHALL use Microsoft.Extensions.Logging |
+| NFR-5.5.4 | Distributed tracing context SHALL propagate across async boundaries |
+| NFR-5.5.5 | Health checks SHALL be provided for all external dependencies |
+
+### 5.6 Compatibility Requirements
+
+| ID | Requirement |
+|----|-------------|
+| NFR-5.6.1 | Target .NET 9.0 with .NET Standard 2.1 compatibility layer |
+| NFR-5.6.2 | Support Native AOT compilation for core components |
+| NFR-5.6.3 | Cross-platform support (Windows, Linux, macOS) |
+| NFR-5.6.4 | ARM64 and x64 architecture support |
+| NFR-5.6.5 | Container-ready (no platform-specific dependencies) |
+
+### 5.7 Maintainability Requirements
+
+| ID | Requirement |
+|----|-------------|
+| NFR-5.7.1 | Code coverage SHALL exceed 80% for core components |
+| NFR-5.7.2 | Public API SHALL maintain semantic versioning |
+| NFR-5.7.3 | Breaking changes SHALL be documented in CHANGELOG |
+| NFR-5.7.4 | XML documentation SHALL be provided for all public APIs |
+| NFR-5.7.5 | Architecture Decision Records (ADRs) SHALL document key decisions |
+
+---
+
+## 6. Constraints
+
+### 6.1 Technical Constraints
+
+- Must use .NET 9.0 or later
+- Must not require elevated permissions for core functionality
+- Must not bundle large model files (models loaded externally)
+- Must support dependency injection via Microsoft.Extensions.DependencyInjection
+
+### 6.2 Business Constraints
+
+- Open-source under permissive license (MIT or Apache 2.0)
+- No vendor lock-in; all providers must be swappable
+- Documentation must be sufficient for self-service adoption
+
+---
+
+## 7. Assumptions
+
+- Consumers have access to at least one LLM provider (cloud or local)
+- Consumers have access to at least one vector store (in-memory acceptable for development)
+- Network connectivity is available for cloud provider access
+- .NET 9.0 SDK is available in target environments
+
+---
+
+## 8. Dependencies
+
+### 8.1 External Dependencies
+
+| Dependency | Purpose | Required |
+|------------|---------|----------|
+| Microsoft.Extensions.* | DI, Configuration, Logging | Yes |
+| System.Text.Json | JSON serialization | Yes |
+| OpenTelemetry.* | Observability | Optional |
+| Polly | Resilience patterns | Yes |
+| DocumentFormat.OpenXml | DOCX parsing | Optional |
+| PdfPig | PDF text extraction | Optional |
+| HtmlAgilityPack | HTML parsing | Optional |
+
+### 8.2 Runtime Dependencies
+
+| Dependency | Purpose | Required |
+|------------|---------|----------|
+| LLM Provider | Text generation | Yes (any one) |
+| Vector Store | Similarity search | Optional (in-memory fallback) |
+| State Store | Workflow persistence | Optional (in-memory fallback) |
+
+---
+
+## 9. Acceptance Criteria
+
+### 9.1 Functional Acceptance
+
+- [ ] All document loaders successfully extract text with >95% accuracy
+- [ ] All embedding providers produce valid, normalized vectors
+- [ ] All vector stores support CRUD operations and similarity search
+- [ ] Graph engine executes complex multi-step workflows correctly
+- [ ] Streaming responses deliver tokens with minimal latency overhead
+
+### 9.2 Non-Functional Acceptance
+
+- [ ] Performance benchmarks meet or exceed targets
+- [ ] Security scan reports zero high/critical vulnerabilities
+- [ ] All public APIs have XML documentation
+- [ ] Test coverage exceeds 80%
+- [ ] Successful deployment in containerized environment
+
+---
+
+## 10. Glossary
+
+| Term | Definition |
+|------|------------|
+| Chunk | A segment of text produced by splitting a document |
+| Embedding | A dense vector representation of text |
+| RAG | Retrieval-Augmented Generation |
+| ReAct | Reasoning and Acting agent pattern |
+| MMR | Maximal Marginal Relevance (diversity-aware retrieval) |
+| AOT | Ahead-of-Time compilation |
+| OWASP | Open Web Application Security Project |
+
+---
+
+## 11. Related Documentation
+
+For implementation details, see:
+
+- **TECHNICAL_SPECIFICATIONS.md**: Architecture, component design, and implementation patterns
+- **API_REFERENCE.md**: Complete API documentation with examples
+- **BUILD_AND_CICD.md**: Build configuration and CI/CD pipeline setup
+- **TESTING_STRATEGY.md**: Testing requirements and strategies
+- **PERFORMANCE_BENCHMARKS.md**: Performance targets and benchmark scenarios
+- **ERROR_HANDLING.md**: Exception hierarchy and error handling patterns
+- **VERSIONING_AND_MIGRATION.md**: Versioning strategy and migration guides
+- **PACKAGE_METADATA.md**: Package organization and distribution
+
+---
+
+## 12. Revision History
+
+| Version | Date | Author | Changes |
+|---------|------|--------|---------|
+| 1.0.0 | 2025-12-07 | - | Initial draft |

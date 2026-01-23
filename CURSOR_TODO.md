@@ -631,8 +631,56 @@ src/DotNetAgents.VectorStores.Pgvector/
 
 ## Notes
 
-- All interfaces should follow the existing DotLangChain patterns
+- All interfaces should follow the existing DotNetAgents patterns
 - Use `CancellationToken` on all async methods
-- Follow the existing exception hierarchy
-- Add OpenTelemetry traces for all operations
+- Follow DotNetAgents exception hierarchy (`AgentException`, `LLMException`, etc.)
+- Use DotNetAgents OpenTelemetry integration for tracing
 - Ensure thread-safety for all stateful components
+- Leverage existing DotNetAgents components:
+  - `IMemory` and `IMemoryStore` for memory management
+  - `IVectorStore` for retrieval
+  - `StateGraph<TState>` for workflows
+  - `ISanitizer` for content filtering
+  - `ICostTracker` for cost monitoring
+  - `IMetricsCollector` for metrics
+
+## Integration with Existing DotNetAgents Components
+
+### Already Available in DotNetAgents:
+- ✅ 12 LLM Providers (including Ollama, vLLM, Anthropic)
+- ✅ Workflow Engine (`StateGraph<TState>`)
+- ✅ Checkpointing (SQL Server, PostgreSQL, InMemory)
+- ✅ Memory System (`IMemory`, `IMemoryStore`)
+- ✅ Vector Stores (`IVectorStore`, Pinecone implementation)
+- ✅ Document Loaders (PDF, CSV, Excel, EPUB, Markdown, Text)
+- ✅ Security (`ISanitizer`, `ISecretsProvider`)
+- ✅ Observability (OpenTelemetry, logging, metrics)
+- ✅ 17 Built-in Tools
+
+### New Components Needed:
+- Education-specific pedagogy components
+- Child safety filters
+- Age-adaptive middleware
+- Assessment generators and evaluators
+- Curriculum-aware retrieval
+- Student profile and mastery tracking
+- Pre-built educational graphs
+
+---
+
+## Enhancement Recommendations
+
+**See `docs/EDUCATION_ENHANCEMENTS.md` for comprehensive recommendations on:**
+- Architecture improvements (plugin system, event-driven architecture)
+- Missing critical features (i18n, accessibility, analytics, multi-tenancy)
+- Security & compliance (FERPA, GDPR, enhanced audit logging, RBAC)
+- Integration points (LMS, SIS, parent communication)
+- Performance & scalability (caching, batch processing, distributed systems)
+- Testing enhancements (pedagogical effectiveness, bias detection)
+- Observability (learning analytics, cost tracking)
+- Future-proofing (versioning, A/B testing, migration paths)
+
+**Key Priorities:**
+1. **Must Have**: FERPA/GDPR compliance, RBAC, i18n, accessibility, versioning
+2. **Should Have**: Learning analytics, multi-tenancy, LMS integration, event system
+3. **Nice to Have**: A/B testing, parent communication, performance benchmarking
