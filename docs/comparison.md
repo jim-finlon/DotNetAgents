@@ -544,7 +544,51 @@ DotNetAgents provides a comprehensive, production-ready alternative to LangChain
 5. **Performance**: .NET 10 AI optimizations
 6. **Provider Support**: 12 LLM providers with more coming
 
-For Python developers, LangChain and LangGraph remain excellent choices. For .NET developers, DotNetAgents provides native C# implementations with enterprise-grade features and Microsoft Agent Framework compatibility.
+For Python developers, LangChain and LangGraph remain excellent choices. For .NET developers, DotNetAgents provides native C# implementations with enterprise-grade features, Microsoft Agent Framework compatibility, and specialized educational extensions.
+
+### Educational Extensions
+
+DotNetAgents includes a comprehensive educational extensions package (`DotNetAgents.Education`) that provides specialized components for educational AI applications:
+
+**Pedagogy Components:**
+- ✅ Socratic dialogue engine (question generation, response evaluation, hint scaffolding)
+- ✅ Spaced repetition scheduler (SuperMemo 2 algorithm)
+- ✅ Mastery calculator (weighted scoring, prerequisite checking)
+
+**Safety Components:**
+- ✅ Child safety filter (COPPA compliance, multi-layer filtering)
+- ✅ Conversation monitor (distress signal detection, alert generation)
+- ✅ Age-adaptive transformer (grade-level content adaptation, complexity scoring)
+
+**Assessment Components:**
+- ✅ Assessment generator (multiple question types, difficulty calibration)
+- ✅ Response evaluator (scoring, misconception detection, feedback)
+
+**Memory & Retrieval:**
+- ✅ Student profile memory (extends DotNetAgents IMemory)
+- ✅ Mastery state memory (concept mastery tracking)
+- ✅ Learning session memory (session management with resume capability)
+- ✅ Curriculum-aware retriever (concept filtering, prerequisite-aware)
+- ✅ Prerequisite checker (dependency validation)
+
+**Compliance:**
+- ✅ FERPA compliance service (access control, logging, parent consent)
+- ✅ GDPR compliance service (data export, deletion, anonymization)
+- ✅ RBAC (role-based access control for education roles)
+- ✅ Comprehensive audit logging
+
+**Infrastructure:**
+- ✅ Multi-tenancy support (tenant context, isolation, management)
+- ✅ Education-specific caching (content caching with TTL support)
+
+**Comparison:**
+| Feature | DotNetAgents.Education | LangChain | LangGraph | Microsoft Agent Framework |
+|---------|------------------------|-----------|-----------|---------------------------|
+| Educational Components | ✅ Full package | ❌ Not included | ❌ Not included | ❌ Not included |
+| Pedagogy Tools | ✅ Socratic, SM2, Mastery | ❌ | ❌ | ❌ |
+| Child Safety | ✅ COPPA compliant | ❌ | ❌ | ❌ |
+| Assessment Generation | ✅ LLM-powered | ❌ | ❌ | ❌ |
+| Compliance | ✅ FERPA/GDPR | ❌ | ❌ | ❌ |
 
 ## Additional Resources
 
