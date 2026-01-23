@@ -18,6 +18,7 @@
     <ProjectReference Include="..\DotNetAgents.Core\DotNetAgents.Core.csproj" />
     <ProjectReference Include="..\DotNetAgents.Workflow\DotNetAgents.Workflow.csproj" />
     <ProjectReference Include="..\DotNetAgents.Configuration\DotNetAgents.Configuration.csproj" />
+    <ProjectReference Include="..\DotNetAgents.Security\DotNetAgents.Security.csproj" />
   </ItemGroup>
 
 </Project>
