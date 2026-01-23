@@ -21,8 +21,8 @@ public static class EducationHelpers
             GradeLevel.G6_8 => (11, 14),
             GradeLevel.G9_10 => (14, 16),
             GradeLevel.G11_12 => (16, 18),
-            GradeLevel.College => (18, 25),
-            GradeLevel.Professional => (25, 100),
+            GradeLevel.G11_12 => (16, 18), // Using G11_12 as highest
+            _ => (18, 100) // For any other values
             _ => (0, 0)
         };
     }
@@ -44,10 +44,9 @@ public static class EducationHelpers
             return GradeLevel.G9_10;
         if (age >= 17 && age <= 18)
             return GradeLevel.G11_12;
-        if (age >= 19 && age <= 25)
-            return GradeLevel.College;
-        if (age > 25)
-            return GradeLevel.Professional;
+        // For ages beyond high school, default to G11_12
+        if (age >= 19)
+            return GradeLevel.G11_12;
         
         return GradeLevel.G3_5; // Default
     }
