@@ -140,7 +140,7 @@ public class ChildSafetyFilter : IContentFilter
         return new ContentFilterResult
         {
             IsAllowed = true,
-            FilteredContent = filteredContent,
+            FilteredContent = filteredContent ?? output, // Ensure FilteredContent is never null
             FlaggedCategories = patternResult.FlaggedCategories,
             RequiresReview = patternResult.RequiresReview || ageCheck.RequiresReview
         };
@@ -219,6 +219,17 @@ public class ChildSafetyFilter : IContentFilter
 
     private ContentFilterResult CheckAgeAppropriateness(string content, GradeLevel gradeLevel)
     {
+        if (string.IsNullOrWhiteSpace(content))
+        {
+            return new ContentFilterResult
+            {
+                IsAllowed = true,
+                FilteredContent = content,
+                FlaggedCategories = Array.Empty<ContentCategory>(),
+                RequiresReview = false
+            };
+        }
+
         // Check for age-inappropriate vocabulary or concepts
         // This is a simplified check - a full implementation would use complexity analysis
 
@@ -230,7 +241,7 @@ public class ChildSafetyFilter : IContentFilter
         };
 
         var lowerContent = content.ToLowerInvariant();
-        if (inappropriateTerms.Any(term => lowerContent.Contains(term, StringComparison.OrdinalIgnoreCase)))
+        if (inappropriateTerms.Length > 0 && inappropriateTerms.Any(term => lowerContent.Contains(term, StringComparison.OrdinalIgnoreCase)))
         {
             return new ContentFilterResult
             {
