@@ -1,293 +1,503 @@
-# DotLangChain Project Rules for Cursor
+# DotNetAgents Library - Cursor Rules
 
 ## Project Overview
-DotLangChain is a .NET 9 library for document ingestion, embeddings, vector stores, and agent orchestration. This file provides context and guidelines for AI-assisted development in Cursor.
+This is an enterprise-grade, open-source .NET 8 library that replicates LangChain and LangGraph functionality in C#. The project targets .NET developers building agentic AI systems.
 
-## Key Documentation Files
+## Core Principles
 
-### Must Read Before Major Changes
-- `START_HERE.md` - Session initialization and quick reference
-- `SESSION_STATE.md` - Current phase and progress
-- `TASK_LIST.md` - Detailed task breakdown
-- `LESSONS_LEARNED.md` - Key decisions and patterns
-- `RESUME.md` - How to resume work after breaks
+### 1. Quality First
+- Write production-ready code from day one
+- No shortcuts or technical debt
+- Comprehensive error handling
+- Defensive programming practices
+- All public APIs must be well-documented
 
-### Architecture & Design
-- `docs/TECHNICAL_SPECIFICATIONS.md` - Architecture and implementation details
-- `docs/API_REFERENCE.md` - Complete API documentation
-- `docs/REQUIREMENTS.md` - Functional and non-functional requirements
+### 2. Architecture
+- **Modular Design**: Code is structured as separate projects (Core, Providers, Workflow, etc.)
+- **Dependency Inversion**: Core has ZERO dependencies on integrations
+- **Interface-Based**: Prefer interfaces over concrete implementations
+- **SOLID Principles**: Strictly follow SOLID principles
+- **Separation of Concerns**: Clear boundaries between layers
 
-### Implementation Guides
-- `docs/BUILD_AND_CICD.md` - Build configuration and CI/CD
-- `docs/TESTING_STRATEGY.md` - Testing approach and guidelines
-- `docs/ERROR_HANDLING.md` - Exception hierarchy and error handling
-- `docs/PERFORMANCE_BENCHMARKS.md` - Performance targets
-- `docs/VERSIONING_AND_MIGRATION.md` - Versioning strategy
-- `docs/PACKAGE_METADATA.md` - Package distribution
+### 3. .NET 8 & C# 12 Standards
+- Target .NET 8 (LTS)
+- Use C# 12 features where appropriate
+- **Nullable Reference Types**: Always enabled, use `?` and `!` appropriately
+- **Records**: Use records for immutable data types (DTOs, state objects, configuration)
+- **Pattern Matching**: Use pattern matching where it improves readability
+- **File-Scoped Namespaces**: Use file-scoped namespaces (`namespace DotNetAgents.Core;`)
 
-## Code Standards
-
-### Language & Framework
-- Target: .NET 9.0 (net9.0)
-- Language: C# 13 (LangVersion 13.0)
-- Nullable reference types: Enabled
-- Implicit usings: Enabled
-- Treat warnings as errors: Enabled in Release builds
-
-### Code Style
-- Use `record` types for immutable data (Document, DocumentChunk, etc.)
-- Prefer `IAsyncEnumerable<T>` for streaming operations
-- All I/O operations must be async
-- Use `Span<T>`/`Memory<T>` for zero-allocation operations where possible
-- Follow SOLID principles, especially Dependency Inversion
+## Coding Standards
 
 ### Naming Conventions
-- Interfaces: `I{Name}` (e.g., `IDocumentLoader`)
-- Abstract classes: `{Name}Base` or descriptive name (e.g., `AgentState`)
-- Concrete classes: `{Name}` (e.g., `RecursiveCharacterTextSplitter`)
-- Records: `{Name}` (e.g., `Document`, `DocumentChunk`)
-- Enums: `{Name}` (e.g., `MessageRole`, `DistanceMetric`)
+- **Interfaces**: Start with `I` (e.g., `ILLMModel`, `IPromptTemplate`)
+- **Classes**: PascalCase (e.g., `PromptTemplate`, `GraphExecutor`)
+- **Methods**: PascalCase (e.g., `GenerateAsync`, `ExecuteAsync`)
+- **Parameters**: camelCase (e.g., `cancellationToken`, `input`)
+- **Private Fields**: `_camelCase` with underscore prefix
+- **Constants**: `PascalCase` (e.g., `MaxRetries`, `DefaultTimeout`)
+- **Async Methods**: Always end with `Async` suffix
 
-### Project Structure
+### Code Style
+- Use 4 spaces for indentation (not tabs)
+- Maximum line length: 120 characters
+- Use `var` only when type is obvious from right-hand side
+- Prefer explicit types for public APIs
+- Use expression-bodied members when appropriate
+- Use `nameof()` instead of string literals for property/parameter names
+
+### Async/Await Patterns
+- **Always** use `async`/`await`, never use `.Result` or `.Wait()`
+- **Always** accept `CancellationToken` in async methods (except entry points where it's optional)
+- Use `IAsyncEnumerable<T>` for streaming operations
+- Use `ConfigureAwait(false)` in library code (not in application code)
+- Handle cancellation gracefully with `OperationCanceledException`
+
+### Error Handling
+- Use specific exception types (`AgentException`, `LLMException`, etc.)
+- Include correlation IDs in exceptions for tracing
+- Never swallow exceptions silently
+- Log exceptions before rethrowing
+- Use `throw;` (not `throw ex;`) to preserve stack trace
+
+### Null Safety
+- Use nullable reference types throughout
+- Mark nullable parameters with `?`
+- Use null-forgiving operator `!` only when absolutely certain
+- Use null-conditional operators (`?.`, `??`) appropriately
+- Validate null inputs in public methods
+
+## Project Structure Guidelines
+
+### Package Architecture
+- **Core Package**: Zero dependencies on integrations
+- **Provider Packages**: Each provider in separate project
+- **Metapackage**: References all packages for convenience
+- Follow dependency inversion principle strictly
+
+### File Organization
+- One public type per file (except related types like exceptions)
+- File name matches class/interface name
+- Group related files in folders by feature/domain
+- Use `Directory.Build.props` for shared properties
+
+### Namespace Organization
 ```
-src/
-├── DotLangChain.Abstractions/     # Interfaces and contracts
-├── DotLangChain.Core/             # Core implementations
-├── DotLangChain.Providers.*/      # LLM provider implementations
-├── DotLangChain.VectorStores.*/   # Vector store integrations
-├── DotLangChain.StateStores.*/    # State persistence
-└── DotLangChain.Extensions.*/     # Extension libraries
-
-tests/
-├── DotLangChain.Tests.Unit/       # Unit tests (xUnit)
-├── DotLangChain.Tests.Integration/# Integration tests (Testcontainers)
-└── DotLangChain.Tests.Benchmarks/ # Performance benchmarks (BenchmarkDotNet)
-
-samples/
-├── DotLangChain.Samples.RAG/      # RAG examples
-├── DotLangChain.Samples.Agent/    # Agent examples
-└── DotLangChain.Samples.MultiAgent/# Multi-agent examples
+DotNetAgents.Core.{Feature}
+DotNetAgents.Providers.{ProviderName}
+DotNetAgents.Workflow.{Feature}
+DotNetAgents.Configuration
+DotNetAgents.Observability.{Feature}
+DotNetAgents.Security.{Feature}
 ```
 
-## Design Patterns
+## API Design Guidelines
 
-### Core Patterns
-- **Provider Pattern**: All external services (LLMs, vector stores) use provider pattern
-- **Builder Pattern**: Graph construction, configuration
-- **Factory Pattern**: Service instance creation
-- **Decorator Pattern**: Caching, retry, observability
-- **Strategy Pattern**: Pluggable implementations (splitters, providers)
+### Public APIs
+- Design for extensibility and testability
+- Use interfaces for all public contracts
+- Prefer composition over inheritance
+- Make APIs discoverable and intuitive
+- Provide fluent APIs where appropriate
 
-### Anti-Patterns to Avoid
-- ❌ Service locator pattern (use DI)
-- ❌ Static mutable state
-- ❌ Catching generic `Exception` (catch specific types)
-- ❌ Blocking async code (use `async/await` properly)
-- ❌ Public mutable properties (use `init` or private setters)
+### Method Signatures
+- Keep parameter lists short (max 5-6 parameters)
+- Use options objects for complex configurations
+- Provide sensible defaults
+- Use overloads for convenience methods
+- Always include XML documentation comments
 
-## Error Handling
+### Example:
+```csharp
+/// <summary>
+/// Generates a response using the LLM model.
+/// </summary>
+/// <param name="input">The input to process.</param>
+/// <param name="options">Optional configuration for the generation.</param>
+/// <param name="cancellationToken">Cancellation token to cancel the operation.</param>
+/// <returns>The generated output.</returns>
+/// <exception cref="AgentException">Thrown when generation fails.</exception>
+public Task<TOutput> GenerateAsync(
+    TInput input,
+    LLMOptions? options = null,
+    CancellationToken cancellationToken = default);
+```
 
-### Exception Hierarchy
-All exceptions inherit from `DotLangChainException`:
-- `DocumentException` (DLC001-*) - Document operations
-- `EmbeddingException` (DLC002-*) - Embedding operations
-- `VectorStoreException` (DLC003-*) - Vector store operations
-- `LLMException` (DLC004-*) - LLM operations
-- `GraphException` (DLC005-*) - Graph execution
-- `ToolException` (DLC006-*) - Tool execution
-- `SecurityException` (DLC007-*) - Security violations
+## Dependency Injection
 
-### Error Handling Guidelines
-- Always include error codes (format: DLC{Category}-{SubCategory}-{Specific})
-- Provide meaningful error messages with context
-- Include inner exceptions for debugging
-- Use structured logging with exception context
+### Registration
+- Use `Microsoft.Extensions.DependencyInjection`
+- Register interfaces, not concrete types
+- Use extension methods for service registration (`AddDotNetAgents()`, `AddOpenAI()`, etc.)
+- Support both `IServiceCollection` and `IHostBuilder`
 
-## Testing Requirements
+### Lifetime Management
+- **Singleton**: For stateless services (factories, configuration)
+- **Scoped**: For request-scoped services (execution context)
+- **Transient**: For services that should be created fresh each time
+
+### Example:
+```csharp
+public static IServiceCollection AddDotNetAgents(
+    this IServiceCollection services,
+    Action<AgentConfiguration>? configure = null)
+{
+    services.AddSingleton<ILLMModelFactory, LLMModelFactory>();
+    services.AddScoped<IExecutionContextProvider, ExecutionContextProvider>();
+    return services;
+}
+```
+
+## Testing Standards
 
 ### Test Coverage
-- Core logic: ≥ 90%
-- Providers: ≥ 80%
-- Overall: ≥ 80%
-
-### Test Types
-- **Unit Tests**: xUnit, FluentAssertions, NSubstitute
-- **Integration Tests**: Testcontainers.NET for real services
-- **Benchmarks**: BenchmarkDotNet for performance tests
+- **Minimum 85% code coverage** for all projects
+- Test all public APIs
+- Test error paths and edge cases
+- Test async/await patterns
+- Test cancellation scenarios
 
 ### Test Organization
-- One test file per class/component
-- Use AAA pattern (Arrange-Act-Assert)
-- Test names: `{MethodName}_{Scenario}_{ExpectedResult}`
-- Use traits for categorization: `[Trait("Category", "Unit")]`
+- One test class per class/interface being tested
+- Use descriptive test method names: `MethodName_Scenario_ExpectedResult`
+- Use `[Fact]` for xUnit tests
+- Use `[Theory]` with `[InlineData]` for parameterized tests
+- Group related tests with `#region`
+
+### Test Patterns
+- Use `Moq` for mocking dependencies
+- Use `FluentAssertions` for assertions
+- Use `IAsyncDisposable` for test cleanup
+- Use test data builders for complex objects
+- Create contract test base classes for interfaces
+
+### Example:
+```csharp
+public class PromptTemplateTests
+{
+    [Fact]
+    public async Task FormatAsync_WithValidVariables_ReturnsFormattedString()
+    {
+        // Arrange
+        var template = new PromptTemplate("Hello {name}!");
+        var variables = new Dictionary<string, object> { ["name"] = "World" };
+        
+        // Act
+        var result = await template.FormatAsync(variables);
+        
+        // Assert
+        result.Should().Be("Hello World!");
+    }
+    
+    [Fact]
+    public async Task FormatAsync_WithMissingVariable_ThrowsException()
+    {
+        // Arrange
+        var template = new PromptTemplate("Hello {name}!");
+        var variables = new Dictionary<string, object>();
+        
+        // Act & Assert
+        await Assert.ThrowsAsync<ArgumentException>(
+            () => template.FormatAsync(variables));
+    }
+}
+```
+
+## Documentation Standards
+
+### XML Documentation
+- **All public APIs** must have XML documentation comments
+- Include `<summary>`, `<param>`, `<returns>`, `<exception>` tags
+- Use `<see cref="">` for type references
+- Use `<seealso cref="">` for related APIs
+- Include code examples in `<example>` tags for complex APIs
+
+### README Files
+- Each project should have a README.md
+- Include purpose, usage examples, and key APIs
+- Link to main documentation
+
+### Code Comments
+- Use comments to explain "why", not "what"
+- Avoid obvious comments
+- Use `// TODO:` for planned improvements
+- Use `// NOTE:` for important implementation details
+- Remove commented-out code before committing
+
+## Security Best Practices
+
+### Secrets Management
+- **Never** hardcode API keys or secrets
+- Use `ISecretsProvider` for all secret access
+- Support Azure Key Vault, AWS Secrets Manager, environment variables
+- Validate secrets at startup, not at runtime
+
+### Input Validation
+- Validate all inputs in public methods
+- Use `ISanitizer` for input sanitization
+- Detect prompt injection attempts
+- Validate tool inputs against schemas
+- Use `ArgumentNullException` for null checks
+
+### Data Protection
+- Encrypt sensitive data at rest
+- Use TLS 1.2+ for all external calls
+- Mask PII in logs
+- Never log secrets or API keys
+- Use secure credential storage
 
 ## Performance Guidelines
 
-### Targets (see PERFORMANCE_BENCHMARKS.md)
-- Document loading: ≥ 100 pages/second
-- Embedding cache: < 1ms P99
-- Vector search: < 50ms P95
-- Graph node overhead: < 100μs per node
+### Async Operations
+- Use `async`/`await` throughout
+- Avoid blocking calls (`Task.Result`, `.Wait()`)
+- Use `IAsyncEnumerable<T>` for streaming
+- Batch operations when possible
+- Use `ConfigureAwait(false)` in library code
 
-### Optimization Strategies
-- Use object pooling for frequently allocated objects
-- Prefer `Span<T>`/`Memory<T>` for zero-allocation operations
-- Use `IAsyncEnumerable<T>` for streaming large datasets
-- Implement caching for expensive operations (embeddings, tokenization)
+### Caching
+- Cache embeddings and LLM responses when appropriate
+- Use multi-level caching (memory, distributed, persistent)
+- Implement cache invalidation strategies
+- Monitor cache hit rates
 
-## Security Requirements
+### Resource Management
+- Implement `IDisposable` or `IAsyncDisposable` for resources
+- Use `using` statements or `await using` for disposal
+- Pool HTTP clients via `IHttpClientFactory`
+- Avoid memory leaks (event handlers, timers, etc.)
 
-### OWASP Compliance
-- All API keys/secrets via `IConfiguration`
-- TLS 1.2+ for all external communications
-- Input sanitization for prompt injection prevention
-- Parameterized queries for vector stores
-- Secure defaults, no secrets in logs
-- URL validation for document loaders
+### Optimization
+- Profile before optimizing
+- Use `Span<T>` and `Memory<T>` for zero-allocation scenarios
+- Avoid premature optimization
+- Measure performance with benchmarks
+- Document performance characteristics
 
-### Security Practices
-- Always sanitize user input
-- Never log secrets or API keys
-- Validate all inputs from external sources
-- Use secure defaults (TLS, encryption)
+## Error Handling Patterns
 
-## Documentation Requirements
+### Exception Types
+- Create specific exception types (`AgentException`, `LLMException`, etc.)
+- Include correlation IDs for tracing
+- Include context in exception messages
+- Use `Exception.Data` for additional context
 
-### XML Documentation
-- All public APIs must have XML documentation
-- Include parameter descriptions
-- Include return value descriptions
-- Include exception documentation
-- Include example code where helpful
+### Retry Logic
+- Implement retry with exponential backoff
+- Use `Polly` for complex retry scenarios
+- Respect `CancellationToken` in retry loops
+- Log retry attempts
 
-### Code Examples
+### Circuit Breaker
+- Implement circuit breaker for external calls
+- Track failure rates
+- Provide fallback mechanisms when possible
+
+## Logging Standards
+
+### Structured Logging
+- Use `Microsoft.Extensions.Logging`
+- Use structured logging (parameters, not string interpolation)
+- Include correlation IDs in logs
+- Use appropriate log levels:
+  - `Trace`: Very detailed, for debugging
+  - `Debug`: Detailed information for debugging
+  - `Information`: General information
+  - `Warning`: Warning messages
+  - `Error`: Error messages
+  - `Critical`: Critical failures
+
+### Example:
 ```csharp
-/// <summary>
-/// Loads a document from a file path.
-/// </summary>
-/// <param name="filePath">Path to the document file.</param>
-/// <param name="metadata">Optional metadata to attach to the document.</param>
-/// <param name="cancellationToken">Cancellation token.</param>
-/// <returns>The loaded document.</returns>
-/// <exception cref="DocumentException">Thrown when the document cannot be loaded.</exception>
-/// <example>
-/// <code>
-/// var document = await loader.LoadAsync("document.pdf");
-/// </code>
-/// </example>
-public Task<Document> LoadAsync(string filePath, DocumentMetadata? metadata = null, CancellationToken cancellationToken = default);
+_logger.LogInformation(
+    "LLM call completed. Model: {ModelName}, Tokens: {TokenCount}, Duration: {Duration}ms",
+    modelName,
+    tokenCount,
+    duration.TotalMilliseconds);
 ```
 
-## Dependency Management
+## Open Source Best Practices
 
-### Common Dependencies
-- `Microsoft.Extensions.*` - DI, Configuration, Logging (v9.0.0)
-- `System.Text.Json` - JSON serialization (v9.0.0)
-- `Polly` - Resilience patterns (v8.5.0)
-- `OpenTelemetry.*` - Observability (v1.10.0, optional)
-- `xUnit` - Testing (v2.8.0)
-- `FluentAssertions` - Test assertions (v6.12.0)
-- `NSubstitute` - Mocking (v5.1.0)
-- `Testcontainers.NET` - Integration tests (v4.0.0)
-- `BenchmarkDotNet` - Performance benchmarks (v0.14.0)
+### Code Quality
+- Follow all coding standards strictly
+- Write self-documenting code
+- Keep functions small and focused
+- Avoid magic numbers (use constants)
+- Use meaningful variable names
 
-### Package Versioning
-- All packages in a release use the same version (SemVer 2.0.0)
-- Dependencies specify exact versions for production
-- Security updates applied within 7 days
+### Git Practices
+- Write clear, descriptive commit messages
+- Use conventional commits format: `type(scope): description`
+- Types: `feat`, `fix`, `docs`, `test`, `refactor`, `perf`, `chore`
+- Keep commits focused (one logical change per commit)
+- Create meaningful branch names
 
-## Update Guidelines
+### Pull Requests
+- Keep PRs focused and small
+- Include tests for new features
+- Update documentation
+- Request reviews from maintainers
+- Address all review comments
 
-### When to Update Files
-- **SESSION_STATE.md**: At milestones, before context compression
-- **TASK_LIST.md**: As tasks are completed
-- **LESSONS_LEARNED.md**: When decisions are made or insights gained
-- **Documentation**: When APIs change or new features added
+## Specific Project Guidelines
 
-### Before Context Compression
-1. Update SESSION_STATE.md with current progress
-2. Update TASK_LIST.md with completed tasks
-3. Update LESSONS_LEARNED.md with new insights
-4. Commit all changes with descriptive message
+### Core Package Rules
+- **ZERO dependencies** on provider packages
+- All interfaces defined in Core
+- No concrete implementations of providers in Core
+- Use dependency inversion throughout
 
-## Git Workflow
+### Provider Package Rules
+- Each provider in separate project
+- Depend only on Core package
+- Implement Core interfaces
+- Provide extension methods for DI registration
+- Include provider-specific tests
 
-### Branching Strategy
-- `main` - Production-ready code (protected, merge-only)
-- `feature/{phase-name}` - Major development phases (merged after tests pass)
-- `bugfix/{issue-name}` - Bug fixes
-- `release/{version}` - Release preparation
+### Workflow Package Rules
+- Depends on Core
+- State must be serializable
+- Support checkpointing
+- Handle cancellation properly
+- Provide fluent API for graph building
 
-### Workflow
-1. Create feature branch from `main` for each major phase
-2. Work on feature branch with regular commits
-3. Ensure all tests pass before merging
-4. Merge feature branch back to `main`
-5. Start next phase from updated `main`
+### Configuration Rules
+- Support multiple configuration sources
+- Validate configuration at startup
+- Provide fluent builder API
+- Support environment-specific configs
+- Document all configuration options
 
-See `docs/GIT_WORKFLOW.md` for detailed workflow guide.
+## Code Review Checklist
 
-### Commit Messages
-- Format: `type(scope): description`
-- Types: `feat`, `fix`, `docs`, `test`, `refactor`, `perf`, `chore`, `build`, `ci`
-- Examples:
-  - `feat(core): add recursive character text splitter`
-  - `fix(providers): handle OpenAI rate limits correctly`
-  - `docs(api): update embedding service documentation`
+Before submitting code, ensure:
+- [ ] All tests pass
+- [ ] Code coverage meets 85% minimum
+- [ ] XML documentation complete
+- [ ] No hardcoded secrets
+- [ ] Error handling implemented
+- [ ] Cancellation tokens used
+- [ ] Async/await used correctly
+- [ ] Nullable reference types handled
+- [ ] No compiler warnings
+- [ ] Code follows style guidelines
+- [ ] Performance considered
+- [ ] Security reviewed
 
-## AI Assistant Guidelines
+## Tools and Analyzers
 
-### When Assisting with Code
-1. Check SESSION_STATE.md for current context
-2. Review relevant documentation files
-3. Follow established patterns from LESSONS_LEARNED.md
-4. Maintain consistency with existing code style
-5. Include XML documentation for new public APIs
-6. Write tests for new functionality
+### Required Analyzers
+- StyleCop.Analyzers
+- Microsoft.CodeAnalysis.NetAnalyzers
+- Nullable reference type warnings enabled
+- Treat warnings as errors in release builds
 
-### When Suggesting Changes
-- Consider impact on existing code
-- Check for breaking changes (require major version bump)
-- Ensure OWASP compliance
-- Verify performance implications
-- Update documentation as needed
+### Recommended Tools
+- JetBrains ReSharper / Rider
+- SonarLint
+- .NET Code Formatter
+- BenchmarkDotNet for performance testing
 
-### Code Generation Priorities
-1. **Correctness**: Code must be functionally correct
-2. **Security**: Follow security best practices
-3. **Performance**: Meet performance targets
-4. **Maintainability**: Code should be clear and well-documented
-5. **Consistency**: Follow established patterns
+## Examples of Good Code
 
-## Quick Reference
+### Good: Interface-Based Design
+```csharp
+public interface ILLMModel<TInput, TOutput>
+{
+    Task<TOutput> GenerateAsync(
+        TInput input,
+        LLMOptions? options = null,
+        CancellationToken cancellationToken = default);
+}
 
-### Key Commands
-```bash
-# Build
-dotnet build --configuration Release
-
-# Test
-dotnet test --configuration Release
-
-# Pack
-dotnet pack --configuration Release --output ./artifacts
-
-# Format
-dotnet format --verify-no-changes
+public class OpenAIModel : ILLMModel<ChatMessage[], ChatMessage>
+{
+    // Implementation
+}
 ```
 
-### File Locations
-- Solution: `DotLangChain.sln`
-- Build props: `Directory.Build.props`
-- Task list: `TASK_LIST.md`
-- Session state: `SESSION_STATE.md`
-- Startup guide: `START_HERE.md`
+### Good: Proper Async/Await
+```csharp
+public async Task<TOutput> GenerateAsync(
+    TInput input,
+    LLMOptions? options = null,
+    CancellationToken cancellationToken = default)
+{
+    if (input == null)
+        throw new ArgumentNullException(nameof(input));
+    
+    try
+    {
+        var result = await _httpClient.PostAsync(
+            _endpoint,
+            content,
+            cancellationToken).ConfigureAwait(false);
+        
+        return await DeserializeAsync<TOutput>(result, cancellationToken)
+            .ConfigureAwait(false);
+    }
+    catch (HttpRequestException ex)
+    {
+        _logger.LogError(ex, "Failed to call LLM API");
+        throw new LLMException("LLM call failed", ex);
+    }
+}
+```
 
-## Additional Notes
+### Good: Proper Disposal
+```csharp
+public class ResourceManager : IAsyncDisposable
+{
+    private readonly HttpClient _httpClient;
+    private bool _disposed;
+    
+    public async ValueTask DisposeAsync()
+    {
+        if (_disposed)
+            return;
+        
+        _httpClient?.Dispose();
+        await CleanupAsync().ConfigureAwait(false);
+        _disposed = true;
+    }
+}
+```
 
-- Always check SESSION_STATE.md before making major changes
-- Update task list as you complete work
-- Document decisions in LESSONS_LEARNED.md
-- Keep documentation in sync with code
-- Follow semantic versioning for releases
+## Anti-Patterns to Avoid
 
+### ❌ Don't Do This:
+- Use `.Result` or `.Wait()` on async methods
+- Catch and swallow exceptions silently
+- Hardcode API keys or secrets
+- Create circular dependencies
+- Use `dynamic` types unnecessarily
+- Ignore cancellation tokens
+- Create memory leaks (event handlers, timers)
+- Write code without tests
+- Skip XML documentation
+- Use `var` for unclear types in public APIs
+
+### ✅ Do This Instead:
+- Use `async`/`await` properly
+- Handle exceptions appropriately
+- Use `ISecretsProvider`
+- Follow dependency inversion
+- Use strong typing
+- Respect cancellation tokens
+- Properly dispose resources
+- Write comprehensive tests
+- Document all public APIs
+- Use explicit types for clarity
+
+## Final Notes
+
+- **Quality over speed**: Take time to do it right
+- **Test everything**: Write tests as you code
+- **Document as you go**: Don't leave documentation for later
+- **Review your code**: Self-review before submitting
+- **Ask for help**: Don't struggle alone, ask the team
+- **Learn continuously**: Stay updated with .NET best practices
+
+---
+
+**Remember**: We're building a world-class, enterprise-grade, open-source library. Every line of code matters. Write code you'd be proud to show to the best developers in the industry.

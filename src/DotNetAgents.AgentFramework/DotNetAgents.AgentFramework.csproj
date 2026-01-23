@@ -1,0 +1,17 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\DotNetAgents.Core\DotNetAgents.Core.csproj" />
+  </ItemGroup>
+
+  <!-- Note: Microsoft Agent Framework packages will be added when available -->
+  <!-- For now, this project provides adapter interfaces and documentation -->
+  
+</Project>

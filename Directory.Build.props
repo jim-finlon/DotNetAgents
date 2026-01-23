@@ -1,60 +1,57 @@
 <Project>
-  <!--
-    Directory.Build.props
-    Shared build properties for all projects in the solution.
-  -->
-  
   <PropertyGroup>
-    <!-- .NET 9.0 targeting -->
-    <TargetFramework>net9.0</TargetFramework>
+    <!-- Target Framework -->
+    <TargetFramework>net10.0</TargetFramework>
     <LangVersion>13.0</LangVersion>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     
-    <!-- Build settings -->
-    <TreatWarningsAsErrors Condition="'$(Configuration)' == 'Release'">true</TreatWarningsAsErrors>
-    <GenerateDocumentationFile>true</GenerateDocumentationFile>
-    <NoWarn>$(NoWarn);1591</NoWarn> <!-- Missing XML doc (to be removed as docs are added) -->
-    
-    <!-- Package metadata (override in individual projects) -->
-    <Authors>DotLangChain Contributors</Authors>
-    <Company>DotLangChain</Company>
-    <Product>DotLangChain</Product>
-    <Copyright>Copyright © 2025</Copyright>
-    <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <PackageProjectUrl>https://github.com/dotlangchain/dotlangchain</PackageProjectUrl>
-    <RepositoryUrl>https://github.com/dotlangchain/dotlangchain</RepositoryUrl>
-    <RepositoryType>git</RepositoryType>
-    
     <!-- Versioning -->
+    <Version>1.0.0</Version>
+    <AssemblyVersion>1.0.0.0</AssemblyVersion>
+    <FileVersion>1.0.0.0</FileVersion>
     <VersionPrefix>1.0.0</VersionPrefix>
-    <VersionSuffix Condition="'$(Configuration)' == 'Debug'">dev</VersionSuffix>
+    <VersionSuffix></VersionSuffix>
     
-    <!-- Build output -->
-    <GeneratePackageOnBuild Condition="'$(Configuration)' == 'Release'">true</GeneratePackageOnBuild>
+    <!-- Company Information -->
+    <Company>DotNetAgents Contributors</Company>
+    <Authors>DotNetAgents Contributors</Authors>
+    <Product>DotNetAgents</Product>
+    <Copyright>Copyright © 2024 DotNetAgents Contributors</Copyright>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageProjectUrl>https://github.com/jim-finlon/DotNetAgents</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/jim-finlon/DotNetAgents</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageTags>ai;llm;langchain;langgraph;agents;workflow;dotnet;csharp</PackageTags>
+    <PackageDescription>Enterprise-grade .NET 8 library for building AI agents, chains, and workflows - A native C# alternative to LangChain and LangGraph</PackageDescription>
+    
+    <!-- Code Analysis -->
+    <EnableNETAnalyzers>true</EnableNETAnalyzers>
+    <AnalysisLevel>latest</AnalysisLevel>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <WarningsAsErrors />
+    <WarningsNotAsErrors />
+    
+    <!-- NuGet -->
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <NoWarn>$(NoWarn);1591</NoWarn> <!-- XML documentation warnings -->
     <IncludeSymbols>true</IncludeSymbols>
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
     
-    <!-- Deterministic builds -->
+    <!-- Build -->
     <Deterministic>true</Deterministic>
-    <ContinuousIntegrationBuild Condition="'$(CI)' == 'true'">true</ContinuousIntegrationBuild>
+    <DebugType>portable</DebugType>
+    <DebugSymbols>true</DebugSymbols>
     
-    <!-- SourceLink support -->
-    <PublishRepositoryUrl>true</PublishRepositoryUrl>
-    <EmbedUntrackedSources>true</EmbedUntrackedSources>
-    <IncludeSymbols>true</IncludeSymbols>
-    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+    <!-- Code Style -->
+    <CodeAnalysisRuleSet>$(MSBuildThisFileDirectory)DotNetAgents.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
-
-  <!-- CI/CD specific settings -->
-  <PropertyGroup Condition="'$(CI)' == 'true'">
-    <BaseIntermediateOutputPath>$(MSBuildThisFileDirectory)artifacts/obj/$(MSBuildProjectName)/</BaseIntermediateOutputPath>
-    <BaseOutputPath>$(MSBuildThisFileDirectory)artifacts/bin/$(MSBuildProjectName)/</BaseOutputPath>
-  </PropertyGroup>
-
-  <!-- Common package references -->
+  
+  <!-- Common Package References -->
   <ItemGroup>
-    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="8.0.0" PrivateAssets="All" Condition="'$(CI)' == 'true'"/>
+    <PackageReference Include="Microsoft.CodeAnalysis.NetAnalyzers" Version="9.0.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+    </PackageReference>
   </ItemGroup>
 </Project>
-

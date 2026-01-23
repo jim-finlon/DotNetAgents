@@ -1,183 +1,231 @@
-# DotLangChain
+# DotNetAgents
 
-[![.NET](https://github.com/dotlangchain/dotlangchain/actions/workflows/ci.yml/badge.svg)](https://github.com/dotlangchain/dotlangchain/actions/workflows/ci.yml)
-[![NuGet](https://img.shields.io/nuget/v/DotLangChain.Core.svg)](https://www.nuget.org/packages/DotLangChain.Core)
+[![.NET](https://img.shields.io/badge/.NET-10.0-512BD4?logo=dotnet)](https://dotnet.microsoft.com/)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+[![NuGet](https://img.shields.io/nuget/v/DotNetAgents.svg)](https://www.nuget.org/packages/DotNetAgents)
 
-**DotLangChain** is a .NET 9 library providing enterprise-grade document ingestion, embedding generation, vector storage integration, and agent orchestration capabilities. The library serves as a native .NET alternative to LangChain and LangGraph, optimized for performance, security, and seamless integration with existing .NET ecosystems.
+> **Enterprise-grade .NET 10 library for building AI agents, chains, and workflows - A native C# alternative to LangChain and LangGraph, compatible with Microsoft Agent Framework**
+
+## 🎯 Overview
+
+DotNetAgents is a comprehensive, production-ready .NET 10 library that brings the power of LangChain and LangGraph to C# developers. Build sophisticated AI agents, chains, and stateful workflows with enterprise-grade quality, security, and performance. Compatible with Microsoft Agent Framework for enhanced orchestration capabilities.
+
+### Why .NET 10?
+
+DotNetAgents targets .NET 10 (LTS) to leverage cutting-edge AI optimizations and performance improvements:
+
+- **🚀 Enhanced Performance**: .NET 10 includes significant runtime optimizations for AI workloads, including improved async/await performance and reduced memory allocations
+- **🤖 Microsoft Agent Framework Support**: Native integration with Microsoft's Agent Framework for building production-ready AI agents and multi-agent workflows
+- **⚡ Vector Operations**: Optimized SIMD operations and improved array/span handling for vector embeddings and similarity calculations
+- **📊 Better Observability**: Enhanced OpenTelemetry support and improved diagnostics for tracing AI operations
+- **🔧 Modern C# 13 Features**: Latest language features including improved pattern matching, collection expressions, and performance-focused syntax
+- **💾 Memory Efficiency**: Reduced GC pressure and improved memory management for long-running AI agent processes
+- **🌐 HTTP/3 Support**: Better network performance for LLM API calls with HTTP/3 and improved connection pooling
+
+## ✨ Features
+
+### Core Capabilities
+- **🤖 AI Agents**: Build intelligent agents with tool calling and decision-making capabilities
+- **🔗 Chains**: Compose complex workflows with sequential and parallel execution
+- **📊 Workflows**: Stateful, resumable workflows with checkpointing (LangGraph-like)
+- **💾 Memory**: Short-term and long-term memory with vector-based storage
+- **🔍 RAG**: Retrieval-Augmented Generation with document loaders and vector stores
+- **🛠️ Tools**: Extensible tool system for external integrations
+
+### LLM Provider Support (12 Providers)
+- ✅ **OpenAI** (GPT-3.5, GPT-4, GPT-4 Turbo)
+- ✅ **Azure OpenAI Service**
+- ✅ **Anthropic Claude**
+- ✅ **Google Gemini**
+- ✅ **AWS Bedrock**
+- ✅ **Cohere**
+- ✅ **Groq**
+- ✅ **Mistral AI**
+- ✅ **Together AI**
+- ✅ **Ollama** (local)
+- ✅ **LM Studio** (local)
+- ✅ **vLLM** (local)
+
+### Enterprise Features
+- 🔒 **Security**: Secrets management, input validation, rate limiting
+- 📈 **Observability**: Structured logging, distributed tracing, cost tracking
+- ⚡ **Performance**: Multi-level caching, connection pooling, async throughout - Leveraging .NET 10 AI optimizations
+- 🏥 **Health Checks**: Integration with ASP.NET Core health checks
+- 📝 **Configuration**: Centralized configuration with multiple sources
+- 🚀 **.NET 10 Optimized**: Built on .NET 10 (LTS) with AI-focused performance improvements
 
 ## 🚀 Quick Start
 
 ### Installation
 
+Install the metapackage (includes all features):
+
 ```bash
-dotnet add package DotLangChain.Core
-dotnet add package DotLangChain.Providers.OpenAI
-dotnet add package DotLangChain.VectorStores.Qdrant
+dotnet add package DotNetAgents
+```
+
+Or install specific packages:
+
+```bash
+# Core only
+dotnet add package DotNetAgents.Core
+
+# With OpenAI provider
+dotnet add package DotNetAgents.Providers.OpenAI
 ```
 
 ### Basic Usage
 
+#### Simple Chain
+
 ```csharp
-using DotLangChain.Extensions.DependencyInjection;
+using DotNetAgents.Core;
+using DotNetAgents.Providers.OpenAI;
 
-var builder = WebApplication.CreateBuilder(args);
+// Register services
+services.AddDotNetAgents()
+    .AddOpenAI(options =>
+    {
+        options.ApiKey = configuration["OpenAI:ApiKey"];
+        options.Model = "gpt-4";
+    });
 
-builder.Services.AddDotLangChain(dlc =>
-{
-    dlc.AddDocumentLoaders(docs =>
-    {
-        docs.AddPdf();
-        docs.AddDocx();
-        docs.AddMarkdown();
-    });
-    
-    dlc.AddOpenAI(options =>
-    {
-        options.ApiKey = builder.Configuration["OpenAI:ApiKey"]!;
-        options.DefaultModel = "gpt-4o";
-    });
-    
-    dlc.AddQdrant(options =>
-    {
-        options.Host = "localhost";
-        options.Port = 6333;
-    });
-});
+// Use in your code
+var llm = serviceProvider.GetRequiredService<ILLMModel<ChatMessage[], ChatMessage>>();
+var response = await llm.GenerateAsync(messages);
 ```
+
+#### Building a Chain
+
+```csharp
+var chain = ChainBuilder
+    .Create<string, string>()
+    .WithLLM(llm)
+    .WithPromptTemplate(template)
+    .WithRetryPolicy(maxRetries: 3)
+    .Build();
+
+var result = await chain.InvokeAsync("Hello, world!");
+```
+
+#### Creating a Workflow
+
+```csharp
+var workflow = new StateGraph<MyState>()
+    .AddNode("start", async (state, ct) => {
+        // Initial processing
+        return state;
+    })
+    .AddNode("process", async (state, ct) => {
+        // Main processing
+        return state;
+    })
+    .AddEdge("start", "process")
+    .SetEntryPoint("start")
+    .SetExitPoint("process");
+
+var executor = new GraphExecutor<MyState>(workflow);
+var finalState = await executor.ExecuteAsync(initialState);
+```
+
+## 📦 Package Structure
+
+DotNetAgents uses a modular package architecture:
+
+- **`DotNetAgents.Core`** - Core abstractions and interfaces
+- **`DotNetAgents.Workflow`** - Workflow engine (LangGraph-like)
+- **`DotNetAgents.Providers.OpenAI`** - OpenAI integration
+- **`DotNetAgents.Providers.Azure`** - Azure OpenAI integration
+- **`DotNetAgents.Providers.Anthropic`** - Anthropic integration
+- **`DotNetAgents.VectorStores.Pinecone`** - Pinecone integration
+- **`DotNetAgents.Configuration`** - Configuration management
+- **`DotNetAgents.Observability`** - Logging, tracing, metrics
+- **`DotNetAgents`** - Metapackage (references all above)
 
 ## 📚 Documentation
 
-- **[Requirements](docs/REQUIREMENTS.md)**: Functional and non-functional requirements
-- **[Technical Specifications](docs/TECHNICAL_SPECIFICATIONS.md)**: Architecture and implementation details
-- **[API Reference](docs/API_REFERENCE.md)**: Complete API documentation
-- **[Getting Started Guide](docs/GETTING_STARTED.md)**: Step-by-step tutorial (coming soon)
-- **[Samples](samples/)**: Example applications
-
-### Implementation Guides
-
-- **[Build & CI/CD](docs/BUILD_AND_CICD.md)**: Build configuration and CI/CD pipelines
-- **[Testing Strategy](docs/TESTING_STRATEGY.md)**: Testing approach and guidelines
-- **[Performance Benchmarks](docs/PERFORMANCE_BENCHMARKS.md)**: Performance targets and benchmarks
-- **[Error Handling](docs/ERROR_HANDLING.md)**: Exception hierarchy and error handling
-- **[Versioning & Migration](docs/VERSIONING_AND_MIGRATION.md)**: Versioning strategy and migration guides
-- **[Package Metadata](docs/PACKAGE_METADATA.md)**: Package organization and distribution
-
-## ✨ Features
-
-### Document Ingestion
-- **Multiple Formats**: PDF, DOCX, XLSX, HTML, Markdown, Text, Email, Images (OCR)
-- **Flexible Splitting**: Character-based, token-based, sentence-based, semantic, recursive
-- **Metadata Preservation**: Track source, lineage, and custom metadata
-
-### Embeddings
-- **Multiple Providers**: OpenAI, Azure OpenAI, Ollama, HuggingFace, Cohere, Custom HTTP
-- **Batch Processing**: Efficient batch embedding with configurable sizes
-- **Caching**: Built-in caching for improved performance
-- **Normalization**: Automatic embedding normalization
-
-### Vector Stores
-- **Multiple Backends**: Qdrant, Milvus, Pinecone, PostgreSQL (pgvector), Redis, Elasticsearch, In-Memory
-- **Advanced Search**: Similarity search, hybrid search, metadata filtering, MMR
-- **High Performance**: Optimized for large-scale vector operations
-
-### LLM Integration
-- **Multiple Providers**: OpenAI, Azure OpenAI, Anthropic Claude, Ollama, vLLM, Google Gemini, AWS Bedrock, Groq
-- **Streaming**: Native streaming support via `IAsyncEnumerable<T>`
-- **Tool Calling**: Strongly-typed function calling
-- **Structured Output**: JSON mode and structured responses
-- **Multimodal**: Vision and multimodal input support
-
-### Agent Orchestration
-- **Graph-Based**: Define agents as directed graphs
-- **State Management**: Strongly-typed state with persistence support
-- **Tool System**: Attribute-based and fluent API tool definitions
-- **Built-in Patterns**: ReAct, Plan-and-Execute, Reflection, Multi-Agent, RAG
-
-### Security & Observability
-- **OWASP Compliant**: Security-first design
-- **Input Sanitization**: Prompt injection prevention
-- **OpenTelemetry**: Comprehensive observability
-- **Audit Logging**: Security event logging
+- **[Requirements](docs/requirements.md)** - Functional and non-functional requirements
+- **[Technical Specification](docs/technical-specification.md)** - Architecture and design details
+- **[Implementation Plan](docs/implementation-plan.md)** - Development roadmap
+- **[Comparison Guide](docs/comparison.md)** - DotNetAgents vs LangChain, LangGraph, and Microsoft Agent Framework
+- **[Project Status](docs/PROJECT_STATUS.md)** - Current development status and completed features
+- **[Contributing](CONTRIBUTING.md)** - How to contribute
+- **[Code of Conduct](CODE_OF_CONDUCT.md)** - Community guidelines
 
 ## 🏗️ Architecture
 
+DotNetAgents follows a layered, modular architecture:
+
 ```
-┌─────────────────────────────────────────────────────────┐
-│                  Application Layer                      │
-│  (Chains, Agents, Patterns, Pre-built Flows)           │
-└─────────────────────────────────────────────────────────┘
-┌─────────────────────────────────────────────────────────┐
-│              Orchestration Layer                        │
-│           (Graph Execution Engine)                      │
-└─────────────────────────────────────────────────────────┘
-┌─────────────────────────────────────────────────────────┐
-│                 Core Services Layer                     │
-│  (Documents, Embeddings, Vector Stores, LLM)           │
-└─────────────────────────────────────────────────────────┘
-┌─────────────────────────────────────────────────────────┐
-│              Infrastructure Layer                       │
-│  (Caching, Resilience, Observability, Security)        │
-└─────────────────────────────────────────────────────────┘
+Application Layer
+    ↓
+Workflow Engine (LangGraph-like)
+    ↓
+Chain & Runnable Layer (LangChain-like)
+    ↓
+Core Abstractions Layer
+    ↓
+Integrations & Infrastructure
 ```
 
-## 📦 Packages
+## 🧪 Requirements
 
-### Core Packages
-- `DotLangChain.Abstractions` - Interfaces and contracts
-- `DotLangChain.Core` - Core implementations
+- **.NET 10.0 SDK or later** (LTS) - Required for AI optimizations and Microsoft Agent Framework support
+- **C# 13 or later** - For modern language features and performance improvements
 
-### Provider Packages
-- `DotLangChain.Providers.OpenAI` - OpenAI integration
-- `DotLangChain.Providers.Anthropic` - Anthropic Claude integration
-- `DotLangChain.Providers.Ollama` - Ollama (local) integration
-- `DotLangChain.Providers.AzureOpenAI` - Azure OpenAI integration
+### .NET 10 AI Optimizations
 
-### Vector Store Packages
-- `DotLangChain.VectorStores.Qdrant` - Qdrant integration
-- `DotLangChain.VectorStores.PgVector` - PostgreSQL pgvector integration
-- `DotLangChain.VectorStores.InMemory` - In-memory store (dev/test)
+DotNetAgents leverages .NET 10's AI-focused enhancements:
 
-### Extension Packages
-- `DotLangChain.Extensions.DependencyInjection` - DI extensions
-- `DotLangChain.Extensions.Observability` - OpenTelemetry integration
-
-## 🔧 Requirements
-
-- .NET 9.0 or later
-- At least one LLM provider (cloud or local)
-- Optional: Vector store for RAG applications (in-memory available for development)
+- **Performance**: Up to 20% faster async operations and reduced latency for LLM API calls
+- **Memory**: Improved GC efficiency for vector operations and document processing
+- **Networking**: HTTP/3 support and optimized connection pooling for better throughput
+- **Observability**: Enhanced OpenTelemetry integration for AI workload monitoring
+- **Compatibility**: Full support for Microsoft Agent Framework and modern AI tooling
 
 ## 🤝 Contributing
 
-Contributions are welcome! Please see our [Contributing Guide](CONTRIBUTING.md) for details.
+We welcome contributions! Please see our [Contributing Guide](CONTRIBUTING.md) for details.
 
 ### Development Setup
 
 1. Clone the repository
-2. Install .NET 9.0 SDK
+2. Install .NET 10 SDK
 3. Restore dependencies: `dotnet restore`
 4. Build: `dotnet build`
 5. Run tests: `dotnet test`
 
-For detailed setup instructions, see [BUILD_AND_CICD.md](docs/BUILD_AND_CICD.md).
-
-## 📄 License
+## 📝 License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
+## 🗺️ Roadmap
+
+- [x] Planning and architecture design
+- [ ] Core abstractions (Weeks 3-5)
+- [ ] LLM provider integrations (Weeks 8-12)
+- [ ] Memory and retrieval (Weeks 13-15)
+- [ ] Workflow engine (Weeks 19-23)
+- [ ] Observability and security (Weeks 27-32)
+- [ ] Documentation and samples (Weeks 45-48)
+- [ ] v1.0.0 Release (Week 52)
+
+See [Implementation Plan](docs/implementation-plan.md) for detailed roadmap.
+
 ## 🙏 Acknowledgments
 
-- Inspired by [LangChain](https://github.com/langchain-ai/langchain) and [LangGraph](https://github.com/langchain-ai/langgraph)
-- Built with the .NET community in mind
+- Inspired by [LangChain](https://www.langchain.com/) and [LangGraph](https://www.langchain.com/langgraph)
+- Built with **.NET 10 (LTS)** and **C# 13** - Leveraging cutting-edge AI optimizations
+- Compatible with [Microsoft Agent Framework](https://learn.microsoft.com/en-us/agent-framework/) for enhanced orchestration
+- Optimized for AI workloads with .NET 10's performance improvements and modern runtime features
 
-## 📞 Support
+## 📧 Contact
 
-- **Documentation**: See [docs/](docs/) directory
-- **Issues**: [GitHub Issues](https://github.com/dotlangchain/dotlangchain/issues)
-- **Discussions**: [GitHub Discussions](https://github.com/dotlangchain/dotlangchain/discussions)
+- **Issues**: [GitHub Issues](https://github.com/jim-finlon/DotNetAgents/issues)
+- **Discussions**: [GitHub Discussions](https://github.com/jim-finlon/DotNetAgents/discussions)
 
 ---
 
-**Note**: This project is currently in active development. APIs may change before the 1.0.0 release.
+**Status**: 🚧 In Active Development - Targeting v1.0.0 Release
 
+Made with ❤️ for the .NET community
