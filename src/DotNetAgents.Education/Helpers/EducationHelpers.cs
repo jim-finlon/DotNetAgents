@@ -34,17 +34,22 @@ public static class EducationHelpers
     /// <returns>The appropriate grade level.</returns>
     public static GradeLevel GetGradeLevelForAge(int age)
     {
-        return age switch
-        {
-            >= 5 and <= 8 => GradeLevel.K2,
-            >= 9 and <= 11 => GradeLevel.G3_5,
-            >= 12 and <= 14 => GradeLevel.G6_8,
-            >= 15 and <= 16 => GradeLevel.G9_10,
-            >= 17 and <= 18 => GradeLevel.G11_12,
-            >= 19 and <= 25 => GradeLevel.College,
-            > 25 => GradeLevel.Professional,
-            _ => GradeLevel.G3_5 // Default
-        };
+        if (age >= 5 && age <= 8)
+            return GradeLevel.K2;
+        if (age >= 9 && age <= 11)
+            return GradeLevel.G3_5;
+        if (age >= 12 && age <= 14)
+            return GradeLevel.G6_8;
+        if (age >= 15 && age <= 16)
+            return GradeLevel.G9_10;
+        if (age >= 17 && age <= 18)
+            return GradeLevel.G11_12;
+        if (age >= 19 && age <= 25)
+            return GradeLevel.College;
+        if (age > 25)
+            return GradeLevel.Professional;
+        
+        return GradeLevel.G3_5; // Default
     }
 
     /// <summary>
