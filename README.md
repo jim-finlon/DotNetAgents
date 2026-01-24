@@ -150,6 +150,7 @@ DotNetAgents uses a modular package architecture:
 - **`DotNetAgents.Providers.Azure`** - Azure OpenAI integration
 - **`DotNetAgents.Providers.Anthropic`** - Anthropic integration
 - **`DotNetAgents.VectorStores.Pinecone`** - Pinecone integration
+- **`DotNetAgents.VectorStores.PostgreSQL`** - PostgreSQL vector store using pgvector extension
 - **`DotNetAgents.Storage.SqlServer`** - SQL Server storage for checkpoints, tasks, and knowledge
 - **`DotNetAgents.Storage.PostgreSQL`** - PostgreSQL storage for checkpoints, tasks, and knowledge
 - **`DotNetAgents.Configuration`** - Configuration management
