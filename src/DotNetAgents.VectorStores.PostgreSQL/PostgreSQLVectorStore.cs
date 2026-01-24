@@ -143,9 +143,12 @@ public class PostgreSQLVectorStore : IVectorStore
                 var paramIndex = 2;
                 foreach (var kvp in filter)
                 {
-                    var paramName = $"@filter_{paramIndex}";
-                    filterConditions.Add($"{_metadataColumn}->>'{kvp.Key}' = {paramName}");
-                    parameters.Add(new NpgsqlParameter(paramName, kvp.Value?.ToString() ?? string.Empty));
+                    var keyParamName = $"@filter_key_{paramIndex}";
+                    var valueParamName = $"@filter_value_{paramIndex}";
+                    // Use parameterized key to prevent SQL injection
+                    filterConditions.Add($"{_metadataColumn}->>{keyParamName} = {valueParamName}");
+                    parameters.Add(new NpgsqlParameter(keyParamName, kvp.Key));
+                    parameters.Add(new NpgsqlParameter(valueParamName, kvp.Value?.ToString() ?? string.Empty));
                     paramIndex++;
                 }
                 whereClause = "WHERE " + string.Join(" AND ", filterConditions);
