@@ -1,3 +1,5 @@
+using DotNetAgents.Knowledge.Storage;
+using DotNetAgents.Tasks.Storage;
 using DotNetAgents.Workflow.Checkpoints;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -5,7 +7,7 @@ using Microsoft.Extensions.Logging;
 namespace DotNetAgents.Storage.PostgreSQL;
 
 /// <summary>
-/// Extension methods for registering PostgreSQL checkpoint store in dependency injection.
+/// Extension methods for registering PostgreSQL stores in dependency injection.
 /// </summary>
 public static class ServiceCollectionExtensions
 {
@@ -59,6 +61,54 @@ public static class ServiceCollectionExtensions
         {
             var logger = sp.GetService<ILogger<PostgreSQLCheckpointStore<TState>>>();
             return new PostgreSQLCheckpointStore<TState>(connectionString, tableName, serializer, logger);
+        });
+
+        return services;
+    }
+
+    /// <summary>
+    /// Adds PostgreSQL task store to the service collection.
+    /// </summary>
+    /// <param name="services">The service collection.</param>
+    /// <param name="connectionString">The PostgreSQL connection string.</param>
+    /// <param name="tableName">Optional table name. Default: "work_tasks".</param>
+    /// <returns>The service collection for method chaining.</returns>
+    public static IServiceCollection AddPostgreSQLTaskStore(
+        this IServiceCollection services,
+        string connectionString,
+        string tableName = "work_tasks")
+    {
+        ArgumentNullException.ThrowIfNull(services);
+        ArgumentException.ThrowIfNullOrWhiteSpace(connectionString);
+
+        services.AddSingleton<ITaskStore>(sp =>
+        {
+            var logger = sp.GetService<ILogger<PostgreSQLTaskStore>>();
+            return new PostgreSQLTaskStore(connectionString, tableName, logger);
+        });
+
+        return services;
+    }
+
+    /// <summary>
+    /// Adds PostgreSQL knowledge store to the service collection.
+    /// </summary>
+    /// <param name="services">The service collection.</param>
+    /// <param name="connectionString">The PostgreSQL connection string.</param>
+    /// <param name="tableName">Optional table name. Default: "knowledge_items".</param>
+    /// <returns>The service collection for method chaining.</returns>
+    public static IServiceCollection AddPostgreSQLKnowledgeStore(
+        this IServiceCollection services,
+        string connectionString,
+        string tableName = "knowledge_items")
+    {
+        ArgumentNullException.ThrowIfNull(services);
+        ArgumentException.ThrowIfNullOrWhiteSpace(connectionString);
+
+        services.AddSingleton<IKnowledgeStore>(sp =>
+        {
+            var logger = sp.GetService<ILogger<PostgreSQLKnowledgeStore>>();
+            return new PostgreSQLKnowledgeStore(connectionString, tableName, logger);
         });
 
         return services;
