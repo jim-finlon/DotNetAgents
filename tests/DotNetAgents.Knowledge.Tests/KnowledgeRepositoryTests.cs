@@ -156,14 +156,15 @@ public class KnowledgeRepositoryTests
         // Arrange
         var title = "Test knowledge";
         var description = "Test description";
-        var contentHash = "test-hash";
         var duplicate = new KnowledgeItem
         {
             Id = Guid.NewGuid(),
             Title = title,
-            Description = description,
-            ContentHash = contentHash
+            Description = description
         };
+
+        // Calculate the actual content hash that will be used
+        var contentHash = Helpers.ContentHashHelper.CalculateContentHash(title, description);
 
         _knowledgeStoreMock.Setup(x => x.GetByContentHashAsync(contentHash, It.IsAny<CancellationToken>()))
             .ReturnsAsync(duplicate);
