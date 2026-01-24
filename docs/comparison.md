@@ -26,6 +26,9 @@ DotNetAgents is a comprehensive .NET 10 library that provides native C# implemen
 | **Performance** | ✅ .NET 10 optimized | ⚠️ Python overhead | ⚠️ Python overhead | ✅ .NET 10 optimized |
 | **Type Safety** | ✅ Strong typing | ⚠️ Dynamic typing | ⚠️ Dynamic typing | ✅ Strong typing |
 | **Educational Extensions** | ✅ Full package (pedagogy, safety, assessment, compliance) | ❌ Not included | ❌ Not included | ❌ Not included |
+| **Voice Commands** | ✅ Intent classification, dialog management, scheduling | ❌ Not included | ❌ Not included | ❌ Not included |
+| **MCP Client** | ✅ Model Context Protocol client library | ❌ Not included | ❌ Not included | ⚠️ MCP support (orchestration focus) |
+| **Task & Knowledge** | ✅ Task management, knowledge repository | ❌ Not included | ❌ Not included | ❌ Not included |
 
 ## Detailed Feature Comparison
 
@@ -452,7 +455,108 @@ DotNetAgents is a comprehensive .NET 10 library that provides native C# implemen
 
 **Winner for Type Safety:** DotNetAgents, MAF (both C#)
 
-### 12. Checkpointing & State Persistence
+### 12. Voice Command Processing
+
+#### DotNetAgents
+✅ **Voice Command Features:**
+- Intent classification using LLM (`IIntentClassifier`)
+- Dynamic intent registration (`IIntentTaxonomyRegistry`)
+- Command parsing and parameter extraction
+- Dialog management for multi-turn conversations (`IDialogManager`)
+- Scheduled command execution (`ICommandScheduler`)
+- Command templates for reusable patterns
+- Intent context awareness
+- Integration with workflow orchestration
+
+**Packages:**
+- `DotNetAgents.Voice` - Core voice command processing
+- `DotNetAgents.Voice.Transcription` - Whisper-based audio transcription
+- `DotNetAgents.Voice.Dialog` - Dialog management system
+- `DotNetAgents.Voice.Scheduling` - Scheduled command execution
+- `DotNetAgents.Voice.SignalR` - Real-time status updates
+
+#### LangChain
+- **❌ Not Included**: No voice command processing
+- **Community Tools**: Some third-party voice integrations available
+
+#### LangGraph
+- **❌ Not Included**: No voice command processing
+- **Workflow Integration**: Could integrate voice via custom nodes
+
+#### Microsoft Agent Framework
+- **MCP Support**: Supports Model Context Protocol for service integration
+- **❌ No Voice Processing**: No built-in voice command processing
+- **Tool Integration**: Can integrate voice tools via MCP
+
+**Winner for Voice Commands:** DotNetAgents (comprehensive voice command system)
+
+### 13. Model Context Protocol (MCP)
+
+#### DotNetAgents
+✅ **MCP Client Library:**
+- HTTP-based MCP client (`IMcpClient`)
+- Tool discovery and registry (`IMcpToolRegistry`)
+- Service health checking
+- Intent-to-service routing (`IMcpAdapterRouter`)
+- Client factory for multiple services (`IMcpClientFactory`)
+- Integration with voice command processing
+
+**Package:**
+- `DotNetAgents.Mcp` - Complete MCP client implementation
+
+#### LangChain
+- **❌ Not Included**: No MCP client library
+- **Community Tools**: Some MCP integrations available
+
+#### LangGraph
+- **❌ Not Included**: No MCP client library
+- **Workflow Integration**: Could integrate MCP via custom nodes
+
+#### Microsoft Agent Framework
+- **✅ MCP Support**: Native MCP support for service integration
+- **Orchestration Focus**: MCP used for agent-to-service communication
+
+**Winner for MCP:** Microsoft Agent Framework (native), DotNetAgents (comprehensive client library)
+
+### 14. Task & Knowledge Management
+
+#### DotNetAgents
+✅ **Task Management:**
+- Task CRUD operations (`ITaskManager`)
+- Dependency tracking (`DependsOn`, `BlockedBy`)
+- Task status management (Pending, InProgress, Completed, etc.)
+- Task statistics and reporting
+- Integration with workflow execution
+
+✅ **Knowledge Repository:**
+- Knowledge capture (`IKnowledgeRepository`)
+- Content hash for duplicate detection
+- Relevance matching (tech stack, tags)
+- Reference counting
+- Search and query capabilities
+- Integration with error handling and tool execution
+
+**Packages:**
+- `DotNetAgents.Tasks` - Task management
+- `DotNetAgents.Knowledge` - Knowledge repository
+- `DotNetAgents.Storage.TaskKnowledge.SqlServer` - SQL Server storage
+- `DotNetAgents.Storage.TaskKnowledge.PostgreSQL` - PostgreSQL storage
+
+#### LangChain
+- **❌ Not Included**: No task or knowledge management
+- **Community Tools**: Some task tracking tools available
+
+#### LangGraph
+- **❌ Not Included**: No task or knowledge management
+- **Workflow State**: Workflow state can be used for task tracking
+
+#### Microsoft Agent Framework
+- **❌ Not Included**: No task or knowledge management
+- **Agent State**: Agent state can be used for tracking
+
+**Winner for Task & Knowledge:** DotNetAgents (dedicated packages)
+
+### 15. Checkpointing & State Persistence
 
 #### DotNetAgents
 ✅ **Multiple Backends:**
@@ -495,6 +599,9 @@ DotNetAgents is a comprehensive .NET 10 library that provides native C# implemen
 - ✅ Building RAG applications with document processing
 - ✅ Want LangChain/LangGraph patterns in C#
 - ✅ Need .NET 10 AI optimizations
+- ✅ Building voice command interfaces
+- ✅ Need MCP client library for service integration
+- ✅ Require task management and knowledge repository
 
 ### Choose LangChain When:
 - ✅ Building Python applications
@@ -543,7 +650,7 @@ services.AddDotNetAgents()
 
 **Benefits:**
 - Use DotNetAgents' document loaders with MAF agents
-- Leverage DotNetAgents' 17 built-in tools
+- Leverage DotNetAgents' 19 built-in tools
 - Access all 12 LLM providers through MAF
 - Combine MAF's orchestration with DotNetAgents' components
 
@@ -574,6 +681,11 @@ DotNetAgents provides a comprehensive alternative to LangChain and LangGraph for
 4. **Type Safety**: Strong typing throughout
 5. **Performance**: .NET 10 AI optimizations
 6. **Provider Support**: 12 LLM providers with more coming
+7. **Voice Commands**: Complete voice command processing system with intent classification, dialog management, and scheduling
+8. **MCP Integration**: Full Model Context Protocol client library for service integration
+9. **Task & Knowledge**: Dedicated task management and knowledge repository packages
+10. **LCEL Support**: Declarative chain composition with operator overloads
+11. **Workflow Visualization**: Export workflows to DOT, Mermaid, and JSON formats
 
 For Python developers, LangChain and LangGraph remain excellent choices. For .NET developers, DotNetAgents provides native C# implementations with enterprise-grade features, Microsoft Agent Framework compatibility, and specialized educational extensions.
 
