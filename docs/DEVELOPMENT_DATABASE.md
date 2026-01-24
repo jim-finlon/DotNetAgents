@@ -9,26 +9,26 @@ This document contains connection information for the development PostgreSQL ser
 - **Host**: `anubis`
 - **Port**: `5432` (standard PostgreSQL port)
 - **Username**: `ai`
-- **Password**: `ai8989@`
+- **Password**: `YOUR_PASSWORD` (contact administrator for actual password)
 - **Environment**: Development playground - full access granted
 
 ### Connection String Format
 
 #### Standard Connection String
 ```
-Host=anubis;Port=5432;Username=ai;Password=ai8989@;Database={database_name}
+Host=anubis;Port=5432;Username=ai;Password=YOUR_PASSWORD;Database={database_name}
 ```
 
 #### Npgsql Connection String (for .NET)
 ```
-Host=anubis;Port=5432;Username=ai;Password=ai8989@;Database={database_name};Pooling=true;MinPoolSize=0;MaxPoolSize=100
+Host=anubis;Port=5432;Username=ai;Password=YOUR_PASSWORD;Database={database_name};Pooling=true;MinPoolSize=0;MaxPoolSize=100
 ```
 
 ### Example Usage
 
 #### Task and Knowledge Stores
 ```csharp
-var connectionString = "Host=anubis;Port=5432;Username=ai;Password=ai8989@;Database=dotnetagents_dev";
+var connectionString = "Host=anubis;Port=5432;Username=ai;Password=YOUR_PASSWORD;Database=dotnetagents_dev";
 
 services.AddPostgreSQLTaskStore(connectionString);
 services.AddPostgreSQLKnowledgeStore(connectionString);
@@ -37,7 +37,7 @@ services.AddPostgreSQLCheckpointStore<MyState>(connectionString);
 
 #### Vector Store
 ```csharp
-var connectionString = "Host=anubis;Port=5432;Username=ai;Password=ai8989@;Database=dotnetagents_vectors";
+var connectionString = "Host=anubis;Port=5432;Username=ai;Password=YOUR_PASSWORD;Database=dotnetagents_vectors";
 
 services.AddPostgreSQLVectorStore(
     connectionString,
@@ -79,7 +79,7 @@ For local development, you can set environment variables:
 $env:POSTGRES_HOST="anubis"
 $env:POSTGRES_PORT="5432"
 $env:POSTGRES_USER="ai"
-$env:POSTGRES_PASSWORD="ai8989@"
+$env:POSTGRES_PASSWORD="YOUR_PASSWORD"
 $env:POSTGRES_DATABASE="dotnetagents_dev"
 ```
 
@@ -99,7 +99,7 @@ To test the connection programmatically:
 ```csharp
 using Npgsql;
 
-var connectionString = "Host=anubis;Port=5432;Username=ai;Password=ai8989@;Database=postgres";
+var connectionString = "Host=anubis;Port=5432;Username=ai;Password=YOUR_PASSWORD;Database=postgres";
 await using var connection = new NpgsqlConnection(connectionString);
 await connection.OpenAsync();
 var version = await connection.PostgreSqlVersion;
