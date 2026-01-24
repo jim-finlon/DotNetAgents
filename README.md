@@ -271,6 +271,15 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - Compatible with [Microsoft Agent Framework](https://learn.microsoft.com/en-us/agent-framework/) for enhanced orchestration
 - Optimized for AI workloads with .NET 10's performance improvements and modern runtime features
 
+## 👥 Contributors
+
+This project has benefited from contributions and assistance from:
+
+- **AI Assistants**: Claude (Anthropic) and Composer (Cursor) for code generation, documentation, and implementation assistance
+- **Human Contributors**: See [CONTRIBUTING.md](CONTRIBUTING.md) for how to contribute
+
+We're grateful for all contributions, whether from humans or AI assistants working together to build better tools!
+
 ## 📧 Contact
 
 - **Issues**: [GitHub Issues](https://github.com/jim-finlon/DotNetAgents/issues)
