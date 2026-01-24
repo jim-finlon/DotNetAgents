@@ -1,3 +1,5 @@
+using DotNetAgents.Abstractions.Chains;
+
 namespace DotNetAgents.Core.Chains;
 
 /// <summary>
@@ -59,7 +61,7 @@ public static class RunnableExtensions
 
         public async Task<TFinalOutput> InvokeAsync(
             TInput input,
-            RunnableOptions? options = null,
+            DotNetAgents.Abstractions.Chains.RunnableOptions? options = null,
             CancellationToken cancellationToken = default)
         {
             var middle = await _first.InvokeAsync(input, options, cancellationToken).ConfigureAwait(false);
@@ -68,7 +70,7 @@ public static class RunnableExtensions
 
         public async IAsyncEnumerable<TFinalOutput> StreamAsync(
             TInput input,
-            RunnableOptions? options = null,
+            DotNetAgents.Abstractions.Chains.RunnableOptions? options = null,
             [System.Runtime.CompilerServices.EnumeratorCancellation] CancellationToken cancellationToken = default)
         {
             await foreach (var middle in _first.StreamAsync(input, options, cancellationToken).ConfigureAwait(false))
@@ -82,7 +84,7 @@ public static class RunnableExtensions
 
         public async Task<IReadOnlyList<TFinalOutput>> BatchAsync(
             IEnumerable<TInput> inputs,
-            RunnableOptions? options = null,
+            DotNetAgents.Abstractions.Chains.RunnableOptions? options = null,
             CancellationToken cancellationToken = default)
         {
             var middleResults = await _first.BatchAsync(inputs, options, cancellationToken).ConfigureAwait(false);
@@ -103,7 +105,7 @@ public static class RunnableExtensions
 
         public async Task<TOutput> InvokeAsync(
             TInput input,
-            RunnableOptions? options = null,
+            DotNetAgents.Abstractions.Chains.RunnableOptions? options = null,
             CancellationToken cancellationToken = default)
         {
             var result = await _runnable.InvokeAsync(input, options, cancellationToken).ConfigureAwait(false);
@@ -112,7 +114,7 @@ public static class RunnableExtensions
 
         public async IAsyncEnumerable<TOutput> StreamAsync(
             TInput input,
-            RunnableOptions? options = null,
+            DotNetAgents.Abstractions.Chains.RunnableOptions? options = null,
             [System.Runtime.CompilerServices.EnumeratorCancellation] CancellationToken cancellationToken = default)
         {
             await foreach (var item in _runnable.StreamAsync(input, options, cancellationToken).ConfigureAwait(false))
@@ -123,7 +125,7 @@ public static class RunnableExtensions
 
         public async Task<IReadOnlyList<TOutput>> BatchAsync(
             IEnumerable<TInput> inputs,
-            RunnableOptions? options = null,
+            DotNetAgents.Abstractions.Chains.RunnableOptions? options = null,
             CancellationToken cancellationToken = default)
         {
             var results = await _runnable.BatchAsync(inputs, options, cancellationToken).ConfigureAwait(false);

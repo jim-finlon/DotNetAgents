@@ -1,5 +1,5 @@
-using DotNetAgents.Core.Exceptions;
-using DotNetAgents.Core.Retrieval;
+using DotNetAgents.Abstractions.Exceptions;
+using DotNetAgents.Abstractions.Retrieval;
 using Microsoft.Extensions.Logging;
 using System.Net.Http.Json;
 using System.Text;

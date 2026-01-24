@@ -1,4 +1,4 @@
-using DotNetAgents.Core.Tools.BuiltIn;
+using DotNetAgents.Tools.BuiltIn;
 using System.Text.Json;
 using Xunit;
 

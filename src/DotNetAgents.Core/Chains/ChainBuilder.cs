@@ -1,7 +1,9 @@
-using DotNetAgents.Core.Caching;
-using DotNetAgents.Core.Exceptions;
-using DotNetAgents.Core.Memory;
-using DotNetAgents.Core.Models;
+using DotNetAgents.Abstractions.Caching;
+using DotNetAgents.Abstractions.Chains;
+using DotNetAgents.Abstractions.Memory;
+using DotNetAgents.Abstractions.Models;
+using DotNetAgents.Abstractions.Prompts;
+using DotNetAgents.Abstractions.Exceptions;
 using DotNetAgents.Core.Prompts;
 
 namespace DotNetAgents.Core.Chains;

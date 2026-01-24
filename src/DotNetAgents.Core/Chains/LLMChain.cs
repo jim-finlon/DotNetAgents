@@ -1,6 +1,7 @@
-using DotNetAgents.Core.Models;
-using DotNetAgents.Core.OutputParsers;
-using DotNetAgents.Core.Prompts;
+using DotNetAgents.Abstractions.Chains;
+using DotNetAgents.Abstractions.Models;
+using DotNetAgents.Abstractions.OutputParsers;
+using DotNetAgents.Abstractions.Prompts;
 
 namespace DotNetAgents.Core.Chains;
 
@@ -35,7 +36,7 @@ public class LLMChain<TInput, TOutput> : IRunnable<TInput, TOutput>
     /// <inheritdoc/>
     public async Task<TOutput> InvokeAsync(
         TInput input,
-        RunnableOptions? options = null,
+        DotNetAgents.Abstractions.Chains.RunnableOptions? options = null,
         CancellationToken cancellationToken = default)
     {
         // Convert input to dictionary if needed
@@ -70,7 +71,7 @@ public class LLMChain<TInput, TOutput> : IRunnable<TInput, TOutput>
     /// <inheritdoc/>
     public async IAsyncEnumerable<TOutput> StreamAsync(
         TInput input,
-        RunnableOptions? options = null,
+        DotNetAgents.Abstractions.Chains.RunnableOptions? options = null,
         [System.Runtime.CompilerServices.EnumeratorCancellation] CancellationToken cancellationToken = default)
     {
         // Convert input to dictionary if needed
@@ -101,7 +102,7 @@ public class LLMChain<TInput, TOutput> : IRunnable<TInput, TOutput>
     /// <inheritdoc/>
     public async Task<IReadOnlyList<TOutput>> BatchAsync(
         IEnumerable<TInput> inputs,
-        RunnableOptions? options = null,
+        DotNetAgents.Abstractions.Chains.RunnableOptions? options = null,
         CancellationToken cancellationToken = default)
     {
         if (inputs == null)

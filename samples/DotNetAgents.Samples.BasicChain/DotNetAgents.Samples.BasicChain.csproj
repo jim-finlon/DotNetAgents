@@ -9,8 +9,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\DotNetAgents.Core\DotNetAgents.Core.csproj" />
-    <ProjectReference Include="..\..\src\DotNetAgents.Providers.OpenAI\DotNetAgents.Providers.OpenAI.csproj" />
+    <ProjectReference Include="..\..\src\DotNetAgents.Abstractions\DotNetAgents.Abstractions.csproj" />
+    <ProjectReference Include="..\..\src\Providers\DotNetAgents.Providers.OpenAI\DotNetAgents.Providers.OpenAI.csproj" />
     <ProjectReference Include="..\..\src\DotNetAgents.Configuration\DotNetAgents.Configuration.csproj" />
   </ItemGroup>
 

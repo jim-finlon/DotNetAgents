@@ -1,3 +1,4 @@
+using DotNetAgents.Abstractions.Caching;
 using DotNetAgents.Core.Caching;
 using FluentAssertions;
 using Xunit;

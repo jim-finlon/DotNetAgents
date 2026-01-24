@@ -1,3 +1,6 @@
+using DotNetAgents.Abstractions.Chains;
+using DotNetAgents.Abstractions.Exceptions;
+
 namespace DotNetAgents.Workflow.Graph;
 
 /// <summary>
@@ -50,7 +53,7 @@ public class WorkflowBuilder<TState> where TState : class
     /// <returns>The workflow builder for method chaining.</returns>
     public WorkflowBuilder<TState> AddNode(
         string name,
-        Core.Chains.IRunnable<TState, TState> runnable)
+        IRunnable<TState, TState> runnable)
     {
         if (runnable == null)
             throw new ArgumentNullException(nameof(runnable));
@@ -111,14 +114,14 @@ public class WorkflowBuilder<TState> where TState : class
     /// Builds the workflow graph.
     /// </summary>
     /// <returns>The built state graph.</returns>
-    /// <exception cref="Core.Exceptions.AgentException">Thrown when the workflow is invalid.</exception>
+    /// <exception cref="AgentException">Thrown when the workflow is invalid.</exception>
     public StateGraph<TState> Build()
     {
         if (string.IsNullOrWhiteSpace(_entryPoint))
         {
-            throw new Core.Exceptions.AgentException(
+            throw new AgentException(
                 "Workflow must have an entry point.",
-                Core.Exceptions.ErrorCategory.ConfigurationError);
+                ErrorCategory.ConfigurationError);
         }
 
         _graph.Validate();

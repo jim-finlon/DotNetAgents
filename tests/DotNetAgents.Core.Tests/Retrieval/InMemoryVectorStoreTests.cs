@@ -1,4 +1,4 @@
-using DotNetAgents.Core.Retrieval;
+using DotNetAgents.Abstractions.Retrieval;
 using DotNetAgents.Core.Retrieval.Implementations;
 using FluentAssertions;
 using Xunit;

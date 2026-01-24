@@ -1,6 +1,8 @@
 using System.Text;
 using System.Text.RegularExpressions;
 
+using DotNetAgents.Abstractions.Prompts;
+
 namespace DotNetAgents.Core.Prompts;
 
 /// <summary>

@@ -1,4 +1,4 @@
-using DotNetAgents.Core.Retrieval;
+using DotNetAgents.Abstractions.Retrieval;
 using DotNetAgents.Education.Models;
 
 namespace DotNetAgents.Education.Retrieval;

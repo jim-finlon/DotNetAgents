@@ -1,6 +1,7 @@
-using DotNetAgents.Core.Chains;
-using DotNetAgents.Core.Models;
-using DotNetAgents.Core.OutputParsers;
+using DotNetAgents.Abstractions.Chains;
+using DotNetAgents.Abstractions.Models;
+using DotNetAgents.Abstractions.OutputParsers;
+using DotNetAgents.Abstractions.Prompts;
 using DotNetAgents.Core.Prompts;
 using FluentAssertions;
 using Moq;

@@ -1,4 +1,4 @@
-using DotNetAgents.Core.Tools.BuiltIn;
+using DotNetAgents.Tools.BuiltIn;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.Json;

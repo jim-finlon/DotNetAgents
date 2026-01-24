@@ -1,7 +1,9 @@
+using DotNetAgents.Abstractions.Chains;
 using DotNetAgents.Core.Chains;
-using DotNetAgents.Core.Models;
+using DotNetAgents.Abstractions.Models;
+using DotNetAgents.Abstractions.Prompts;
 using DotNetAgents.Core.Prompts;
-using DotNetAgents.Core.Retrieval;
+using DotNetAgents.Abstractions.Retrieval;
 using DotNetAgents.Core.Retrieval.Implementations;
 using FluentAssertions;
 using Moq;

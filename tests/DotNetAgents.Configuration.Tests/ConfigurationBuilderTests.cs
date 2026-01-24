@@ -111,6 +111,6 @@ public class ConfigurationBuilderTests
         var builder = new ConfigurationBuilder();
 
         // Act & Assert
-        Assert.Throws<Core.Exceptions.AgentException>(() => builder.Build());
+        Assert.Throws<DotNetAgents.Abstractions.Exceptions.AgentException>(() => builder.Build());
     }
 }

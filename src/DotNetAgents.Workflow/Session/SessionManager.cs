@@ -1,4 +1,4 @@
-using DotNetAgents.Core.Exceptions;
+using DotNetAgents.Abstractions.Exceptions;
 using DotNetAgents.Workflow.Session.Bootstrap;
 using DotNetAgents.Workflow.Session.Storage;
 using Microsoft.Extensions.Logging;

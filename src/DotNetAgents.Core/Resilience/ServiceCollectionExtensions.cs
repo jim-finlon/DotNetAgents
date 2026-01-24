@@ -1,4 +1,5 @@
-using DotNetAgents.Core.Models;
+using DotNetAgents.Abstractions.Models;
+using DotNetAgents.Abstractions.Resilience;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 

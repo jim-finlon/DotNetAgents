@@ -1,5 +1,5 @@
 using DotNetAgents.Configuration;
-using DotNetAgents.Core.Models;
+using DotNetAgents.Abstractions.Models;
 using DotNetAgents.Education.Assessment;
 using DotNetAgents.Education.Memory;
 using DotNetAgents.Education.Models;

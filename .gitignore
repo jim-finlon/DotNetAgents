@@ -390,6 +390,9 @@ appsettings.Local.json
 *.env
 .env
 .env.local
+appsettings.*.json
+!appsettings.json
+!appsettings.example.json
 
 # Test results and coverage
 TestResults/

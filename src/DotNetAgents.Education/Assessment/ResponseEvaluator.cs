@@ -1,4 +1,4 @@
-using DotNetAgents.Core.Models;
+using DotNetAgents.Abstractions.Models;
 using DotNetAgents.Education.Models;
 using Microsoft.Extensions.Logging;
 

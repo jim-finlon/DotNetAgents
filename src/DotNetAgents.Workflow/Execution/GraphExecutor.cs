@@ -1,5 +1,5 @@
-using DotNetAgents.Core.Exceptions;
-using DotNetAgents.Core.Execution;
+using DotNetAgents.Abstractions.Exceptions;
+using DotNetAgents.Abstractions.Execution;
 using DotNetAgents.Workflow.Checkpoints;
 using DotNetAgents.Workflow.Graph;
 using Microsoft.Extensions.Logging;
@@ -24,7 +24,7 @@ public record GraphExecutionOptions
     /// <summary>
     /// Gets or sets an optional execution context for tracking.
     /// </summary>
-    public Core.Execution.ExecutionContext? ExecutionContext { get; init; }
+    public DotNetAgents.Abstractions.Execution.ExecutionContext? ExecutionContext { get; init; }
 
     /// <summary>
     /// Gets or sets whether to create checkpoints after each node execution.

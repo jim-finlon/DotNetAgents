@@ -1,3 +1,5 @@
+using DotNetAgents.Abstractions.Chains;
+
 namespace DotNetAgents.Core.Chains;
 
 /// <summary>
@@ -25,7 +27,7 @@ public class SequentialChain<TInput, TOutput> : IRunnable<TInput, TOutput>
     /// <inheritdoc/>
     public async Task<TOutput> InvokeAsync(
         TInput input,
-        RunnableOptions? options = null,
+        DotNetAgents.Abstractions.Chains.RunnableOptions? options = null,
         CancellationToken cancellationToken = default)
     {
         object current = input!;
@@ -41,7 +43,7 @@ public class SequentialChain<TInput, TOutput> : IRunnable<TInput, TOutput>
     /// <inheritdoc/>
     public async IAsyncEnumerable<TOutput> StreamAsync(
         TInput input,
-        RunnableOptions? options = null,
+        DotNetAgents.Abstractions.Chains.RunnableOptions? options = null,
         [System.Runtime.CompilerServices.EnumeratorCancellation] CancellationToken cancellationToken = default)
     {
         // For sequential chains, streaming is complex - we'll just invoke and yield
@@ -52,7 +54,7 @@ public class SequentialChain<TInput, TOutput> : IRunnable<TInput, TOutput>
     /// <inheritdoc/>
     public async Task<IReadOnlyList<TOutput>> BatchAsync(
         IEnumerable<TInput> inputs,
-        RunnableOptions? options = null,
+        DotNetAgents.Abstractions.Chains.RunnableOptions? options = null,
         CancellationToken cancellationToken = default)
     {
         if (inputs == null)

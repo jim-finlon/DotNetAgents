@@ -1,8 +1,11 @@
-﻿using DotNetAgents.Core.Agents;
-using DotNetAgents.Core.Models;
+using DotNetAgents.Abstractions.Agents;
+using DotNetAgents.Core.Agents;
+using DotNetAgents.Abstractions.Models;
+using DotNetAgents.Abstractions.Prompts;
 using DotNetAgents.Core.Prompts;
+using DotNetAgents.Abstractions.Tools;
 using DotNetAgents.Core.Tools;
-using DotNetAgents.Core.Tools.BuiltIn;
+using DotNetAgents.Tools.BuiltIn;
 using DotNetAgents.Providers.OpenAI;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;

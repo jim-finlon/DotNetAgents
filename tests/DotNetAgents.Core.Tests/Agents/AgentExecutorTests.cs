@@ -1,7 +1,9 @@
+using DotNetAgents.Abstractions.Agents;
 using DotNetAgents.Core.Agents;
-using DotNetAgents.Core.Memory;
+using DotNetAgents.Abstractions.Memory;
 using DotNetAgents.Core.Memory.Implementations;
-using DotNetAgents.Core.Models;
+using DotNetAgents.Abstractions.Models;
+using DotNetAgents.Abstractions.Tools;
 using DotNetAgents.Core.Tools;
 using FluentAssertions;
 using Moq;
@@ -105,7 +107,7 @@ public class AgentExecutorTests
         var executor = new AgentExecutor(mockLLM.Object, toolRegistry, promptTemplate, maxIterations: 2);
 
         // Act & Assert
-        await Assert.ThrowsAsync<Core.Exceptions.AgentException>(() =>
+        await Assert.ThrowsAsync<DotNetAgents.Abstractions.Exceptions.AgentException>(() =>
             executor.InvokeAsync("Test"));
     }
 

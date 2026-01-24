@@ -1,5 +1,5 @@
-using DotNetAgents.Core.Memory;
-using DotNetAgents.Core.Models;
+using DotNetAgents.Abstractions.Memory;
+using DotNetAgents.Abstractions.Models;
 using DotNetAgents.Education.Models;
 using Microsoft.Extensions.Logging;
 

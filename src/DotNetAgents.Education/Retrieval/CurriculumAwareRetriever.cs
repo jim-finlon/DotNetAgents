@@ -1,5 +1,5 @@
-using DotNetAgents.Core.Models;
-using DotNetAgents.Core.Retrieval;
+using DotNetAgents.Abstractions.Models;
+using DotNetAgents.Abstractions.Retrieval;
 using DotNetAgents.Education.Memory;
 using DotNetAgents.Education.Models;
 using DotNetAgents.Education.Pedagogy;

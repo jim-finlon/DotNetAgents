@@ -1,3 +1,4 @@
+using DotNetAgents.Abstractions.Prompts;
 using DotNetAgents.Core.Prompts;
 using FluentAssertions;
 using Xunit;

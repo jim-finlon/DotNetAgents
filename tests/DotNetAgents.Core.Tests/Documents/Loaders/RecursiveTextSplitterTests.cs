@@ -1,5 +1,6 @@
+using DotNetAgents.Abstractions.Documents;
 using DotNetAgents.Core.Documents;
-using DotNetAgents.Core.Documents.Loaders;
+using DotNetAgents.Documents.Loaders;
 using Xunit;
 
 namespace DotNetAgents.Core.Tests.Documents.Loaders;

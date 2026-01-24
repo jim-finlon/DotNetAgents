@@ -1,4 +1,4 @@
-using DotNetAgents.Core.Retrieval;
+using DotNetAgents.Abstractions.Retrieval;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 

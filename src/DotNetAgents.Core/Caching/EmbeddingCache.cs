@@ -1,5 +1,6 @@
 using System.Security.Cryptography;
 using System.Text;
+using DotNetAgents.Abstractions.Caching;
 
 namespace DotNetAgents.Core.Caching;
 

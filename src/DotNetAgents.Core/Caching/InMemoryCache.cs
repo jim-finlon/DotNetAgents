@@ -1,4 +1,5 @@
 using System.Collections.Concurrent;
+using DotNetAgents.Abstractions.Caching;
 
 namespace DotNetAgents.Core.Caching;
 

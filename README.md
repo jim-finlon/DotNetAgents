@@ -151,8 +151,8 @@ DotNetAgents uses a modular package architecture:
 - **`DotNetAgents.Providers.Anthropic`** - Anthropic integration
 - **`DotNetAgents.VectorStores.Pinecone`** - Pinecone integration
 - **`DotNetAgents.VectorStores.PostgreSQL`** - PostgreSQL vector store using pgvector extension
-- **`DotNetAgents.Storage.SqlServer`** - SQL Server storage for checkpoints, tasks, and knowledge
-- **`DotNetAgents.Storage.PostgreSQL`** - PostgreSQL storage for checkpoints, tasks, and knowledge
+- **`DotNetAgents.Storage.TaskKnowledge.SqlServer`** - SQL Server storage for checkpoints, tasks, and knowledge
+- **`DotNetAgents.Storage.TaskKnowledge.PostgreSQL`** - PostgreSQL storage for checkpoints, tasks, and knowledge
 - **`DotNetAgents.Configuration`** - Configuration management
 - **`DotNetAgents.Observability`** - Logging, tracing, metrics
 - **`DotNetAgents.Security`** - Security features
@@ -161,19 +161,19 @@ DotNetAgents uses a modular package architecture:
 
 ## 📚 Documentation
 
-- **[Requirements](docs/requirements.md)** - Functional and non-functional requirements
-- **[Technical Specification](docs/technical-specification.md)** - Architecture and design details
-- **[Implementation Plan](docs/implementation-plan.md)** - Development roadmap
+- **[Requirements](docs/REQUIREMENTS.md)** - Functional and non-functional requirements
+- **[Technical Specification](docs/architecture/technical-specification.md)** - Architecture and design details
+- **[Implementation Plan](docs/architecture/implementation-plan.md)** - Development roadmap
 - **[Comparison Guide](docs/comparison.md)** - DotNetAgents vs LangChain, LangGraph, and Microsoft Agent Framework
-- **[Project Status](docs/PROJECT_STATUS.md)** - Current development status and completed features
+- **[Project Status](docs/status/PROJECT_STATUS.md)** - Current development status and completed features
 - **[Contributing](CONTRIBUTING.md)** - How to contribute
 - **[Code of Conduct](CODE_OF_CONDUCT.md)** - Community guidelines
 
 ### Educational Extensions Documentation
 
-- **[Education Requirements](docs/education/REQUIREMENTS.md)** - Educational package requirements
-- **[Education Technical Specification](docs/education/TECHNICAL_SPECIFICATION.md)** - Architecture and algorithms
-- **[Education Implementation Plan](docs/education/IMPLEMENTATION_PLAN.md)** - Phased implementation roadmap
+- **[Education Requirements](docs/features/education/REQUIREMENTS.md)** - Educational package requirements
+- **[Education Technical Specification](docs/features/education/TECHNICAL_SPECIFICATION.md)** - Architecture and algorithms
+- **[Education Implementation Plan](docs/features/education/IMPLEMENTATION_PLAN.md)** - Phased implementation roadmap
 - **[Education README](src/DotNetAgents.Education/README.md)** - Getting started guide and examples
 
 ## 🏗️ Architecture

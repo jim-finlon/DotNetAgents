@@ -1,4 +1,4 @@
-using DotNetAgents.Core.Caching;
+using DotNetAgents.Abstractions.Caching;
 using Microsoft.Extensions.Logging;
 
 namespace DotNetAgents.Education.Infrastructure;

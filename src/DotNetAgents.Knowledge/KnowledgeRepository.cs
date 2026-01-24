@@ -1,4 +1,4 @@
-using DotNetAgents.Core.Exceptions;
+using DotNetAgents.Abstractions.Exceptions;
 using DotNetAgents.Knowledge.Helpers;
 using DotNetAgents.Knowledge.Models;
 using DotNetAgents.Knowledge.Storage;

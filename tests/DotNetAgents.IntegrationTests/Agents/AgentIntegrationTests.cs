@@ -1,9 +1,10 @@
-using DotNetAgents.Core.Agents;
+using DotNetAgents.Abstractions.Agents;
 using DotNetAgents.Core.Memory.Implementations;
-using DotNetAgents.Core.Models;
+using DotNetAgents.Abstractions.Models;
+using DotNetAgents.Abstractions.Prompts;
 using DotNetAgents.Core.Prompts;
-using DotNetAgents.Core.Tools;
-using DotNetAgents.Core.Tools.BuiltIn;
+using DotNetAgents.Abstractions.Tools;
+using DotNetAgents.Tools.BuiltIn;
 using FluentAssertions;
 using Moq;
 using System.Text.Json;

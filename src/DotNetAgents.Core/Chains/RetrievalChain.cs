@@ -1,7 +1,8 @@
-using DotNetAgents.Core.Documents;
-using DotNetAgents.Core.Models;
-using DotNetAgents.Core.Prompts;
-using DotNetAgents.Core.Retrieval;
+using DotNetAgents.Abstractions.Chains;
+using DotNetAgents.Abstractions.Documents;
+using DotNetAgents.Abstractions.Models;
+using DotNetAgents.Abstractions.Prompts;
+using DotNetAgents.Abstractions.Retrieval;
 
 namespace DotNetAgents.Core.Chains;
 
@@ -49,7 +50,7 @@ public class RetrievalChain<TInput, TOutput> : IRunnable<TInput, TOutput>
     /// <inheritdoc/>
     public async Task<TOutput> InvokeAsync(
         TInput input,
-        RunnableOptions? options = null,
+        DotNetAgents.Abstractions.Chains.RunnableOptions? options = null,
         CancellationToken cancellationToken = default)
     {
         // Convert input to dictionary
@@ -89,7 +90,7 @@ public class RetrievalChain<TInput, TOutput> : IRunnable<TInput, TOutput>
     /// <inheritdoc/>
     public async IAsyncEnumerable<TOutput> StreamAsync(
         TInput input,
-        RunnableOptions? options = null,
+        DotNetAgents.Abstractions.Chains.RunnableOptions? options = null,
         [System.Runtime.CompilerServices.EnumeratorCancellation] CancellationToken cancellationToken = default)
     {
         // For streaming, we retrieve once and stream the LLM response
@@ -100,7 +101,7 @@ public class RetrievalChain<TInput, TOutput> : IRunnable<TInput, TOutput>
     /// <inheritdoc/>
     public async Task<IReadOnlyList<TOutput>> BatchAsync(
         IEnumerable<TInput> inputs,
-        RunnableOptions? options = null,
+        DotNetAgents.Abstractions.Chains.RunnableOptions? options = null,
         CancellationToken cancellationToken = default)
     {
         if (inputs == null)
@@ -117,7 +118,7 @@ public class RetrievalChain<TInput, TOutput> : IRunnable<TInput, TOutput>
         return results;
     }
 
-    private static string BuildContext(IReadOnlyList<VectorSearchResult> searchResults)
+    private static string BuildContext(IReadOnlyList<DotNetAgents.Abstractions.Retrieval.VectorSearchResult> searchResults)
     {
         if (searchResults.Count == 0)
         {

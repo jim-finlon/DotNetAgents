@@ -1,4 +1,4 @@
-﻿using DotNetAgents.Core.Models;
+using DotNetAgents.Abstractions.Models;
 using DotNetAgents.Providers.OpenAI;
 using DotNetAgents.Workflow.Checkpoints;
 using DotNetAgents.Workflow.Execution;

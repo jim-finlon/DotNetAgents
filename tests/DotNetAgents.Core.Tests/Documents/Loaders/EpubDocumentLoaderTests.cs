@@ -1,5 +1,5 @@
-using DotNetAgents.Core.Documents;
-using DotNetAgents.Core.Documents.Loaders;
+using DotNetAgents.Abstractions.Documents;
+using DotNetAgents.Documents.Loaders;
 using FluentAssertions;
 using System.IO.Compression;
 using System.Text;

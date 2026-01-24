@@ -1,4 +1,4 @@
-using DotNetAgents.Core.Chains;
+using DotNetAgents.Abstractions.Chains;
 
 namespace DotNetAgents.Workflow.Graph;
 

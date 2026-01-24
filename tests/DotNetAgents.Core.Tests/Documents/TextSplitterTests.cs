@@ -1,3 +1,4 @@
+using DotNetAgents.Abstractions.Documents;
 using DotNetAgents.Core.Documents;
 using FluentAssertions;
 using Xunit;

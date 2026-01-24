@@ -1,9 +1,12 @@
-﻿using DotNetAgents.Core.Chains;
+using DotNetAgents.Abstractions.Chains;
+using DotNetAgents.Core.Chains;
+using DotNetAgents.Abstractions.Documents;
 using DotNetAgents.Core.Documents;
-using DotNetAgents.Core.Documents.Loaders;
-using DotNetAgents.Core.Models;
+using DotNetAgents.Documents.Loaders;
+using DotNetAgents.Abstractions.Models;
+using DotNetAgents.Abstractions.Prompts;
 using DotNetAgents.Core.Prompts;
-using DotNetAgents.Core.Retrieval;
+using DotNetAgents.Abstractions.Retrieval;
 using DotNetAgents.Core.Retrieval.Implementations;
 using DotNetAgents.Providers.OpenAI;
 using Microsoft.Extensions.DependencyInjection;

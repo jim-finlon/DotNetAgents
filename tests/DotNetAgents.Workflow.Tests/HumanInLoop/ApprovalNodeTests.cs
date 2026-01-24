@@ -1,4 +1,4 @@
-using DotNetAgents.Core.Exceptions;
+using DotNetAgents.Abstractions.Exceptions;
 using DotNetAgents.Workflow.Graph;
 using DotNetAgents.Workflow.HumanInLoop;
 using FluentAssertions;

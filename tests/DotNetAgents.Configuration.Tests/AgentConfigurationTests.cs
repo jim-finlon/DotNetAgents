@@ -33,7 +33,7 @@ public class AgentConfigurationTests
         // Act & Assert
         config.Invoking(c => c.Validate())
             .Should()
-            .Throw<Core.Exceptions.AgentException>()
+            .Throw<Abstractions.Exceptions.AgentException>()
             .WithMessage("*DefaultLLMProvider*");
     }
 
@@ -50,7 +50,7 @@ public class AgentConfigurationTests
         // Act & Assert
         config.Invoking(c => c.Validate())
             .Should()
-            .Throw<Core.Exceptions.AgentException>()
+            .Throw<Abstractions.Exceptions.AgentException>()
             .WithMessage("*not configured*");
     }
 }

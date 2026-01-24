@@ -1,3 +1,5 @@
+using DotNetAgents.Abstractions.Memory;
+
 namespace DotNetAgents.Core.Memory.Implementations;
 
 /// <summary>

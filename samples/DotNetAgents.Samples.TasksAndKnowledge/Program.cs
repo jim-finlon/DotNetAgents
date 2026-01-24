@@ -1,4 +1,4 @@
-using DotNetAgents.Core.Models;
+using DotNetAgents.Abstractions.Models;
 using DotNetAgents.Knowledge;
 using DotNetAgents.Knowledge.Models;
 using DotNetAgents.Providers.OpenAI;

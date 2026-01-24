@@ -1,5 +1,6 @@
+using DotNetAgents.Abstractions.Caching;
 using DotNetAgents.Core.Caching;
-using DotNetAgents.Core.Tools.BuiltIn;
+using DotNetAgents.Tools.BuiltIn;
 using Xunit;
 
 namespace DotNetAgents.Core.Tests.Tools.BuiltIn;

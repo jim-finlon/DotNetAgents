@@ -1,3 +1,4 @@
+using DotNetAgents.Abstractions.OutputParsers;
 using DotNetAgents.Core.OutputParsers;
 using FluentAssertions;
 using System.Text.Json;
@@ -47,7 +48,7 @@ public class JsonOutputParserTests
         var invalidJson = "{invalid json}";
 
         // Act & Assert
-        var exception = await Assert.ThrowsAsync<ParsingException>(() => parser.ParseAsync(invalidJson));
+        var exception = await Assert.ThrowsAsync<DotNetAgents.Core.OutputParsers.ParsingException>(() => parser.ParseAsync(invalidJson));
         exception.RawOutput.Should().Be(invalidJson);
     }
 

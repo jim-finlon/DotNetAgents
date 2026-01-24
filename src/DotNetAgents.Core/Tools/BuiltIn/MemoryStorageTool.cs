@@ -1,5 +1,6 @@
 using System.Text.Json;
-using DotNetAgents.Core.Caching;
+using DotNetAgents.Abstractions.Caching;
+using DotNetAgents.Abstractions.Tools;
 
 namespace DotNetAgents.Core.Tools.BuiltIn;
 

@@ -14,6 +14,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\DotNetAgents.Abstractions\DotNetAgents.Abstractions.csproj" />
     <ProjectReference Include="..\DotNetAgents.Core\DotNetAgents.Core.csproj" />
   </ItemGroup>
 

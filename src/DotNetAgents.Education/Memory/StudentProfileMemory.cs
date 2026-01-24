@@ -1,4 +1,4 @@
-using DotNetAgents.Core.Memory;
+using DotNetAgents.Abstractions.Memory;
 using DotNetAgents.Core.Memory.Implementations;
 using Microsoft.Extensions.Logging;
 

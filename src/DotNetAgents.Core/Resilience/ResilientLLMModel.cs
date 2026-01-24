@@ -1,4 +1,5 @@
-using DotNetAgents.Core.Models;
+using DotNetAgents.Abstractions.Models;
+using DotNetAgents.Abstractions.Resilience;
 using Microsoft.Extensions.Logging;
 
 namespace DotNetAgents.Core.Resilience;
@@ -44,7 +45,7 @@ public class ResilientLLMModel<TInput, TOutput> : ILLMModel<TInput, TOutput>
     /// <inheritdoc/>
     public async Task<TOutput> GenerateAsync(
         TInput input,
-        LLMOptions? options = null,
+        DotNetAgents.Abstractions.Models.LLMOptions? options = null,
         CancellationToken cancellationToken = default)
     {
         Func<CancellationToken, Task<TOutput>> operation = async ct =>
@@ -76,7 +77,7 @@ public class ResilientLLMModel<TInput, TOutput> : ILLMModel<TInput, TOutput>
     /// <inheritdoc/>
     public async IAsyncEnumerable<TOutput> GenerateStreamAsync(
         TInput input,
-        LLMOptions? options = null,
+        DotNetAgents.Abstractions.Models.LLMOptions? options = null,
         [System.Runtime.CompilerServices.EnumeratorCancellation] CancellationToken cancellationToken = default)
     {
         // For streaming, we apply resilience at the operation level
@@ -91,7 +92,7 @@ public class ResilientLLMModel<TInput, TOutput> : ILLMModel<TInput, TOutput>
     /// <inheritdoc/>
     public async Task<IReadOnlyList<TOutput>> GenerateBatchAsync(
         IEnumerable<TInput> inputs,
-        LLMOptions? options = null,
+        DotNetAgents.Abstractions.Models.LLMOptions? options = null,
         CancellationToken cancellationToken = default)
     {
         Func<CancellationToken, Task<IReadOnlyList<TOutput>>> operation = async ct =>

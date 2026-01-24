@@ -1,3 +1,4 @@
+using DotNetAgents.Abstractions.Chains;
 using DotNetAgents.Core.Chains;
 using FluentAssertions;
 using System.Runtime.CompilerServices;

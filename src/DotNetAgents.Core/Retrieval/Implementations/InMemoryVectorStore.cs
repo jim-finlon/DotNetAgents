@@ -1,3 +1,5 @@
+using DotNetAgents.Abstractions.Retrieval;
+
 namespace DotNetAgents.Core.Retrieval.Implementations;
 
 /// <summary>

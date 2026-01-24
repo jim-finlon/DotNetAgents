@@ -1,4 +1,4 @@
-using DotNetAgents.Core.Exceptions;
+using DotNetAgents.Abstractions.Exceptions;
 using DotNetAgents.Workflow.Graph;
 using FluentAssertions;
 using Xunit;

@@ -1,3 +1,5 @@
+using DotNetAgents.Abstractions.Chains;
+
 namespace DotNetAgents.Core.Chains;
 
 /// <summary>
@@ -22,7 +24,7 @@ public class Runnable<TInput, TOutput> : IRunnable<TInput, TOutput>
     /// <inheritdoc/>
     public Task<TOutput> InvokeAsync(
         TInput input,
-        RunnableOptions? options = null,
+        DotNetAgents.Abstractions.Chains.RunnableOptions? options = null,
         CancellationToken cancellationToken = default)
     {
         return _func(input, cancellationToken);
@@ -31,7 +33,7 @@ public class Runnable<TInput, TOutput> : IRunnable<TInput, TOutput>
     /// <inheritdoc/>
     public async IAsyncEnumerable<TOutput> StreamAsync(
         TInput input,
-        RunnableOptions? options = null,
+        DotNetAgents.Abstractions.Chains.RunnableOptions? options = null,
         [System.Runtime.CompilerServices.EnumeratorCancellation] CancellationToken cancellationToken = default)
     {
         var result = await InvokeAsync(input, options, cancellationToken).ConfigureAwait(false);
@@ -41,7 +43,7 @@ public class Runnable<TInput, TOutput> : IRunnable<TInput, TOutput>
     /// <inheritdoc/>
     public async Task<IReadOnlyList<TOutput>> BatchAsync(
         IEnumerable<TInput> inputs,
-        RunnableOptions? options = null,
+        DotNetAgents.Abstractions.Chains.RunnableOptions? options = null,
         CancellationToken cancellationToken = default)
     {
         if (inputs == null)

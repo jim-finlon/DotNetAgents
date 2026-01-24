@@ -1,4 +1,4 @@
-using DotNetAgents.Core.Exceptions;
+using DotNetAgents.Abstractions.Exceptions;
 using DotNetAgents.Tasks.Models;
 using DotNetAgents.Tasks.Storage;
 using Microsoft.Extensions.Logging;

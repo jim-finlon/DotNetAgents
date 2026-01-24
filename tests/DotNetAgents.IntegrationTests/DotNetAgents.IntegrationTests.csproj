@@ -32,7 +32,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\DotNetAgents.Core\DotNetAgents.Core.csproj" />
+    <ProjectReference Include="..\..\src\DotNetAgents.Abstractions\DotNetAgents.Abstractions.csproj" />
     <ProjectReference Include="..\..\src\DotNetAgents.Workflow\DotNetAgents.Workflow.csproj" />
     <ProjectReference Include="..\..\src\DotNetAgents.Configuration\DotNetAgents.Configuration.csproj" />
     <ProjectReference Include="..\..\src\DotNetAgents.Observability\DotNetAgents.Observability.csproj" />

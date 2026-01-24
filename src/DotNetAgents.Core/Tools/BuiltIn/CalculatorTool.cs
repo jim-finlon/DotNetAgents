@@ -1,6 +1,7 @@
 using System.Text.Json;
 using System.Text.RegularExpressions;
-using DotNetAgents.Core.Exceptions;
+using DotNetAgents.Abstractions.Tools;
+using DotNetAgents.Abstractions.Exceptions;
 
 namespace DotNetAgents.Core.Tools.BuiltIn;
 

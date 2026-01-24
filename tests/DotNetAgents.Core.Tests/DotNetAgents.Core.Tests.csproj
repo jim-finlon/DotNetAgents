@@ -30,7 +30,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\src\DotNetAgents.Abstractions\DotNetAgents.Abstractions.csproj" />
     <ProjectReference Include="..\..\src\DotNetAgents.Core\DotNetAgents.Core.csproj" />
+    <ProjectReference Include="..\..\src\DotNetAgents.Documents\DotNetAgents.Documents.csproj" />
+    <ProjectReference Include="..\..\src\DotNetAgents.Tools.BuiltIn\DotNetAgents.Tools.BuiltIn.csproj" />
   </ItemGroup>
 
 </Project>

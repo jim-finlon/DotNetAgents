@@ -1,9 +1,9 @@
-using DotNetAgents.Core.Chains;
-using DotNetAgents.Core.Exceptions;
-using DotNetAgents.Core.Memory;
-using DotNetAgents.Core.Models;
-using DotNetAgents.Core.Prompts;
-using DotNetAgents.Core.Tools;
+using DotNetAgents.Abstractions.Chains;
+using DotNetAgents.Abstractions.Memory;
+using DotNetAgents.Abstractions.Models;
+using DotNetAgents.Abstractions.Prompts;
+using DotNetAgents.Abstractions.Tools;
+using DotNetAgents.Abstractions.Exceptions;
 using System.Text.Json;
 using System.Text.RegularExpressions;
 
@@ -95,13 +95,13 @@ public class AgentExecutor : IRunnable<string, string>
                 // Save to memory if available
                 if (_memory != null)
                 {
-                    await _memory.AddMessageAsync(new Memory.MemoryMessage
+                    await _memory.AddMessageAsync(new DotNetAgents.Abstractions.Memory.MemoryMessage
                     {
                         Content = input,
                         Role = "user"
                     }, cancellationToken).ConfigureAwait(false);
 
-                    await _memory.AddMessageAsync(new Memory.MemoryMessage
+                    await _memory.AddMessageAsync(new DotNetAgents.Abstractions.Memory.MemoryMessage
                     {
                         Content = finalAnswer,
                         Role = "assistant"

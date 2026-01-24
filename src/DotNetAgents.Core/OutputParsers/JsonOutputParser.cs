@@ -1,5 +1,7 @@
 using System.Text.Json;
 
+using DotNetAgents.Abstractions.OutputParsers;
+
 namespace DotNetAgents.Core.OutputParsers;
 
 /// <summary>
@@ -46,7 +48,7 @@ public class JsonOutputParser<T> : IOutputParser<T>
         }
         catch (JsonException ex)
         {
-            throw new ParsingException(
+            throw new DotNetAgents.Core.OutputParsers.ParsingException(
                 $"Failed to parse JSON output: {ex.Message}",
                 output,
                 ex);
