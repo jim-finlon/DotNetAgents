@@ -15,6 +15,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\DotNetAgents.Core\DotNetAgents.Core.csproj" />
+    <ProjectReference Include="..\DotNetAgents.Workflow\DotNetAgents.Workflow.csproj" />
   </ItemGroup>
 
 </Project>
