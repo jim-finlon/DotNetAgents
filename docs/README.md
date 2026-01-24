@@ -7,7 +7,6 @@ This directory contains all documentation for the DotNetAgents library, organize
 ### `/architecture/`
 Architecture and design documentation:
 - `technical-specification.md` - Complete technical specification
-- `implementation-plan.md` - Development roadmap and phases
 - `package-strategy-analysis.md` - Package structure analysis
 - `microsoft-agent-framework-analysis.md` - Analysis of Microsoft Agent Framework compatibility
 
@@ -16,11 +15,10 @@ Feature-specific documentation:
 - `/education/` - Educational extensions documentation
   - `REQUIREMENTS.md` - Educational package requirements
   - `TECHNICAL_SPECIFICATION.md` - Architecture and algorithms
-  - `IMPLEMENTATION_PLAN.md` - Phased implementation roadmap
   - `STATUS.md` - Implementation status
   - `TEST_COVERAGE.md` - Test coverage details
+  - `EDUCATION_ENHANCEMENTS.md` - Education enhancements documentation
 - `JARVIS_VISION.md` - JARVIS system vision and design
-- `EDUCATION_ENHANCEMENTS.md` - Education enhancements documentation
 
 ### `/guides/`
 User guides and how-to documentation:
@@ -32,25 +30,20 @@ User guides and how-to documentation:
 - `VERSIONING_AND_MIGRATION.md` - Versioning strategy and migration guides
 
 ### `/status/`
-Project status and planning documents:
+Project status documents:
 - `PROJECT_STATUS.md` - Current development status and completed features
 - `JARVIS_IMPLEMENTATION_STATUS.md` - JARVIS implementation tracking
-- `TONY_EXTRACTION_PLAN.md` - TONY/JARVIS extraction plan
-- `TONY_SUMMARY.md` - TONY project summary
-- `LAKEIN_PROJECT_PLAN.md` - Lakein Time Management project plan
-- `LAKEIN_FRAMEWORK_ENHANCEMENTS.md` - Framework enhancements for Lakein
 
 ### Root Level
 Additional documentation files:
 - `REQUIREMENTS.md` - Functional and non-functional requirements
-- `TECHNICAL_SPECIFICATIONS.md` - Technical specifications (legacy)
+- `TECHNICAL_SPECIFICATIONS.md` - Technical specifications
 - `comparison.md` - Comparison with LangChain, LangGraph, and Microsoft Agent Framework
 - `PACKAGE_METADATA.md` - Package metadata and NuGet information
 - `PERFORMANCE_BENCHMARKS.md` - Performance benchmarks and metrics
-- `EXTRACTION_PLAN.md` - Component extraction plan
 - `GIT_WORKFLOW.md` - Git workflow and branching strategy
-- `ERROR_HANDLING.md` - Error handling documentation (legacy, see guides/)
-- `API_REFERENCE.md` - API reference (legacy, see guides/)
+- `DEVELOPMENT_DATABASE.md` - Development database configuration
+- `AISESSIONPERSISTENCE_COMPARISON.md` - Comparison with AiSessionPersistence project
 
 ## 🔍 Quick Links
 

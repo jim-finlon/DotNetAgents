@@ -15,7 +15,7 @@ DotNetAgents is a comprehensive .NET 10 library that provides native C# implemen
 | **License** | MIT | MIT | MIT | MIT (Preview) |
 | **Maturity** | Production-ready | Mature | Mature | Preview |
 | **LLM Providers** | 12+ providers | 100+ integrations | Same as LangChain | Limited (orchestration focus) |
-| **Document Loaders** | 6 types (PDF, CSV, Excel, EPUB, Markdown, Text) | 100+ loaders | Same as LangChain | ❌ Not included |
+| **Document Loaders** | 10 types (PDF, CSV, Excel, EPUB, Markdown, Text, DOCX, HTML, JSON, XML) | 100+ loaders | Same as LangChain | ❌ Not included |
 | **Built-in Tools** | 19 tools | 50+ tools | Same as LangChain | Tool framework only |
 | **Chains** | ✅ LangChain-like | ✅ Native | ✅ Native | ✅ Similar patterns |
 | **Workflows** | ✅ LangGraph-like | Via LangGraph | ✅ Native | ✅ Agent workflows |
