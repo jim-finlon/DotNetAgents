@@ -79,7 +79,18 @@ var workflow = WorkflowBuilder<MyState>.Create()
 
 The package provides storage abstractions (`ITaskStore`) with implementations:
 - `InMemoryTaskStore`: For testing and development
-- Database implementations: SQL Server and PostgreSQL (coming in Phase 6)
+- `SqlServerTaskStore`: SQL Server database storage (via `DotNetAgents.Storage.SqlServer`)
+- `PostgreSQLTaskStore`: PostgreSQL database storage (via `DotNetAgents.Storage.PostgreSQL`)
+
+### Using Database Storage
+
+```csharp
+// SQL Server
+services.AddSqlServerTaskStore(connectionString, tableName: "WorkTasks");
+
+// PostgreSQL
+services.AddPostgreSQLTaskStore(connectionString, tableName: "work_tasks");
+```
 
 ## Documentation
 

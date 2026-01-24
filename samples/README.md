@@ -92,6 +92,25 @@ dotnet run
 
 **Note:** This sample requires an OpenAI API key for full functionality (some features work without it).
 
+### 6. TasksAndKnowledge
+
+Demonstrates task management, knowledge capture, and bootstrap generation in workflows.
+
+**Features:**
+- Task creation and tracking in workflows
+- Knowledge capture from successes and errors
+- Task statistics and completion tracking
+- Knowledge repository querying
+- Bootstrap payload generation for workflow resumption
+
+**Run:**
+```bash
+cd DotNetAgents.Samples.TasksAndKnowledge
+dotnet run
+```
+
+**Note:** This sample works without an OpenAI API key (LLM features are optional).
+
 ## Setting Up
 
 1. Set your OpenAI API key:

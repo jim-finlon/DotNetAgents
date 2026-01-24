@@ -94,7 +94,18 @@ catch (Exception ex)
 
 The package provides storage abstractions (`IKnowledgeStore`) with implementations:
 - `InMemoryKnowledgeStore`: For testing and development
-- Database implementations: SQL Server and PostgreSQL (coming in Phase 6)
+- `SqlServerKnowledgeStore`: SQL Server database storage (via `DotNetAgents.Storage.SqlServer`)
+- `PostgreSQLKnowledgeStore`: PostgreSQL database storage (via `DotNetAgents.Storage.PostgreSQL`)
+
+### Using Database Storage
+
+```csharp
+// SQL Server
+services.AddSqlServerKnowledgeStore(connectionString, tableName: "KnowledgeItems");
+
+// PostgreSQL
+services.AddPostgreSQLKnowledgeStore(connectionString, tableName: "knowledge_items");
+```
 
 ## Documentation
 

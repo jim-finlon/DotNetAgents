@@ -143,11 +143,15 @@ var finalState = await executor.ExecuteAsync(initialState);
 DotNetAgents uses a modular package architecture:
 
 - **`DotNetAgents.Core`** - Core abstractions and interfaces
-- **`DotNetAgents.Workflow`** - Workflow engine (LangGraph-like)
+- **`DotNetAgents.Workflow`** - Workflow engine (LangGraph-like) with session management and bootstrap generation
+- **`DotNetAgents.Tasks`** - Task management for workflows (tracking, dependencies, statistics)
+- **`DotNetAgents.Knowledge`** - Knowledge repository for capturing and querying learning from agent execution
 - **`DotNetAgents.Providers.OpenAI`** - OpenAI integration
 - **`DotNetAgents.Providers.Azure`** - Azure OpenAI integration
 - **`DotNetAgents.Providers.Anthropic`** - Anthropic integration
 - **`DotNetAgents.VectorStores.Pinecone`** - Pinecone integration
+- **`DotNetAgents.Storage.SqlServer`** - SQL Server storage for checkpoints, tasks, and knowledge
+- **`DotNetAgents.Storage.PostgreSQL`** - PostgreSQL storage for checkpoints, tasks, and knowledge
 - **`DotNetAgents.Configuration`** - Configuration management
 - **`DotNetAgents.Observability`** - Logging, tracing, metrics
 - **`DotNetAgents.Security`** - Security features
