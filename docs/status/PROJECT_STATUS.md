@@ -1,7 +1,7 @@
 # DotNetAgents Library - Project Status
 
 **Last Updated:** January 2025  
-**Status:** Production-Ready (Core features complete)  
+**Status:** Beta (Core features complete, actively tested)  
 **Target Framework:** .NET 10 (LTS)
 
 ## Overview

@@ -8,14 +8,14 @@
 
 ## 🎯 Overview
 
-DotNetAgents is a comprehensive, production-ready .NET 10 library that brings the power of LangChain and LangGraph to C# developers. Build sophisticated AI agents, chains, and stateful workflows with enterprise-grade quality, security, and performance. Compatible with Microsoft Agent Framework for enhanced orchestration capabilities.
+DotNetAgents is a comprehensive .NET 10 library (currently in beta) that brings the power of LangChain and LangGraph to C# developers. Build sophisticated AI agents, chains, and stateful workflows with enterprise-grade quality, security, and performance. Compatible with Microsoft Agent Framework for enhanced orchestration capabilities.
 
 ### Why .NET 10?
 
 DotNetAgents targets .NET 10 (LTS) to leverage cutting-edge AI optimizations and performance improvements:
 
 - **🚀 Enhanced Performance**: .NET 10 includes significant runtime optimizations for AI workloads, including improved async/await performance and reduced memory allocations
-- **🤖 Microsoft Agent Framework Support**: Native integration with Microsoft's Agent Framework for building production-ready AI agents and multi-agent workflows
+- **🤖 Microsoft Agent Framework Support**: Native integration with Microsoft's Agent Framework for building AI agents and multi-agent workflows
 - **⚡ Vector Operations**: Optimized SIMD operations and improved array/span handling for vector embeddings and similarity calculations
 - **📊 Better Observability**: Enhanced OpenTelemetry support and improved diagnostics for tracing AI operations
 - **🔧 Modern C# 13 Features**: Latest language features including improved pattern matching, collection expressions, and performance-focused syntax
@@ -247,7 +247,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 🗺️ Current Status
 
-**Production-Ready Features:**
+**Beta Features:**
 - ✅ Core abstractions and interfaces
 - ✅ 12 LLM provider integrations
 - ✅ 10 document loaders
@@ -278,6 +278,6 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ---
 
-**Status**: ✅ Production-Ready - Core features complete, actively maintained
+**Status**: 🧪 Beta - Core features complete, actively maintained and tested
 
 Made with ❤️ for the .NET community

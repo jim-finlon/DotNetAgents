@@ -13,7 +13,7 @@ DotNetAgents is a comprehensive .NET 10 library that provides native C# implemen
 |---------|--------------|-----------|-----------|---------------------------|
 | **Language** | C# (.NET 10) | Python | Python | C# (.NET 10) |
 | **License** | MIT | MIT | MIT | MIT (Preview) |
-| **Maturity** | Production-ready | Mature | Mature | Preview |
+| **Maturity** | Beta | Mature | Mature | Preview |
 | **LLM Providers** | 12+ providers | 100+ integrations | Same as LangChain | Limited (orchestration focus) |
 | **Document Loaders** | 10 types (PDF, CSV, Excel, EPUB, Markdown, Text, DOCX, HTML, JSON, XML) | 100+ loaders | Same as LangChain | ❌ Not included |
 | **Built-in Tools** | 19 tools | 50+ tools | Same as LangChain | Tool framework only |
@@ -135,7 +135,7 @@ DotNetAgents is a comprehensive .NET 10 library that provides native C# implemen
 - **❌ Not Included**: No document loaders provided
 - **Requires Integration**: Need to build or use external loaders
 
-**Winner for Document Loaders:** LangChain (breadth), DotNetAgents (C# ecosystem, production-ready)
+**Winner for Document Loaders:** LangChain (breadth), DotNetAgents (C# ecosystem, beta)
 
 ### 4. Built-in Tools
 
@@ -488,7 +488,7 @@ DotNetAgents is a comprehensive .NET 10 library that provides native C# implemen
 
 ### Choose DotNetAgents When:
 - ✅ Building .NET/C# applications
-- ✅ Need production-ready document loaders
+- ✅ Need comprehensive document loaders
 - ✅ Require enterprise-grade security and observability
 - ✅ Want strong typing and compile-time safety
 - ✅ Need comprehensive LLM provider support in C#
@@ -566,9 +566,9 @@ var result = await chain.InvokeAsync("Hello");
 
 ## Conclusion
 
-DotNetAgents provides a comprehensive, production-ready alternative to LangChain and LangGraph for .NET developers, while also offering compatibility with Microsoft Agent Framework. The library excels in:
+DotNetAgents provides a comprehensive alternative to LangChain and LangGraph for .NET developers (currently in beta), while also offering compatibility with Microsoft Agent Framework. The library excels in:
 
-1. **Document Processing**: Production-ready loaders for PDF, CSV, Excel, EPUB, Markdown
+1. **Document Processing**: Comprehensive loaders for PDF, CSV, Excel, EPUB, Markdown, DOCX, HTML, JSON, XML
 2. **Security**: Enterprise-grade security features
 3. **Observability**: Comprehensive monitoring and tracing
 4. **Type Safety**: Strong typing throughout
