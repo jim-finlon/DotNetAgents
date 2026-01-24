@@ -16,10 +16,10 @@ DotNetAgents is a comprehensive .NET 10 library that provides native C# implemen
 | **Maturity** | Production-ready | Mature | Mature | Preview |
 | **LLM Providers** | 12+ providers | 100+ integrations | Same as LangChain | Limited (orchestration focus) |
 | **Document Loaders** | 6 types (PDF, CSV, Excel, EPUB, Markdown, Text) | 100+ loaders | Same as LangChain | ❌ Not included |
-| **Built-in Tools** | 17 tools | 50+ tools | Same as LangChain | Tool framework only |
+| **Built-in Tools** | 19 tools | 50+ tools | Same as LangChain | Tool framework only |
 | **Chains** | ✅ LangChain-like | ✅ Native | ✅ Native | ✅ Similar patterns |
 | **Workflows** | ✅ LangGraph-like | Via LangGraph | ✅ Native | ✅ Agent workflows |
-| **Vector Stores** | 2 (Pinecone, InMemory) | 50+ integrations | Same as LangChain | ✅ Memory abstractions |
+| **Vector Stores** | 5 (Pinecone, PostgreSQL, Weaviate, Qdrant, Chroma) | 50+ integrations | Same as LangChain | ✅ Memory abstractions |
 | **Checkpointing** | ✅ SQL Server, PostgreSQL, InMemory | ✅ Various backends | ✅ Various backends | ✅ State persistence |
 | **Observability** | ✅ OpenTelemetry, logging, metrics | ✅ Limited | ✅ Limited | ✅ OpenTelemetry |
 | **Security** | ✅ Enterprise-grade | ⚠️ Basic | ⚠️ Basic | ⚠️ Basic |
@@ -101,7 +101,7 @@ DotNetAgents is a comprehensive .NET 10 library that provides native C# implemen
 
 ### 3. Document Loaders
 
-#### DotNetAgents (6 Types)
+#### DotNetAgents (10 Types)
 ✅ **Implemented:**
 - PDF (with page splitting)
 - CSV (with header mapping)
@@ -109,6 +109,10 @@ DotNetAgents is a comprehensive .NET 10 library that provides native C# implemen
 - EPUB (with chapter splitting)
 - Markdown
 - Text
+- DOCX (Word documents with paragraph splitting)
+- HTML (with text extraction and element splitting)
+- JSON (with flattening and array splitting)
+- XML (with text extraction and element splitting)
 
 **Features:**
 - Metadata extraction
@@ -135,7 +139,7 @@ DotNetAgents is a comprehensive .NET 10 library that provides native C# implemen
 
 ### 4. Built-in Tools
 
-#### DotNetAgents (17 Tools)
+#### DotNetAgents (19 Tools)
 ✅ **Implemented:**
 1. Calculator
 2. Web Search (DuckDuckGo)
@@ -154,6 +158,8 @@ DotNetAgents is a comprehensive .NET 10 library that provides native C# implemen
 15. Hash Generator (MD5, SHA1, SHA256, SHA384, SHA512)
 16. Random Data Generator
 17. CSV Reader
+18. Slack (send messages to Slack channels)
+19. GitHub (interact with GitHub API - issues, PRs, repos)
 
 **Features:**
 - Security controls and validation
@@ -203,6 +209,14 @@ DotNetAgents is a comprehensive .NET 10 library that provides native C# implemen
 - **Chain Types**: LLMChain, SequentialChain, RouterChain, etc.
 - **LCEL (LangChain Expression Language)**: Declarative chain composition
 
+#### DotNetAgents (LCEL-like Support)
+✅ **Declarative Chain Composition:**
+- `ChainExpression<TInput, TOutput>` for type-safe chain building
+- `|` operator for sequential composition (pipe)
+- `&` operator for parallel composition
+- `*` operator for batch processing
+- `ChainExpressionParser` for string-based chain expressions
+
 #### LangGraph
 - Uses LangChain's chain patterns
 - Adds stateful workflow capabilities
@@ -228,7 +242,7 @@ DotNetAgents is a comprehensive .NET 10 library that provides native C# implemen
 **Features:**
 - Strongly typed state
 - Checkpoint persistence
-- Human-in-the-loop support (planned)
+- Human-in-the-loop support (✅ Implemented with `ApprovalNode<TState>`)
 - Graph validation
 - Async execution
 
@@ -241,6 +255,19 @@ DotNetAgents is a comprehensive .NET 10 library that provides native C# implemen
 - **Checkpointing**: Various backend support (Redis, SQLite, etc.)
 - **Visualization**: Tools for visualizing workflow graphs
 - **Human-in-the-Loop**: Built-in support for human approval nodes
+
+#### DotNetAgents (Workflow Features)
+✅ **Visualization:**
+- `IGraphVisualizationService` for workflow graph visualization
+- DOT format export (Graphviz)
+- Mermaid diagram generation
+- JSON metadata export
+
+✅ **Human-in-the-Loop:**
+- `ApprovalNode<TState>` for workflow approval points
+- `IApprovalHandler<TState>` interface for custom approval workflows
+- `InMemoryApprovalHandler` for development/testing
+- `SignalRApprovalHandler` for web applications
 
 #### Microsoft Agent Framework
 - **Agent Workflows**: Multi-agent workflow orchestration
@@ -261,6 +288,10 @@ DotNetAgents is a comprehensive .NET 10 library that provides native C# implemen
 ✅ **Vector Stores:**
 - InMemoryVectorStore
 - PineconeVectorStore
+- PostgreSQLVectorStore (pgvector)
+- WeaviateVectorStore
+- QdrantVectorStore
+- ChromaVectorStore
 - Extensible interface for additional stores
 
 ✅ **Text Splitting:**

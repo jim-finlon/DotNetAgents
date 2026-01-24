@@ -375,6 +375,147 @@ Knowledge can be captured from workflow nodes:
 })
 ```
 
+## Human-in-the-Loop Support
+
+### Overview
+
+DotNetAgents provides built-in support for human approval workflows through the `ApprovalNode<TState>` class. This allows workflows to pause and wait for human approval before proceeding.
+
+### Basic Usage
+
+```csharp
+using DotNetAgents.Workflow.HumanInLoop;
+
+// Create an approval handler (in-memory for example)
+var approvalHandler = new InMemoryApprovalHandler<MyState>(logger);
+
+// Create a workflow with an approval node
+var workflow = WorkflowBuilder<MyState>.Create()
+    .AddNode("process", async (state, ct) =>
+    {
+        // Process data...
+        return state with { Processed = true };
+    })
+    .AddNode("approval", new ApprovalNode<MyState>(
+        name: "approval",
+        approvalHandler: approvalHandler,
+        approvalMessage: "Please review the processed data before continuing.",
+        timeout: TimeSpan.FromMinutes(30)))
+    .AddNode("finalize", async (state, ct) =>
+    {
+        // Finalize after approval
+        return state;
+    })
+    .AddEdge("process", "approval")
+    .AddEdge("approval", "finalize")
+    .SetEntryPoint("process")
+    .SetExitPoint("finalize")
+    .Build();
+```
+
+### Approval Handlers
+
+#### In-Memory Approval Handler
+
+For development and testing:
+
+```csharp
+var approvalHandler = new InMemoryApprovalHandler<MyState>(logger);
+
+// Manually approve a pending request
+await approvalHandler.ApproveAsync(
+    workflowRunId: "run-123",
+    nodeName: "approval",
+    approved: true);
+```
+
+#### Custom Approval Handler
+
+Implement `IApprovalHandler<TState>` for custom approval workflows:
+
+```csharp
+public class MyApprovalHandler<TState> : IApprovalHandler<TState> where TState : class
+{
+    public Task<bool> RequestApprovalAsync(
+        string workflowRunId,
+        string nodeName,
+        TState state,
+        string? message,
+        CancellationToken cancellationToken = default)
+    {
+        // Send approval request (email, SignalR, webhook, etc.)
+        // Return true if immediately approved, false if pending
+        return Task.FromResult(false);
+    }
+
+    public Task<bool> IsApprovedAsync(
+        string workflowRunId,
+        string nodeName,
+        CancellationToken cancellationToken = default)
+    {
+        // Check if approval has been granted
+        return Task.FromResult(false);
+    }
+}
+```
+
+### Approval Workflow Pattern
+
+```csharp
+// 1. Workflow reaches approval node
+// 2. ApprovalNode calls RequestApprovalAsync
+// 3. If not immediately approved, workflow pauses
+// 4. Approval handler polls IsApprovedAsync
+// 5. Once approved, workflow continues
+// 6. If rejected or timeout, workflow throws AgentException
+```
+
+### Integration with Web Applications
+
+For web applications, you can create a SignalR-based approval handler:
+
+```csharp
+public class SignalRApprovalHandler<TState> : IApprovalHandler<TState> where TState : class
+{
+    private readonly IHubContext<ApprovalHub> _hubContext;
+
+    public async Task<bool> RequestApprovalAsync(
+        string workflowRunId,
+        string nodeName,
+        TState state,
+        string? message,
+        CancellationToken cancellationToken = default)
+    {
+        // Send approval request via SignalR
+        await _hubContext.Clients.All.SendAsync(
+            "ApprovalRequested",
+            workflowRunId,
+            nodeName,
+            message,
+            cancellationToken);
+
+        return false; // Pending approval
+    }
+
+    public Task<bool> IsApprovedAsync(
+        string workflowRunId,
+        string nodeName,
+        CancellationToken cancellationToken = default)
+    {
+        // Check approval status from database/cache
+        return Task.FromResult(false);
+    }
+}
+```
+
+### Best Practices
+
+1. **Set Timeouts**: Always set reasonable timeouts for approval nodes to prevent workflows from hanging indefinitely
+2. **Clear Messages**: Provide clear approval messages explaining what needs approval
+3. **State Inspection**: Approval handlers can inspect workflow state to make informed decisions
+4. **Error Handling**: Handle approval rejections and timeouts gracefully in your workflow
+5. **Persistence**: Use persistent approval handlers (database-backed) for production workloads
+
 ## Bootstrap Generation
 
 ### Overview

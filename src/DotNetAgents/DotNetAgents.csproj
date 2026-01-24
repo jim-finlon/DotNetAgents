@@ -45,6 +45,9 @@
     <!-- Vector Store Packages: Vector similarity search implementations -->
     <ProjectReference Include="..\DotNetAgents.VectorStores.Pinecone\DotNetAgents.VectorStores.Pinecone.csproj" />
     <ProjectReference Include="..\DotNetAgents.VectorStores.PostgreSQL\DotNetAgents.VectorStores.PostgreSQL.csproj" />
+    <ProjectReference Include="..\DotNetAgents.VectorStores.Weaviate\DotNetAgents.VectorStores.Weaviate.csproj" />
+    <ProjectReference Include="..\DotNetAgents.VectorStores.Qdrant\DotNetAgents.VectorStores.Qdrant.csproj" />
+    <ProjectReference Include="..\DotNetAgents.VectorStores.Chroma\DotNetAgents.VectorStores.Chroma.csproj" />
     
     <!-- Provider Packages: LLM provider integrations -->
     <!-- Cloud APIs: Major cloud providers -->

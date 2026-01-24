@@ -26,12 +26,31 @@ DotNetAgents targets .NET 10 (LTS) to leverage cutting-edge AI optimizations and
 
 ### Core Capabilities
 - **🤖 AI Agents**: Build intelligent agents with tool calling and decision-making capabilities
-- **🔗 Chains**: Compose complex workflows with sequential and parallel execution
-- **📊 Workflows**: Stateful, resumable workflows with checkpointing (LangGraph-like)
+- **🔗 Chains**: Compose complex workflows with sequential and parallel execution (LCEL-like declarative syntax)
+- **📊 Workflows**: Stateful, resumable workflows with checkpointing and visualization (LangGraph-like)
 - **💾 Memory**: Short-term and long-term memory with vector-based storage
 - **🔍 RAG**: Retrieval-Augmented Generation with document loaders and vector stores
-- **🛠️ Tools**: Extensible tool system for external integrations
+- **🛠️ Tools**: 19 built-in tools + extensible tool system for external integrations
 - **📚 Education Extensions**: Specialized components for educational AI applications (pedagogy, safety, assessment, compliance)
+
+### Document Loaders (10 Types)
+- ✅ **PDF** (with page splitting)
+- ✅ **CSV** (with header mapping)
+- ✅ **Excel** (with worksheet/row splitting)
+- ✅ **EPUB** (with chapter splitting)
+- ✅ **Markdown**
+- ✅ **Text**
+- ✅ **DOCX** (Word documents)
+- ✅ **HTML** (with text extraction)
+- ✅ **JSON** (with flattening)
+- ✅ **XML** (with text extraction)
+
+### Vector Stores (5 Implementations)
+- ✅ **Pinecone** (cloud vector database)
+- ✅ **PostgreSQL** (pgvector extension)
+- ✅ **Weaviate** (open-source vector database)
+- ✅ **Qdrant** (high-performance vector database)
+- ✅ **Chroma** (embedding database)
 
 ### LLM Provider Support (12 Providers)
 - ✅ **OpenAI** (GPT-3.5, GPT-4, GPT-4 Turbo)
@@ -151,6 +170,9 @@ DotNetAgents uses a modular package architecture:
 - **`DotNetAgents.Providers.Anthropic`** - Anthropic integration
 - **`DotNetAgents.VectorStores.Pinecone`** - Pinecone integration
 - **`DotNetAgents.VectorStores.PostgreSQL`** - PostgreSQL vector store using pgvector extension
+- **`DotNetAgents.VectorStores.Weaviate`** - Weaviate integration
+- **`DotNetAgents.VectorStores.Qdrant`** - Qdrant integration
+- **`DotNetAgents.VectorStores.Chroma`** - Chroma integration
 - **`DotNetAgents.Storage.TaskKnowledge.SqlServer`** - SQL Server storage for checkpoints, tasks, and knowledge
 - **`DotNetAgents.Storage.TaskKnowledge.PostgreSQL`** - PostgreSQL storage for checkpoints, tasks, and knowledge
 - **`DotNetAgents.Configuration`** - Configuration management
