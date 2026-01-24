@@ -1,3 +1,4 @@
+using DotNetAgents.Workflow.Session.Bootstrap;
 using DotNetAgents.Workflow.Session.Storage;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -32,6 +33,9 @@ public static class ServiceCollectionExtensions
             services.AddSingleton<IMilestoneStore, InMemoryMilestoneStore>();
             services.AddSingleton<ISessionContextStore, InMemorySessionContextStore>();
         }
+
+        // Register bootstrap generator
+        services.AddSingleton<IBootstrapGenerator, BootstrapGenerator>();
 
         // Register manager
         services.AddScoped<ISessionManager, SessionManager>();

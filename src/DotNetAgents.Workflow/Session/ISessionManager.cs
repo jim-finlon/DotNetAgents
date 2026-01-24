@@ -1,4 +1,4 @@
-using DotNetAgents.Workflow.Session;
+using DotNetAgents.Workflow.Session.Bootstrap;
 
 namespace DotNetAgents.Workflow.Session;
 
@@ -78,4 +78,16 @@ public interface ISessionManager
     /// <param name="cancellationToken">A cancellation token to observe while waiting for the task to complete.</param>
     /// <returns>The session context if found; otherwise, null.</returns>
     Task<SessionContext?> GetContextAsync(string sessionId, CancellationToken cancellationToken = default);
+
+    /// <summary>
+    /// Generates a bootstrap payload for session resumption.
+    /// </summary>
+    /// <param name="data">The bootstrap data.</param>
+    /// <param name="format">The output format.</param>
+    /// <param name="cancellationToken">A cancellation token to observe while waiting for the task to complete.</param>
+    /// <returns>The generated bootstrap payload.</returns>
+    Task<BootstrapPayload> GenerateBootstrapAsync(
+        BootstrapData data,
+        BootstrapFormat format = BootstrapFormat.Json,
+        CancellationToken cancellationToken = default);
 }

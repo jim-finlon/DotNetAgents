@@ -1,4 +1,5 @@
 using DotNetAgents.Core.Exceptions;
+using DotNetAgents.Workflow.Session.Bootstrap;
 using DotNetAgents.Workflow.Session.Storage;
 using Microsoft.Extensions.Logging;
 
@@ -12,6 +13,7 @@ public class SessionManager : ISessionManager
     private readonly ISnapshotStore _snapshotStore;
     private readonly IMilestoneStore _milestoneStore;
     private readonly ISessionContextStore _contextStore;
+    private readonly IBootstrapGenerator _bootstrapGenerator;
     private readonly ILogger<SessionManager> _logger;
 
     /// <summary>
@@ -20,16 +22,19 @@ public class SessionManager : ISessionManager
     /// <param name="snapshotStore">The snapshot store.</param>
     /// <param name="milestoneStore">The milestone store.</param>
     /// <param name="contextStore">The session context store.</param>
+    /// <param name="bootstrapGenerator">The bootstrap generator.</param>
     /// <param name="logger">The logger.</param>
     public SessionManager(
         ISnapshotStore snapshotStore,
         IMilestoneStore milestoneStore,
         ISessionContextStore contextStore,
+        IBootstrapGenerator bootstrapGenerator,
         ILogger<SessionManager> logger)
     {
         _snapshotStore = snapshotStore ?? throw new ArgumentNullException(nameof(snapshotStore));
         _milestoneStore = milestoneStore ?? throw new ArgumentNullException(nameof(milestoneStore));
         _contextStore = contextStore ?? throw new ArgumentNullException(nameof(contextStore));
+        _bootstrapGenerator = bootstrapGenerator ?? throw new ArgumentNullException(nameof(bootstrapGenerator));
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
     }
 
@@ -237,6 +242,45 @@ public class SessionManager : ISessionManager
             _logger.LogError(ex, "Failed to get context for session {SessionId}", sessionId);
             throw new AgentException(
                 $"Failed to get context: {ex.Message}",
+                ErrorCategory.WorkflowError,
+                ex);
+        }
+    }
+
+    /// <summary>
+    /// Generates a bootstrap payload for session resumption.
+    /// </summary>
+    /// <param name="data">The bootstrap data.</param>
+    /// <param name="format">The output format.</param>
+    /// <param name="cancellationToken">A cancellation token to observe while waiting for the task to complete.</param>
+    /// <returns>The generated bootstrap payload.</returns>
+    public async Task<BootstrapPayload> GenerateBootstrapAsync(
+        BootstrapData data,
+        BootstrapFormat format = BootstrapFormat.Json,
+        CancellationToken cancellationToken = default)
+    {
+        if (data == null)
+            throw new ArgumentNullException(nameof(data));
+
+        try
+        {
+            _logger.LogDebug("Generating bootstrap for session {SessionId}", data.SessionId);
+
+            var payload = await _bootstrapGenerator.GenerateAsync(data, format, cancellationToken).ConfigureAwait(false);
+
+            _logger.LogInformation(
+                "Bootstrap generated. SessionId: {SessionId}, Format: {Format}, Size: {Size} bytes",
+                data.SessionId,
+                format,
+                payload.FormattedContent.Length);
+
+            return payload;
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Failed to generate bootstrap for session {SessionId}", data.SessionId);
+            throw new AgentException(
+                $"Failed to generate bootstrap: {ex.Message}",
                 ErrorCategory.WorkflowError,
                 ex);
         }
