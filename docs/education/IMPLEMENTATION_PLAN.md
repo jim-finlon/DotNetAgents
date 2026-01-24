@@ -431,11 +431,77 @@ This document provides a detailed, phased implementation plan for the DotNetAgen
 
 ---
 
-### Phase 5: Integration Components (Weeks 11-12)
+### Phase 5: Workflows & Graphs (Weeks 11-12) ⚡ HIGH PRIORITY
+
+**Goal**: Create pre-built educational workflows using DotNetAgents StateGraph.
+
+#### Week 11: Socratic Tutor Graph
+
+**Deliverables:**
+- [ ] Implement `SocraticTutorGraph`
+- [ ] State management
+- [ ] Checkpointing integration
+- [ ] Unit and integration tests
+
+**Tasks:**
+1. Create `SocraticTutorGraph`:
+   - Use DotNetAgents `StateGraph<SocraticDialogueState>`
+   - Nodes: assess, question, evaluate, hint, celebrate
+   - Conditional edges for mastery routing
+   - State persistence
+   - Integration with checkpointing
+2. Implement state management:
+   - `SocraticDialogueState` record
+   - State transitions
+   - State validation
+
+**Acceptance Criteria:**
+- ✅ Graph executes correctly
+- ✅ State persists across sessions
+- ✅ Checkpointing works
+- ✅ >90% unit test coverage
+
+**Dependencies:**
+- Phase 4 deliverables
+- DotNetAgents.Workflow
+
+#### Week 12: Assessment & Lesson Graphs
+
+**Deliverables:**
+- [ ] Implement `AdaptiveAssessmentGraph`
+- [ ] Implement `LessonDeliveryGraph`
+- [ ] State management
+- [ ] Unit and integration tests
+
+**Tasks:**
+1. Create `AdaptiveAssessmentGraph`:
+   - Use DotNetAgents `StateGraph<AssessmentState>`
+   - Adaptive difficulty adjustment
+   - Early termination conditions
+   - Result reporting
+2. Create `LessonDeliveryGraph`:
+   - Use DotNetAgents `StateGraph<LessonState>`
+   - Concept introduction flow
+   - Practice problem integration
+   - Mastery check gates
+
+**Acceptance Criteria:**
+- ✅ Graphs execute correctly
+- ✅ Adaptive difficulty works
+- ✅ Mastery checks accurate
+- ✅ >90% unit test coverage
+
+**Dependencies:**
+- Week 11 deliverables
+- DotNetAgents.Workflow
+
+---
+
+### Phase 6: Integration Components (Weeks 13-14)
 
 **Goal**: Implement LMS and SIS integrations.
 
-#### Week 11: LMS Integration
+#### Week 13: LMS Integration
 
 **Deliverables:**
 - [ ] Implement `CanvasConnector`
@@ -470,10 +536,10 @@ This document provides a detailed, phased implementation plan for the DotNetAgen
 - ✅ >90% unit test coverage
 
 **Dependencies:**
-- Phase 4 deliverables
+- Phase 5 deliverables
 - LMS API credentials
 
-#### Week 12: SIS Integration & Learning Analytics
+#### Week 14: SIS Integration & Learning Analytics
 
 **Deliverables:**
 - [ ] Implement `PowerSchoolConnector`
@@ -507,75 +573,9 @@ This document provides a detailed, phased implementation plan for the DotNetAgen
 - ✅ >90% unit test coverage
 
 **Dependencies:**
-- Week 11 deliverables
+- Week 13 deliverables
 - SIS API credentials
 - DotNetAgents.Observability
-
----
-
-### Phase 6: Workflows & Graphs (Weeks 13-14)
-
-**Goal**: Create pre-built educational workflows using DotNetAgents StateGraph.
-
-#### Week 13: Socratic Tutor Graph
-
-**Deliverables:**
-- [ ] Implement `SocraticTutorGraph`
-- [ ] State management
-- [ ] Checkpointing integration
-- [ ] Unit and integration tests
-
-**Tasks:**
-1. Create `SocraticTutorGraph`:
-   - Use DotNetAgents `StateGraph<SocraticDialogueState>`
-   - Nodes: assess, question, evaluate, hint, celebrate
-   - Conditional edges for mastery routing
-   - State persistence
-   - Integration with checkpointing
-2. Implement state management:
-   - `SocraticDialogueState` record
-   - State transitions
-   - State validation
-
-**Acceptance Criteria:**
-- ✅ Graph executes correctly
-- ✅ State persists across sessions
-- ✅ Checkpointing works
-- ✅ >90% unit test coverage
-
-**Dependencies:**
-- Phase 5 deliverables
-- DotNetAgents.Workflow
-
-#### Week 14: Assessment & Lesson Graphs
-
-**Deliverables:**
-- [ ] Implement `AdaptiveAssessmentGraph`
-- [ ] Implement `LessonDeliveryGraph`
-- [ ] State management
-- [ ] Unit and integration tests
-
-**Tasks:**
-1. Create `AdaptiveAssessmentGraph`:
-   - Use DotNetAgents `StateGraph<AssessmentState>`
-   - Adaptive difficulty adjustment
-   - Early termination conditions
-   - Result reporting
-2. Create `LessonDeliveryGraph`:
-   - Use DotNetAgents `StateGraph<LessonState>`
-   - Concept introduction flow
-   - Practice problem integration
-   - Mastery check gates
-
-**Acceptance Criteria:**
-- ✅ Graphs execute correctly
-- ✅ Adaptive difficulty works
-- ✅ Mastery checks accurate
-- ✅ >90% unit test coverage
-
-**Dependencies:**
-- Week 13 deliverables
-- DotNetAgents.Workflow
 
 ---
 
