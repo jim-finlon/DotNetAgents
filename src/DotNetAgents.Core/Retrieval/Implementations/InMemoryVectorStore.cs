@@ -1,4 +1,5 @@
 using DotNetAgents.Abstractions.Retrieval;
+using DotNetAgents.Core.Retrieval;
 
 namespace DotNetAgents.Core.Retrieval.Implementations;
 
@@ -61,8 +62,8 @@ public class InMemoryVectorStore : IVectorStore
                     }
                 }
 
-                // Calculate cosine similarity
-                var similarity = CosineSimilarity(queryVector, vector);
+                // Calculate cosine similarity using optimized SIMD operations
+                var similarity = VectorOperations.CosineSimilarity(queryVector, vector);
 
                 results.Add(new VectorSearchResult
                 {
@@ -105,28 +106,4 @@ public class InMemoryVectorStore : IVectorStore
         }
     }
 
-    private static float CosineSimilarity(float[] vectorA, float[] vectorB)
-    {
-        if (vectorA.Length != vectorB.Length)
-            throw new ArgumentException("Vectors must have the same length.");
-
-        var dotProduct = 0f;
-        var magnitudeA = 0f;
-        var magnitudeB = 0f;
-
-        for (int i = 0; i < vectorA.Length; i++)
-        {
-            dotProduct += vectorA[i] * vectorB[i];
-            magnitudeA += vectorA[i] * vectorA[i];
-            magnitudeB += vectorB[i] * vectorB[i];
-        }
-
-        magnitudeA = MathF.Sqrt(magnitudeA);
-        magnitudeB = MathF.Sqrt(magnitudeB);
-
-        if (magnitudeA == 0f || magnitudeB == 0f)
-            return 0f;
-
-        return dotProduct / (magnitudeA * magnitudeB);
-    }
 }

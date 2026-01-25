@@ -11,6 +11,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\DotNetAgents.Abstractions\DotNetAgents.Abstractions.csproj" />
+    <ProjectReference Include="..\DotNetAgents.Core\DotNetAgents.Core.csproj" />
     <PackageReference Include="DocumentFormat.OpenXml" Version="3.0.0" />
     <PackageReference Include="EPPlus" Version="7.0.0" />
     <PackageReference Include="HtmlAgilityPack" Version="1.11.71" />

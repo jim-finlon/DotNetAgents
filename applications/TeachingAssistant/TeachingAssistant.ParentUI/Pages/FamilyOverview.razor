@@ -1,0 +1,76 @@
+@page "/"
+@page "/family"
+@using TeachingAssistant.ParentUI.Services
+@using TeachingAssistant.ParentUI.Models
+@inject ApiClient ApiClient
+@inject ParentHubService ParentHub
+@implements IAsyncDisposable
+
+<PageTitle>Family Overview</PageTitle>
+
+<h1>Family Dashboard</h1>
+
+@if (students == null)
+{
+    <p>Loading...</p>
+}
+else
+{
+    <div class="row">
+        @foreach (var student in students)
+        {
+            <div class="col-md-6 mb-3">
+                <div class="card">
+                    <div class="card-header">
+                        <h5>@student.Name</h5>
+                        @if (student.GradeLevel.HasValue)
+                        {
+                            <span class="badge bg-primary">Grade @student.GradeLevel</span>
+                        }
+                    </div>
+                    <div class="card-body">
+                        <a href="/student/@student.Id" class="btn btn-primary">View Progress</a>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+}
+
+@code {
+    private List<StudentDto>? students;
+    private Guid familyId = Guid.Parse("00000000-0000-0000-0000-000000000001"); // TODO: Get from auth
+
+    protected override async Task OnInitializedAsync()
+    {
+        await ParentHub.StartAsync();
+        await ParentHub.JoinFamilyNotificationsAsync(familyId.ToString());
+        ParentHub.ProgressUpdateReceived += OnProgressUpdate;
+        ParentHub.AchievementReceived += OnAchievement;
+        
+        students = await ApiClient.GetStudentsByFamilyAsync(familyId);
+    }
+
+    private void OnProgressUpdate(object update)
+    {
+        // Refresh student progress
+        InvokeAsync(async () =>
+        {
+            students = await ApiClient.GetStudentsByFamilyAsync(familyId);
+            StateHasChanged();
+        });
+    }
+
+    private void OnAchievement(object achievement)
+    {
+        // Show achievement notification
+        StateHasChanged();
+    }
+
+    public async ValueTask DisposeAsync()
+    {
+        ParentHub.ProgressUpdateReceived -= OnProgressUpdate;
+        ParentHub.AchievementReceived -= OnAchievement;
+        await ParentHub.DisposeAsync();
+    }
+}

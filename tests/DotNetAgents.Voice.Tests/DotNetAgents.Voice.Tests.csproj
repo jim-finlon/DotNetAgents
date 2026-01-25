@@ -29,7 +29,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\DotNetAgents.Abstractions\DotNetAgents.Abstractions.csproj" />
-    <ProjectReference Include="..\..\src\Voice\DotNetAgents.Voice\DotNetAgents.Voice.csproj" />
+    <ProjectReference Include="..\..\applications\JARVIS\JARVIS.Voice\DotNetAgents.Voice\DotNetAgents.Voice.csproj" />
   </ItemGroup>
 
 </Project>

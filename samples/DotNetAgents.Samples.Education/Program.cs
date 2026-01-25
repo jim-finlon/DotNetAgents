@@ -1,10 +1,13 @@
 using DotNetAgents.Configuration;
 using DotNetAgents.Abstractions.Models;
+using DotNetAgents.Agents.StateMachines;
 using DotNetAgents.Education.Assessment;
+using DotNetAgents.Education.BehaviorTrees;
 using DotNetAgents.Education.Memory;
 using DotNetAgents.Education.Models;
 using DotNetAgents.Education.Pedagogy;
 using DotNetAgents.Education.Safety;
+using DotNetAgents.Education.StateMachines;
 using DotNetAgents.Providers.OpenAI;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -75,6 +78,15 @@ class Program
 
             // Demo 6: Student Profile Management
             await DemonstrateStudentProfile(serviceProvider, logger);
+
+            // Demo 7: Learning Session State Machine
+            await DemonstrateLearningSessionStateMachine(serviceProvider, logger);
+
+            // Demo 8: Mastery State Machine
+            await DemonstrateMasteryStateMachine(serviceProvider, logger);
+
+            // Demo 9: Adaptive Learning Path Behavior Tree
+            await DemonstrateAdaptiveLearningPath(serviceProvider, logger);
 
             Console.WriteLine("\n✅ All demonstrations completed successfully!");
         }
@@ -274,6 +286,145 @@ class Program
             Console.WriteLine($"Grade Level: {retrieved.GradeLevel}");
             Console.WriteLine($"Learning Preferences: {string.Join(", ", retrieved.LearningPreferences)}");
         }
+    }
+
+    static async Task DemonstrateLearningSessionStateMachine(IServiceProvider services, ILogger logger)
+    {
+        Console.WriteLine("\n🔄 Demo 7: Learning Session State Machine");
+        Console.WriteLine("------------------------------------------");
+
+        // Create state machine
+        var loggerFactory = services.GetRequiredService<ILoggerFactory>();
+        var stateMachineLogger = loggerFactory.CreateLogger<AgentStateMachine<LearningSessionContext>>();
+        var stateMachine = LearningSessionStateMachinePattern.CreateLearningSessionPattern<LearningSessionContext>(
+            stateMachineLogger,
+            sessionTimeout: TimeSpan.FromHours(2),
+            learningTimeout: TimeSpan.FromMinutes(30));
+        var adapter = new LearningSessionStateMachineAdapter<LearningSessionContext>(stateMachine);
+
+        // Create session memory with state machine
+        var sessionMemory = new LearningSessionMemory(
+            services.GetRequiredService<ILogger<LearningSessionMemory>>(),
+            adapter);
+
+        var studentId = "demo-student-state";
+        var conceptId = new ConceptId("fractions", SubjectArea.Mathematics, GradeLevel.G3_5);
+
+        // Create session (transitions to Initialized)
+        var session = await sessionMemory.CreateSessionAsync(studentId, conceptId);
+        Console.WriteLine($"Created session: {session.SessionId}");
+        Console.WriteLine($"Current state: {sessionMemory.GetSessionState(session.SessionId)}");
+
+        // Transition to Learning
+        await sessionMemory.TransitionToStateAsync(session.SessionId, "Learning");
+        Console.WriteLine($"After transition to Learning: {sessionMemory.GetSessionState(session.SessionId)}");
+
+        // Transition to Assessment
+        await sessionMemory.TransitionToStateAsync(session.SessionId, "Assessment");
+        Console.WriteLine($"After transition to Assessment: {sessionMemory.GetSessionState(session.SessionId)}");
+
+        // Transition to Review
+        await sessionMemory.TransitionToStateAsync(session.SessionId, "Review");
+        Console.WriteLine($"After transition to Review: {sessionMemory.GetSessionState(session.SessionId)}");
+
+        // Complete session
+        await sessionMemory.CompleteSessionAsync(session.SessionId);
+        Console.WriteLine($"After completion: {sessionMemory.GetSessionState(session.SessionId)}");
+
+        var context = sessionMemory.GetSessionContext(session.SessionId);
+        if (context != null)
+        {
+            Console.WriteLine($"Session context - Learning started: {context.LearningStartedAt}");
+            Console.WriteLine($"Session context - Assessment started: {context.AssessmentStartedAt}");
+            Console.WriteLine($"Session context - Completed: {context.CompletedAt}");
+        }
+    }
+
+    static async Task DemonstrateMasteryStateMachine(IServiceProvider services, ILogger logger)
+    {
+        Console.WriteLine("\n📊 Demo 8: Mastery State Machine");
+        Console.WriteLine("----------------------------------");
+
+        // Create mastery state machine
+        var loggerFactory = services.GetRequiredService<ILoggerFactory>();
+        var stateMachineLogger = loggerFactory.CreateLogger<AgentStateMachine<MasteryContext>>();
+        var stateMachine = MasteryStateMachinePattern.CreateMasteryPattern<MasteryContext>(stateMachineLogger);
+        var adapter = new MasteryStateMachineAdapter<MasteryContext>(stateMachine);
+
+        // Create mastery memory with state machine
+        var masteryMemory = new MasteryStateMemory(
+            services.GetRequiredService<ILogger<MasteryStateMemory>>(),
+            adapter);
+
+        var studentId = "demo-student-mastery";
+        var conceptId = new ConceptId("addition", SubjectArea.Mathematics, GradeLevel.K2);
+
+        // Update mastery with different scores to trigger state transitions
+        var scores = new[] { 30.0, 50.0, 70.0, 85.0 };
+
+        foreach (var score in scores)
+        {
+            var mastery = new ConceptMastery
+            {
+                ConceptId = conceptId,
+                Score = score,
+                Level = MasteryLevelExtensions.FromScore(score),
+                LastUpdated = DateTimeOffset.UtcNow
+            };
+
+            await masteryMemory.UpdateMasteryAsync(studentId, mastery);
+            var state = masteryMemory.GetMasteryState(studentId, conceptId);
+            Console.WriteLine($"Score: {score:F1}% → State: {state ?? "null"}, Level: {mastery.Level}");
+        }
+    }
+
+    static async Task DemonstrateAdaptiveLearningPath(IServiceProvider services, ILogger logger)
+    {
+        Console.WriteLine("\n🎯 Demo 9: Adaptive Learning Path Behavior Tree");
+        Console.WriteLine("--------------------------------------------------");
+
+        var masteryCalculator = services.GetRequiredService<IMasteryCalculator>();
+        var behaviorTree = new AdaptiveLearningPathBehaviorTree(
+            masteryCalculator,
+            services.GetRequiredService<ILogger<AdaptiveLearningPathBehaviorTree>>());
+
+        var studentId = "demo-student-path";
+        var availableConcepts = new List<ConceptId>
+        {
+            new ConceptId("addition", SubjectArea.Mathematics, GradeLevel.K2),
+            new ConceptId("subtraction", SubjectArea.Mathematics, GradeLevel.K2),
+            new ConceptId("multiplication", SubjectArea.Mathematics, GradeLevel.G3_5),
+            new ConceptId("division", SubjectArea.Mathematics, GradeLevel.G3_5)
+        };
+
+        // Create student mastery levels
+        var studentMastery = new Dictionary<ConceptId, ConceptMastery>
+        {
+            [availableConcepts[0]] = new ConceptMastery
+            {
+                ConceptId = availableConcepts[0],
+                Score = 85.0,
+                Level = MasteryLevel.Advanced,
+                LastUpdated = DateTimeOffset.UtcNow.AddDays(-10) // Needs review
+            },
+            [availableConcepts[1]] = new ConceptMastery
+            {
+                ConceptId = availableConcepts[1],
+                Score = 45.0,
+                Level = MasteryLevel.Developing,
+                LastUpdated = DateTimeOffset.UtcNow
+            }
+        };
+
+        var context = await behaviorTree.DetermineLearningPathAsync(
+            studentId,
+            availableConcepts,
+            studentMastery);
+
+        Console.WriteLine($"Selected Concept: {context.SelectedConcept?.Value ?? "none"}");
+        Console.WriteLine($"Strategy: {context.Strategy}");
+        Console.WriteLine($"Selection Reason: {context.SelectionReason}");
+        Console.WriteLine($"Prerequisites Met: {context.PrerequisitesMet}");
     }
 }
 

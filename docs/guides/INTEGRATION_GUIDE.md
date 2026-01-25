@@ -602,18 +602,83 @@ Console.WriteLine(bootstrap.FormattedContent);
 6. **Generate Bootstraps**: Generate bootstrap payloads at key workflow checkpoints for resumption
 7. **Use Database Storage**: Use database storage (SQL Server or PostgreSQL) for production workloads
 
+## Autonomous Agent Capabilities
+
+DotNetAgents provides comprehensive support for autonomous agents through State Machines and Behavior Trees.
+
+### State Machines
+
+State machines manage agent lifecycle and operational states:
+
+```csharp
+using DotNetAgents.Agents.StateMachines;
+using DotNetAgents.Agents.Registry;
+
+// Create a worker pool state machine pattern
+var stateMachine = StateMachinePatterns.CreateWorkerPoolPattern<MyContext>(
+    logger,
+    cooldownDuration: TimeSpan.FromSeconds(5));
+
+// Register with agent registry
+var stateMachineRegistry = new AgentStateMachineRegistry<MyContext>(agentRegistry, logger);
+await stateMachineRegistry.RegisterAsync("agent-1", stateMachine);
+
+// Transition states
+await stateMachine.TransitionAsync("Busy", context);
+```
+
+**Key Features:**
+- Hierarchical states (nested states)
+- Parallel states (orthogonal regions)
+- Timed and scheduled transitions
+- State persistence and history
+- Common patterns (Idle-Working, Error-Recovery, Worker Pool, Supervisor)
+
+See [State Machines README](../../src/DotNetAgents.Agents.StateMachines/README.md) for detailed documentation.
+
+### Behavior Trees
+
+Behavior trees enable hierarchical decision-making for autonomous agents:
+
+```csharp
+using DotNetAgents.Agents.BehaviorTrees;
+
+// Create a behavior tree
+var sequence = new SequenceNode<MyContext>("ProcessSequence", logger)
+    .AddChild(new ConditionNode<MyContext>("CheckCondition", ctx => ctx.IsValid, logger))
+    .AddChild(new ActionNode<MyContext>("PerformAction", async (ctx, ct) => {
+        // Action logic
+        return BehaviorTreeNodeStatus.Success;
+    }, logger));
+
+var tree = new BehaviorTree<MyContext>("MyTree", sequence);
+var executor = new BehaviorTreeExecutor<MyContext>(logger);
+var result = await executor.ExecuteAsync(tree, context);
+```
+
+**Key Features:**
+- Leaf nodes (Action, Condition)
+- Composite nodes (Sequence, Selector, Parallel)
+- Decorator nodes (Retry, Timeout, Cooldown, Conditional)
+- LLM integration nodes
+- Workflow integration nodes
+- State machine integration nodes
+
+See [Behavior Trees README](../../src/DotNetAgents.Agents.BehaviorTrees/README.md) for detailed documentation.
+
 ## Examples
 
-See the `DotNetAgents.Samples.TasksAndKnowledge` sample for a complete working example demonstrating:
-- Task creation and tracking
-- Knowledge capture from successes and errors
-- Task statistics
-- Knowledge querying
-- Bootstrap generation
+See the sample applications for complete working examples:
+
+- **`DotNetAgents.Samples.TasksAndKnowledge`**: Task creation, knowledge capture, bootstrap generation
+- **`DotNetAgents.Samples.MultiAgent`**: Supervisor-worker patterns, agent registry, worker pool
+- **`DotNetAgents.Samples.StateMachines`**: State machine patterns, registry integration, message bus integration
 
 ## Additional Resources
 
-- [Tasks Package README](../src/DotNetAgents.Tasks/README.md)
-- [Knowledge Package README](../src/DotNetAgents.Knowledge/README.md)
-- [Workflow Documentation](PROJECT_STATUS.md)
-- [Samples](../samples/README.md)
+- [Tasks Package README](../../src/DotNetAgents.Tasks/README.md)
+- [Knowledge Package README](../../src/DotNetAgents.Knowledge/README.md)
+- [State Machines README](../../src/DotNetAgents.Agents.StateMachines/README.md)
+- [Behavior Trees README](../../src/DotNetAgents.Agents.BehaviorTrees/README.md)
+- [Workflow Documentation](../status/PROJECT_STATUS.md)
+- [Samples](../../samples/README.md)

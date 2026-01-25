@@ -23,17 +23,13 @@
     <ProjectReference Include="..\DotNetAgents.Workflow\DotNetAgents.Workflow.csproj" />
     <ProjectReference Include="..\DotNetAgents.Tasks\DotNetAgents.Tasks.csproj" />
     <ProjectReference Include="..\DotNetAgents.Knowledge\DotNetAgents.Knowledge.csproj" />
-    <ProjectReference Include="..\DotNetAgents.Education\DotNetAgents.Education.csproj" />
     <ProjectReference Include="..\DotNetAgents.Configuration\DotNetAgents.Configuration.csproj" />
     <ProjectReference Include="..\DotNetAgents.Observability\DotNetAgents.Observability.csproj" />
     <ProjectReference Include="..\DotNetAgents.Security\DotNetAgents.Security.csproj" />
     
-    <!-- Voice Packages: Voice command processing, transcription, and dialog management -->
-    <ProjectReference Include="..\Voice\DotNetAgents.Voice\DotNetAgents.Voice.csproj" />
-    <ProjectReference Include="..\Voice\DotNetAgents.Voice.Transcription\DotNetAgents.Voice.Transcription.csproj" />
-    <ProjectReference Include="..\Voice\DotNetAgents.Voice.SignalR\DotNetAgents.Voice.SignalR.csproj" />
-    <ProjectReference Include="..\Voice\DotNetAgents.Voice.Dialog\DotNetAgents.Voice.Dialog.csproj" />
-    <ProjectReference Include="..\Voice\DotNetAgents.Voice.Scheduling\DotNetAgents.Voice.Scheduling.csproj" />
+    <!-- Application Packages: Moved to applications/ directory (not included in metapackage) -->
+    <!-- Education: applications/TeachingAssistant/TeachingAssistant.Education/ -->
+    <!-- Voice: applications/JARVIS/JARVIS.Voice/ -->
     
     <!-- MCP: Model Context Protocol client library -->
     <ProjectReference Include="..\DotNetAgents.Mcp\DotNetAgents.Mcp.csproj" />

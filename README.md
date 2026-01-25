@@ -28,9 +28,13 @@ DotNetAgents targets .NET 10 (LTS) to leverage cutting-edge AI optimizations and
 - **🤖 AI Agents**: Build intelligent agents with tool calling and decision-making capabilities
 - **🔗 Chains**: Compose complex workflows with sequential and parallel execution (LCEL-like declarative syntax)
 - **📊 Workflows**: Stateful, resumable workflows with checkpointing and visualization (LangGraph-like)
+- **🔄 State Machines**: Manage agent lifecycle and operational states with hierarchical, parallel, and timed transitions
+- **🌳 Behavior Trees**: Hierarchical decision-making for autonomous agents with composite, decorator, and integration nodes
 - **💾 Memory**: Short-term and long-term memory with vector-based storage
 - **🔍 RAG**: Retrieval-Augmented Generation with document loaders and vector stores
 - **🛠️ Tools**: 19 built-in tools + extensible tool system for external integrations
+- **👥 Multi-Agent Workflows**: Supervisor-worker patterns, agent registry, load balancing, auto-scaling
+- **📨 Agent Messaging**: Multiple message bus implementations (In-Memory, Kafka, RabbitMQ, Redis Pub/Sub)
 - **📚 Education Extensions**: Specialized components for educational AI applications (pedagogy, safety, assessment, compliance)
 
 ### Document Loaders (10 Types)
@@ -175,6 +179,8 @@ DotNetAgents uses a modular package architecture:
 - **`DotNetAgents.VectorStores.Chroma`** - Chroma integration
 - **`DotNetAgents.Storage.TaskKnowledge.SqlServer`** - SQL Server storage for checkpoints, tasks, and knowledge
 - **`DotNetAgents.Storage.TaskKnowledge.PostgreSQL`** - PostgreSQL storage for checkpoints, tasks, and knowledge
+- **`DotNetAgents.Agents.StateMachines`** - State machine implementation for agent lifecycle management
+- **`DotNetAgents.Agents.BehaviorTrees`** - Behavior tree implementation for autonomous agent decision-making
 - **`DotNetAgents.Configuration`** - Configuration management
 - **`DotNetAgents.Observability`** - Logging, tracing, metrics
 - **`DotNetAgents.Security`** - Security features
@@ -204,6 +210,8 @@ DotNetAgents follows a layered, modular architecture:
 
 ```
 Application Layer
+    ↓
+Autonomous Agents (State Machines & Behavior Trees)
     ↓
 Workflow Engine (LangGraph-like)
     ↓
@@ -254,6 +262,8 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - ✅ 5 vector store implementations
 - ✅ 19 built-in tools
 - ✅ Workflow engine with checkpointing
+- ✅ State Machines for agent lifecycle management
+- ✅ Behavior Trees for autonomous agent decision-making
 - ✅ Voice command processing (JARVIS)
 - ✅ MCP client library
 - ✅ Educational extensions package
@@ -261,6 +271,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - ✅ LCEL-like chain composition
 - ✅ Workflow visualization
 - ✅ Human-in-the-loop support
+- ✅ Multi-agent workflows with supervisor-worker patterns
 
 **See [Project Status](docs/status/PROJECT_STATUS.md) for detailed status.**
 

@@ -1,0 +1,289 @@
+using DotNetAgents.Agents.BehaviorTrees;
+using DotNetAgents.Abstractions.Tools;
+using Microsoft.Extensions.Logging;
+
+namespace DotNetAgents.Core.Agents.BehaviorTrees;
+
+/// <summary>
+/// Context object for tool selection behavior tree operations.
+/// </summary>
+public class ToolSelectionContext
+{
+    /// <summary>
+    /// Gets or sets the requested tool name.
+    /// </summary>
+    public string? RequestedToolName { get; set; }
+
+    /// <summary>
+    /// Gets or sets the available tools.
+    /// </summary>
+    public IReadOnlyList<ITool> AvailableTools { get; set; } = Array.Empty<ITool>();
+
+    /// <summary>
+    /// Gets or sets the selected tool.
+    /// </summary>
+    public ITool? SelectedTool { get; set; }
+
+    /// <summary>
+    /// Gets or sets the selection strategy used.
+    /// </summary>
+    public ToolSelectionStrategy Strategy { get; set; } = ToolSelectionStrategy.Unknown;
+
+    /// <summary>
+    /// Gets or sets the reason for selecting this tool.
+    /// </summary>
+    public string? SelectionReason { get; set; }
+
+    /// <summary>
+    /// Gets or sets the tool capability or description being searched for.
+    /// </summary>
+    public string? CapabilitySearch { get; set; }
+}
+
+/// <summary>
+/// Represents the tool selection strategy.
+/// </summary>
+public enum ToolSelectionStrategy
+{
+    Unknown,
+    ExactMatch,
+    CapabilityMatch,
+    DescriptionMatch,
+    Fallback
+}
+
+/// <summary>
+/// Behavior tree for intelligent tool selection that determines the best tool
+/// to use based on name matching, capability matching, and description matching.
+/// </summary>
+public class ToolSelectionBehaviorTree
+{
+    private readonly BehaviorTree<ToolSelectionContext> _tree;
+    private readonly BehaviorTreeExecutor<ToolSelectionContext> _executor;
+    private readonly ILogger<ToolSelectionBehaviorTree>? _logger;
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="ToolSelectionBehaviorTree"/> class.
+    /// </summary>
+    /// <param name="logger">Optional logger instance.</param>
+    public ToolSelectionBehaviorTree(ILogger<ToolSelectionBehaviorTree>? logger = null)
+    {
+        _logger = logger;
+
+        // Create logger for behavior tree nodes
+        ILogger<BehaviorTreeNode<ToolSelectionContext>>? behaviorTreeLogger = null;
+        ILogger<BehaviorTreeExecutor<ToolSelectionContext>>? executorLogger = null;
+        if (logger != null)
+        {
+            var loggerFactory = Microsoft.Extensions.Logging.LoggerFactory.Create(builder =>
+                builder.AddConsole().SetMinimumLevel(Microsoft.Extensions.Logging.LogLevel.Debug));
+            behaviorTreeLogger = loggerFactory.CreateLogger<BehaviorTreeNode<ToolSelectionContext>>();
+            executorLogger = loggerFactory.CreateLogger<BehaviorTreeExecutor<ToolSelectionContext>>();
+        }
+
+        // Build behavior tree
+        // Root: Selector (try strategies in order)
+        var root = new SelectorNode<ToolSelectionContext>("ToolSelectionSelector", behaviorTreeLogger)
+            // Strategy 1: Exact Match (tool name matches exactly)
+            .AddChild(new SequenceNode<ToolSelectionContext>("ExactMatchSequence", behaviorTreeLogger)
+                .AddChild(new ConditionNode<ToolSelectionContext>(
+                    "HasExactMatch",
+                    ctx => HasExactMatch(ctx),
+                    behaviorTreeLogger))
+                .AddChild(new ActionNode<ToolSelectionContext>(
+                    "SelectExactMatch",
+                    ctx => SelectExactMatch(ctx),
+                    behaviorTreeLogger)))
+            // Strategy 2: Capability Match (tool capability matches)
+            .AddChild(new SequenceNode<ToolSelectionContext>("CapabilityMatchSequence", behaviorTreeLogger)
+                .AddChild(new ConditionNode<ToolSelectionContext>(
+                    "HasCapabilityMatch",
+                    ctx => HasCapabilityMatch(ctx),
+                    behaviorTreeLogger))
+                .AddChild(new ActionNode<ToolSelectionContext>(
+                    "SelectCapabilityMatch",
+                    ctx => SelectCapabilityMatch(ctx),
+                    behaviorTreeLogger)))
+            // Strategy 3: Description Match (tool description contains keywords)
+            .AddChild(new SequenceNode<ToolSelectionContext>("DescriptionMatchSequence", behaviorTreeLogger)
+                .AddChild(new ConditionNode<ToolSelectionContext>(
+                    "HasDescriptionMatch",
+                    ctx => HasDescriptionMatch(ctx),
+                    behaviorTreeLogger))
+                .AddChild(new ActionNode<ToolSelectionContext>(
+                    "SelectDescriptionMatch",
+                    ctx => SelectDescriptionMatch(ctx),
+                    behaviorTreeLogger)))
+            // Fallback: Select first available tool
+            .AddChild(new ActionNode<ToolSelectionContext>(
+                "SelectFallback",
+                ctx => SelectFallback(ctx),
+                behaviorTreeLogger));
+
+        _tree = new BehaviorTree<ToolSelectionContext>("ToolSelectionTree", root);
+        _executor = new BehaviorTreeExecutor<ToolSelectionContext>(executorLogger);
+    }
+
+    /// <summary>
+    /// Selects a tool based on the requested tool name or capability.
+    /// </summary>
+    /// <param name="requestedToolName">The requested tool name.</param>
+    /// <param name="availableTools">The available tools.</param>
+    /// <param name="capabilitySearch">Optional capability or description to search for.</param>
+    /// <param name="cancellationToken">Cancellation token to cancel the operation.</param>
+    /// <returns>The tool selection context with selected tool and strategy.</returns>
+    public async Task<ToolSelectionContext> SelectToolAsync(
+        string? requestedToolName,
+        IReadOnlyList<ITool> availableTools,
+        string? capabilitySearch = null,
+        CancellationToken cancellationToken = default)
+    {
+        ArgumentNullException.ThrowIfNull(availableTools);
+
+        var context = new ToolSelectionContext
+        {
+            RequestedToolName = requestedToolName,
+            AvailableTools = availableTools,
+            CapabilitySearch = capabilitySearch
+        };
+
+        var result = await _executor.ExecuteAsync(_tree, context, cancellationToken).ConfigureAwait(false);
+
+        if (result.Status == BehaviorTreeNodeStatus.Success)
+        {
+            _logger?.LogDebug(
+                "Tool selected: {ToolName}, Strategy: {Strategy}",
+                context.SelectedTool?.Name ?? "none",
+                context.Strategy);
+        }
+        else
+        {
+            _logger?.LogWarning(
+                "Tool selection failed - no tool selected");
+        }
+
+        return context;
+    }
+
+    private bool HasExactMatch(ToolSelectionContext context)
+    {
+        if (string.IsNullOrWhiteSpace(context.RequestedToolName))
+            return false;
+
+        return context.AvailableTools.Any(tool =>
+            string.Equals(tool.Name, context.RequestedToolName, StringComparison.OrdinalIgnoreCase));
+    }
+
+    private BehaviorTreeNodeStatus SelectExactMatch(ToolSelectionContext context)
+    {
+        if (string.IsNullOrWhiteSpace(context.RequestedToolName))
+            return BehaviorTreeNodeStatus.Failure;
+
+        var tool = context.AvailableTools.FirstOrDefault(t =>
+            string.Equals(t.Name, context.RequestedToolName, StringComparison.OrdinalIgnoreCase));
+
+        if (tool != null)
+        {
+            context.SelectedTool = tool;
+            context.Strategy = ToolSelectionStrategy.ExactMatch;
+            context.SelectionReason = $"Exact name match: {tool.Name}";
+            return BehaviorTreeNodeStatus.Success;
+        }
+
+        return BehaviorTreeNodeStatus.Failure;
+    }
+
+    private bool HasCapabilityMatch(ToolSelectionContext context)
+    {
+        if (string.IsNullOrWhiteSpace(context.CapabilitySearch))
+            return false;
+
+        var searchLower = context.CapabilitySearch.ToLowerInvariant();
+        return context.AvailableTools.Any(tool =>
+            tool.Name.ToLowerInvariant().Contains(searchLower) ||
+            (tool.Description?.ToLowerInvariant().Contains(searchLower) ?? false));
+    }
+
+    private BehaviorTreeNodeStatus SelectCapabilityMatch(ToolSelectionContext context)
+    {
+        if (string.IsNullOrWhiteSpace(context.CapabilitySearch))
+            return BehaviorTreeNodeStatus.Failure;
+
+        var searchLower = context.CapabilitySearch.ToLowerInvariant();
+        var tool = context.AvailableTools.FirstOrDefault(t =>
+            t.Name.ToLowerInvariant().Contains(searchLower) ||
+            (t.Description?.ToLowerInvariant().Contains(searchLower) ?? false));
+
+        if (tool != null)
+        {
+            context.SelectedTool = tool;
+            context.Strategy = ToolSelectionStrategy.CapabilityMatch;
+            context.SelectionReason = $"Capability match: {tool.Name}";
+            return BehaviorTreeNodeStatus.Success;
+        }
+
+        return BehaviorTreeNodeStatus.Failure;
+    }
+
+    private bool HasDescriptionMatch(ToolSelectionContext context)
+    {
+        if (string.IsNullOrWhiteSpace(context.RequestedToolName) && string.IsNullOrWhiteSpace(context.CapabilitySearch))
+            return false;
+
+        var searchTerms = new List<string>();
+        if (!string.IsNullOrWhiteSpace(context.RequestedToolName))
+            searchTerms.AddRange(context.RequestedToolName.Split(' ', StringSplitOptions.RemoveEmptyEntries));
+        if (!string.IsNullOrWhiteSpace(context.CapabilitySearch))
+            searchTerms.AddRange(context.CapabilitySearch.Split(' ', StringSplitOptions.RemoveEmptyEntries));
+
+        if (searchTerms.Count == 0)
+            return false;
+
+        return context.AvailableTools.Any(tool =>
+        {
+            var description = tool.Description?.ToLowerInvariant() ?? string.Empty;
+            return searchTerms.Any(term => description.Contains(term.ToLowerInvariant()));
+        });
+    }
+
+    private BehaviorTreeNodeStatus SelectDescriptionMatch(ToolSelectionContext context)
+    {
+        var searchTerms = new List<string>();
+        if (!string.IsNullOrWhiteSpace(context.RequestedToolName))
+            searchTerms.AddRange(context.RequestedToolName.Split(' ', StringSplitOptions.RemoveEmptyEntries));
+        if (!string.IsNullOrWhiteSpace(context.CapabilitySearch))
+            searchTerms.AddRange(context.CapabilitySearch.Split(' ', StringSplitOptions.RemoveEmptyEntries));
+
+        if (searchTerms.Count == 0)
+            return BehaviorTreeNodeStatus.Failure;
+
+        var tool = context.AvailableTools.FirstOrDefault(t =>
+        {
+            var description = t.Description?.ToLowerInvariant() ?? string.Empty;
+            return searchTerms.Any(term => description.Contains(term.ToLowerInvariant()));
+        });
+
+        if (tool != null)
+        {
+            context.SelectedTool = tool;
+            context.Strategy = ToolSelectionStrategy.DescriptionMatch;
+            context.SelectionReason = $"Description match: {tool.Name}";
+            return BehaviorTreeNodeStatus.Success;
+        }
+
+        return BehaviorTreeNodeStatus.Failure;
+    }
+
+    private BehaviorTreeNodeStatus SelectFallback(ToolSelectionContext context)
+    {
+        if (context.AvailableTools.Count > 0)
+        {
+            context.SelectedTool = context.AvailableTools[0];
+            context.Strategy = ToolSelectionStrategy.Fallback;
+            context.SelectionReason = "Fallback: first available tool";
+            return BehaviorTreeNodeStatus.Success;
+        }
+
+        return BehaviorTreeNodeStatus.Failure;
+    }
+}

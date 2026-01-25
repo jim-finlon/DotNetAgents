@@ -1,0 +1,116 @@
+@page "/"
+@page "/dashboard"
+@using TeachingAssistant.AdminUI.Services
+@inject ApiClient ApiClient
+@inject AdminHubService AdminHub
+@implements IAsyncDisposable
+
+<PageTitle>Admin Dashboard</PageTitle>
+
+<h1>System Dashboard</h1>
+
+@if (metrics == null)
+{
+    <p>Loading metrics...</p>
+}
+else
+{
+    <div class="row">
+        <div class="col-md-3">
+            <div class="card">
+                <div class="card-body">
+                    <h5>Active Students</h5>
+                    <h2>@metrics.ActiveStudents</h2>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card">
+                <div class="card-body">
+                    <h5>Active Sessions</h5>
+                    <h2>@metrics.ActiveSessions</h2>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card">
+                <div class="card-body">
+                    <h5>Pending Assessments</h5>
+                    <h2>@metrics.PendingAssessments</h2>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card">
+                <div class="card-body">
+                    <h5>Avg Response Time</h5>
+                    <h2>@metrics.AverageResponseTime.ToString("F1")ms</h2>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+<div class="mt-3">
+    <h3>Recent Alerts</h3>
+    @if (alerts.Count == 0)
+    {
+        <p>No alerts</p>
+    }
+    else
+    {
+        @foreach (var alert in alerts)
+        {
+            <div class="alert alert-@(alert.Severity == "Critical" ? "danger" : "warning")">
+                <strong>@alert.AlertType</strong>: @alert.Message
+                <small class="text-muted">@alert.Timestamp.ToString("MM/dd/yyyy HH:mm")</small>
+            </div>
+        }
+    }
+</div>
+
+@code {
+    private SystemMetricsDto? metrics;
+    private List<AdminAlert> alerts = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        await AdminHub.StartAsync();
+        AdminHub.SystemMetricsReceived += OnSystemMetrics;
+        AdminHub.AlertReceived += OnAlert;
+        
+        metrics = await ApiClient.GetSystemMetricsAsync();
+    }
+
+    private void OnSystemMetrics(object metricsData)
+    {
+        // Update metrics from SignalR
+        InvokeAsync(() =>
+        {
+            // Parse and update metrics
+            StateHasChanged();
+        });
+    }
+
+    private void OnAlert(object alertData)
+    {
+        // Add alert to list
+        // In production, would parse alertData
+        StateHasChanged();
+    }
+
+    public async ValueTask DisposeAsync()
+    {
+        AdminHub.SystemMetricsReceived -= OnSystemMetrics;
+        AdminHub.AlertReceived -= OnAlert;
+        await AdminHub.DisposeAsync();
+    }
+}
+
+public class AdminAlert
+{
+    public string AlertType { get; set; } = string.Empty;
+    public string Severity { get; set; } = string.Empty;
+    public string Message { get; set; } = string.Empty;
+    public DateTimeOffset Timestamp { get; set; }
+}

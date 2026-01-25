@@ -1,0 +1,32 @@
+@page "/analytics"
+@using TeachingAssistant.AdminUI.Services
+@inject ApiClient ApiClient
+
+<PageTitle>Analytics</PageTitle>
+
+<h1>Learning Analytics</h1>
+
+<div class="card">
+    <div class="card-header">
+        <h5>System Analytics</h5>
+    </div>
+    <div class="card-body">
+        <p>Analytics dashboard for learning metrics, student performance, and system usage.</p>
+        <p><em>Note: Full analytics requires analytics API endpoints and data aggregation.</em></p>
+        
+        <div class="row mt-3">
+            <div class="col-md-6">
+                <h6>Student Engagement</h6>
+                <p>Charts and graphs showing student engagement metrics.</p>
+            </div>
+            <div class="col-md-6">
+                <h6>Content Performance</h6>
+                <p>Analytics on content unit effectiveness and student outcomes.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    // Analytics data would be loaded here
+}

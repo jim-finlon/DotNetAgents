@@ -15,12 +15,15 @@
     <PackageReference Include="xunit" Version="2.5.3" />
     <PackageReference Include="xunit.runner.visualstudio" Version="2.5.3" />
     <PackageReference Include="Moq" Version="4.20.70" />
-    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="9.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="10.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="10.0.0" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\DotNetAgents.Workflow\DotNetAgents.Workflow.csproj" />
     <ProjectReference Include="..\DotNetAgents.Core.Tests\DotNetAgents.Core.Tests.csproj" />
+    <ProjectReference Include="..\..\src\DotNetAgents.Agents.Supervisor\DotNetAgents.Agents.Supervisor.csproj" />
+    <ProjectReference Include="..\..\src\DotNetAgents.Agents.Tasks\DotNetAgents.Agents.Tasks.csproj" />
   </ItemGroup>
 
 </Project>

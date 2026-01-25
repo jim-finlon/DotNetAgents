@@ -1,8 +1,10 @@
 using DotNetAgents.Abstractions.Chains;
+using DotNetAgents.Core.Chains;
 using DotNetAgents.Abstractions.Models;
 using DotNetAgents.Abstractions.OutputParsers;
 using DotNetAgents.Abstractions.Prompts;
 using DotNetAgents.Core.Prompts;
+using DotNetAgents.Core.OutputParsers;
 using FluentAssertions;
 using Moq;
 using Xunit;

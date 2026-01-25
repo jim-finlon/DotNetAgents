@@ -29,6 +29,11 @@ DotNetAgents is a comprehensive .NET 10 library that provides native C# implemen
 | **Voice Commands** | ✅ Intent classification, dialog management, scheduling | ❌ Not included | ❌ Not included | ❌ Not included |
 | **MCP Client** | ✅ Model Context Protocol client library | ❌ Not included | ❌ Not included | ⚠️ MCP support (orchestration focus) |
 | **Task & Knowledge** | ✅ Task management, knowledge repository | ❌ Not included | ❌ Not included | ❌ Not included |
+| **Multi-Agent Workflows** | ✅ Supervisor-worker, registry, messaging, load balancing, auto-scaling | ⚠️ Limited | ⚠️ Limited | ✅ Native support |
+| **Agent Messaging** | ✅ In-Memory, Kafka, RabbitMQ, Redis Pub/Sub | ⚠️ Custom | ⚠️ Custom | ✅ Built-in |
+| **Agent Registry** | ✅ In-Memory, PostgreSQL | ❌ Not included | ❌ Not included | ✅ Built-in |
+| **State Machines** | ✅ Hierarchical, parallel, timed transitions, persistence | ❌ Not included | ❌ Not included | ⚠️ Basic state management |
+| **Behavior Trees** | ✅ Full implementation with LLM/workflow/state machine integration | ❌ Not included | ❌ Not included | ❌ Not included |
 
 ## Detailed Feature Comparison
 
@@ -602,6 +607,9 @@ DotNetAgents is a comprehensive .NET 10 library that provides native C# implemen
 - ✅ Building voice command interfaces
 - ✅ Need MCP client library for service integration
 - ✅ Require task management and knowledge repository
+- ✅ Need autonomous agent capabilities (state machines, behavior trees)
+- ✅ Building multi-agent systems with sophisticated lifecycle management
+- ✅ Require hierarchical decision-making for agents
 
 ### Choose LangChain When:
 - ✅ Building Python applications
@@ -671,6 +679,63 @@ var chain = new LLMChain(llm, promptTemplate);
 var result = await chain.InvokeAsync("Hello");
 ```
 
+## Multi-Agent Workflows
+
+DotNetAgents provides comprehensive support for multi-agent workflows and supervisor-worker patterns:
+
+### Agent Registry
+- **In-Memory Registry**: Fast, single-instance agent discovery
+- **PostgreSQL Registry**: Distributed, persistent agent registry with auto-schema creation
+- **Capability-Based Discovery**: Find agents by tools, intents, or custom capabilities
+- **Heartbeat Monitoring**: Track agent availability and health
+
+### Agent Messaging
+- **In-Memory Message Bus**: Fast, single-instance messaging
+- **Kafka Message Bus**: Distributed, high-throughput messaging with partitioning
+- **RabbitMQ Message Bus**: Reliable message delivery with exchanges and queues
+- **Redis Pub/Sub Message Bus**: High-performance pub/sub messaging
+- **Message Filtering**: Subscribe by agent ID, message type, or broadcast
+
+### Task Management
+- **Task Queue**: Priority-based task queuing with capability matching
+- **Task Store**: Persistent task storage with result tracking
+- **PostgreSQL Backend**: Distributed task queue and store with auto-schema creation
+- **Task Status Tracking**: Pending, Assigned, InProgress, Completed, Failed, Cancelled
+
+### Worker Pool
+- **Load Balancing**: Round-robin, capability-based, priority-based, and random strategies
+- **Auto-Scaling**: Configurable scale-up/scale-down based on load metrics
+- **Worker Statistics**: Track worker availability, task distribution, and performance
+- **Capability Matching**: Automatic worker selection based on task requirements
+
+### Supervisor Agent
+- **Task Delegation**: Submit tasks to worker pool with automatic distribution
+- **Result Aggregation**: Collect and aggregate results from multiple workers
+- **Task Monitoring**: Track task status and retrieve results
+- **Batch Operations**: Submit multiple tasks efficiently
+
+### Workflow Integration
+- **MultiAgentWorkflowState**: Base state class for multi-agent workflows
+- **DelegateToWorkerNode**: Workflow node for delegating tasks to workers
+- **AggregateResultsNode**: Workflow node for aggregating worker results
+- **StateMachineWorkflowNode**: Workflow nodes that trigger state machine transitions
+- **StateConditionWorkflowNode**: Workflow nodes that check state machine state
+- **Seamless Integration**: Works with existing StateGraph workflow engine
+
+### Autonomous Agent Capabilities
+- **State Machines**: Agent lifecycle management with hierarchical, parallel, and timed transitions
+- **Behavior Trees**: Hierarchical decision-making with composite, decorator, and integration nodes
+- **State-Based Selection**: Worker pool selection based on state machine states
+- **Message Bus Integration**: State transitions triggered via message bus
+- **LLM Integration**: Behavior tree nodes that use LLMs for decision-making
+- **Workflow Integration**: Behavior tree nodes that execute workflows
+
+### Observability
+- **OpenTelemetry Tracing**: Distributed tracing for agent communication, state machines, and behavior trees
+- **Metrics Collection**: Task distribution, execution time, worker pool metrics, state transition metrics, behavior tree execution metrics
+- **Activity Tracking**: Message sending, task submission, execution activities, state transitions, behavior tree node execution
+- **Correlation IDs**: Track requests across multiple agents
+
 ## Conclusion
 
 DotNetAgents provides a comprehensive alternative to LangChain and LangGraph for .NET developers (currently in beta), while also offering compatibility with Microsoft Agent Framework. The library excels in:
@@ -686,6 +751,8 @@ DotNetAgents provides a comprehensive alternative to LangChain and LangGraph for
 9. **Task & Knowledge**: Dedicated task management and knowledge repository packages
 10. **LCEL Support**: Declarative chain composition with operator overloads
 11. **Workflow Visualization**: Export workflows to DOT, Mermaid, and JSON formats
+12. **Autonomous Agents**: State machines and behavior trees for sophisticated agent lifecycle and decision-making
+13. **Multi-Agent Workflows**: Supervisor-worker patterns with state-based selection and message bus integration
 
 For Python developers, LangChain and LangGraph remain excellent choices. For .NET developers, DotNetAgents provides native C# implementations with enterprise-grade features, Microsoft Agent Framework compatibility, and specialized educational extensions.
 

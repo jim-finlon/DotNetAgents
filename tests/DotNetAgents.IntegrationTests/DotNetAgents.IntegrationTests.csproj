@@ -21,10 +21,11 @@
     </PackageReference>
     <PackageReference Include="Moq" Version="4.20.70" />
     <PackageReference Include="FluentAssertions" Version="6.12.0" />
-    <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="8.0.0" />
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="8.0.0" />
-    <PackageReference Include="Microsoft.Extensions.Configuration" Version="8.0.0" />
-    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="8.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="10.0.0" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="10.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration" Version="10.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="10.0.0" />
+    <PackageReference Include="Npgsql" Version="9.0.2" />
   </ItemGroup>
 
   <ItemGroup>
@@ -37,6 +38,11 @@
     <ProjectReference Include="..\..\src\DotNetAgents.Configuration\DotNetAgents.Configuration.csproj" />
     <ProjectReference Include="..\..\src\DotNetAgents.Observability\DotNetAgents.Observability.csproj" />
     <ProjectReference Include="..\..\src\DotNetAgents.Security\DotNetAgents.Security.csproj" />
+    <ProjectReference Include="..\..\src\DotNetAgents.Storage.Agents.PostgreSQL\DotNetAgents.Storage.Agents.PostgreSQL.csproj" />
+    <ProjectReference Include="..\..\src\DotNetAgents.Agents.Registry\DotNetAgents.Agents.Registry.csproj" />
+    <ProjectReference Include="..\..\src\DotNetAgents.Agents.Tasks\DotNetAgents.Agents.Tasks.csproj" />
+    <ProjectReference Include="..\..\src\DotNetAgents.Core\DotNetAgents.Core.csproj" />
+    <ProjectReference Include="..\..\src\DotNetAgents.Tools.BuiltIn\DotNetAgents.Tools.BuiltIn.csproj" />
   </ItemGroup>
 
 </Project>

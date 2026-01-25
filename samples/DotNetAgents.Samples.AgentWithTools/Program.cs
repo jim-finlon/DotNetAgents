@@ -1,5 +1,8 @@
 using DotNetAgents.Abstractions.Agents;
 using DotNetAgents.Core.Agents;
+using DotNetAgents.Core.Agents.BehaviorTrees;
+using DotNetAgents.Core.Agents.StateMachines;
+using DotNetAgents.Agents.StateMachines;
 using DotNetAgents.Abstractions.Models;
 using DotNetAgents.Abstractions.Prompts;
 using DotNetAgents.Core.Prompts;
@@ -55,18 +58,37 @@ class Program
         // Create ReAct prompt template
         var promptTemplate = new ReActPromptTemplate();
 
-        // Create agent executor
+        // Create state machine for agent execution lifecycle tracking
+        var loggerFactory = serviceProvider.GetRequiredService<ILoggerFactory>();
+        var stateMachineLogger = loggerFactory.CreateLogger<AgentStateMachine<AgentExecutionContext>>();
+        var stateMachine = AgentExecutionStateMachinePattern.CreateAgentExecutionPattern<AgentExecutionContext>(
+            stateMachineLogger,
+            maxThinkingTime: TimeSpan.FromMinutes(5),
+            maxActingTime: TimeSpan.FromMinutes(2));
+        var stateMachineAdapter = new AgentExecutionStateMachineAdapter<AgentExecutionContext>(stateMachine);
+
+        // Create agent executor with state machine
+        var agentLogger = serviceProvider.GetRequiredService<ILogger<AgentExecutor>>();
         var agent = new AgentExecutor(
             llm,
             toolRegistry,
             promptTemplate,
-            maxIterations: 5);
+            maxIterations: 5,
+            stateMachine: stateMachineAdapter,
+            logger: agentLogger);
 
         Console.WriteLine("Agent is ready with the following tools:");
         foreach (var tool in toolRegistry.GetAllTools())
         {
             Console.WriteLine($"  - {tool.Name}: {tool.Description}");
         }
+
+        Console.WriteLine("\nServices configured with:");
+        Console.WriteLine("  ✓ Agent Execution State Machine (Initialized → Thinking → Acting → Observing → Finalizing)");
+        Console.WriteLine("  ✓ Tool Selection Behavior Tree (ExactMatch/CapabilityMatch/DescriptionMatch strategies)\n");
+
+        // Demo 1: Tool Selection Behavior Tree
+        await DemonstrateToolSelectionBehaviorTree(toolRegistry, serviceProvider);
 
         Console.WriteLine("\n");
 
@@ -105,6 +127,52 @@ class Program
         catch (Exception ex)
         {
             Console.WriteLine($"\nError: {ex.Message}");
+        }
+    }
+
+    private static async Task DemonstrateToolSelectionBehaviorTree(
+        ToolRegistry toolRegistry,
+        IServiceProvider serviceProvider)
+    {
+        Console.WriteLine("Demo: Tool Selection Behavior Tree");
+        Console.WriteLine("-----------------------------------");
+
+        var behaviorTreeLogger = serviceProvider.GetRequiredService<ILogger<ToolSelectionBehaviorTree>>();
+        var behaviorTree = new ToolSelectionBehaviorTree(behaviorTreeLogger);
+
+        var availableTools = toolRegistry.GetAllTools().ToList();
+
+        // Test cases
+        var testCases = new[]
+        {
+            new { RequestedName = "Calculator", Capability = (string?)null },
+            new { RequestedName = "calc", Capability = (string?)null },
+            new { RequestedName = "date", Capability = (string?)null },
+            new { RequestedName = "unknown_tool", Capability = "mathematical operations" },
+            new { RequestedName = (string?)null, Capability = "web search" }
+        };
+
+        foreach (var testCase in testCases)
+        {
+            Console.WriteLine($"\nRequested Tool: {testCase.RequestedName ?? "null"}");
+            Console.WriteLine($"Capability Search: {testCase.Capability ?? "null"}");
+
+            var context = await behaviorTree.SelectToolAsync(
+                testCase.RequestedName,
+                availableTools,
+                testCase.Capability,
+                CancellationToken.None);
+
+            if (context.SelectedTool != null)
+            {
+                Console.WriteLine($"  Selected: {context.SelectedTool.Name}");
+                Console.WriteLine($"  Strategy: {context.Strategy}");
+                Console.WriteLine($"  Reason: {context.SelectionReason}");
+            }
+            else
+            {
+                Console.WriteLine("  No tool selected");
+            }
         }
     }
 }

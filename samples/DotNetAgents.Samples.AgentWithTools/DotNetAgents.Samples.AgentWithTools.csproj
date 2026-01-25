@@ -14,6 +14,8 @@
     <ProjectReference Include="..\..\src\DotNetAgents.Tools.BuiltIn\DotNetAgents.Tools.BuiltIn.csproj" />
     <ProjectReference Include="..\..\src\Providers\DotNetAgents.Providers.OpenAI\DotNetAgents.Providers.OpenAI.csproj" />
     <ProjectReference Include="..\..\src\DotNetAgents.Configuration\DotNetAgents.Configuration.csproj" />
+    <ProjectReference Include="..\..\src\DotNetAgents.Agents.StateMachines\DotNetAgents.Agents.StateMachines.csproj" />
+    <ProjectReference Include="..\..\src\DotNetAgents.Agents.BehaviorTrees\DotNetAgents.Agents.BehaviorTrees.csproj" />
   </ItemGroup>
 
   <ItemGroup>

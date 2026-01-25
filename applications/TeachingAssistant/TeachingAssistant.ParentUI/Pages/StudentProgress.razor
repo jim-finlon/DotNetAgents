@@ -1,0 +1,55 @@
+@page "/student/{StudentId:guid}"
+@using TeachingAssistant.Data.Entities
+@using TeachingAssistant.ParentUI.Services
+@using TeachingAssistant.ParentUI.Models
+@inject ApiClient ApiClient
+
+<PageTitle>Student Progress - @student?.Name</PageTitle>
+
+@if (student == null)
+{
+    <p>Loading...</p>
+}
+else
+{
+    <h2>@student.Name - Progress Overview</h2>
+    
+    <div class="row mt-3">
+        @foreach (var progress in subjectProgress)
+        {
+            <div class="col-md-4 mb-3">
+                <div class="card">
+                    <div class="card-header">
+                        <h5>@progress.Subject</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="progress mb-2">
+                            <div class="progress-bar" role="progressbar" style="width: @(progress.OverallProgress)%">
+                                @progress.OverallProgress.ToString("F1")%
+                            </div>
+                        </div>
+                        <p><strong>Streak:</strong> @progress.StreakDays days</p>
+                        <p><strong>Time Spent:</strong> @progress.TotalTimeMinutes minutes</p>
+                        @if (progress.LastActivityAt.HasValue)
+                        {
+                            <p><small>Last Active: @progress.LastActivityAt.Value.ToString("MM/dd/yyyy")</small></p>
+                        }
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+}
+
+@code {
+    [Parameter] public Guid StudentId { get; set; }
+    
+    private StudentDto? student;
+    private List<SubjectProgressDto> subjectProgress = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        student = await ApiClient.GetStudentByIdAsync(StudentId);
+        subjectProgress = await ApiClient.GetStudentProgressAsync(StudentId);
+    }
+}

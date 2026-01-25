@@ -190,6 +190,13 @@ DotNetAgents is an enterprise-grade .NET 10 library that replicates LangChain an
 - ✅ **Scheduled Commands**: Time-based command execution
 - ✅ **Command Templates**: Reusable command patterns
 
+#### Autonomous Agent Capabilities (Phase 3.4)
+- ✅ **State Machines**: Complete implementation with hierarchical states, parallel regions, timed/scheduled transitions, persistence, and observability
+- ✅ **Behavior Trees**: Full implementation with leaf, composite, and decorator nodes, plus LLM/workflow/state machine integration
+- ✅ **State Machine Patterns**: Common patterns (Idle-Working, Error-Recovery, Worker Pool, Supervisor)
+- ✅ **State Machine Integration**: Workflow nodes, worker pool selection, message bus integration
+- ✅ **Behavior Tree Integration**: LLM actions, workflow execution, state machine conditions/actions
+
 ### ⏳ Future Enhancements
 
 #### High Priority

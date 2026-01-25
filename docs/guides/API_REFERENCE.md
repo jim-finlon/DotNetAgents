@@ -1,7 +1,8 @@
-# DotLangChain API Reference
+# DotNetAgents API Reference
 
-**Version:** 1.0.0  
-**Date:** December 7, 2025  
+**Version:** 2.0.0  
+**Date:** January 2025  
+**Last Updated:** January 2025
 
 ---
 
@@ -19,6 +20,8 @@
 10. [Security](#10-security)
 11. [Configuration & DI](#11-configuration--dependency-injection)
 12. [Observability](#12-observability)
+13. [State Machines](#13-state-machines)
+14. [Behavior Trees](#14-behavior-trees)
 
 ---
 
@@ -2042,8 +2045,360 @@ record AskRequest(string Question);
 
 ---
 
+## 13. State Machines
+
+### 13.1 IStateMachine<TState>
+
+Core interface for state machine implementations.
+
+**Namespace:** `DotNetAgents.Agents.StateMachines`
+
+```csharp
+public interface IStateMachine<TState> where TState : class
+{
+    string CurrentState { get; }
+    bool CanTransition(string fromState, string toState, TState context);
+    Task TransitionAsync(string toState, TState context, CancellationToken cancellationToken = default);
+    IEnumerable<string> GetAvailableTransitions(TState context);
+    event EventHandler<StateTransitionEventArgs<TState>>? StateTransitioned;
+    void Reset();
+}
+```
+
+**Key Methods:**
+
+| Method | Description |
+|--------|-------------|
+| `CurrentState` | Gets the current state name |
+| `CanTransition` | Checks if a transition is allowed |
+| `TransitionAsync` | Transitions to a new state |
+| `GetAvailableTransitions` | Gets all available transitions from current state |
+| `StateTransitioned` | Event raised on state transitions |
+| `Reset` | Resets to initial state |
+
+**Example:**
+
+```csharp
+var stateMachine = StateMachinePatterns.CreateSupervisorPattern<SupervisorContext>(logger);
+await stateMachine.TransitionAsync("Analyzing", context);
+Console.WriteLine($"Current State: {stateMachine.CurrentState}");
+```
+
+### 13.2 StateMachineBuilder<TState>
+
+Fluent builder for creating state machines.
+
+**Namespace:** `DotNetAgents.Agents.StateMachines`
+
+```csharp
+public class StateMachineBuilder<TState> where TState : class
+{
+    public StateMachineBuilder<TState> AddState(string name, Action<TState>? entryAction = null, Action<TState>? exitAction = null);
+    public StateMachineBuilder<TState> AddTransition(string fromState, string toState, Func<TState, bool>? guard = null);
+    public StateMachineBuilder<TState> SetInitialState(string state);
+    public IStateMachine<TState> Build();
+}
+```
+
+**Example:**
+
+```csharp
+var builder = new StateMachineBuilder<MyContext>(logger);
+var stateMachine = builder
+    .AddState("Idle", entryAction: ctx => Console.WriteLine("Entered Idle"))
+    .AddState("Working", entryAction: ctx => Console.WriteLine("Entered Working"))
+    .AddTransition("Idle", "Working", guard: ctx => ctx.HasTask)
+    .AddTransition("Working", "Idle", guard: ctx => ctx.TaskComplete)
+    .SetInitialState("Idle")
+    .Build();
+```
+
+### 13.3 StateMachinePatterns
+
+Pre-built state machine patterns for common use cases.
+
+**Namespace:** `DotNetAgents.Agents.StateMachines`
+
+**Available Patterns:**
+
+- `CreateSupervisorPattern<TState>`: Supervisor agent lifecycle (Monitoring → Analyzing → Delegating → Waiting)
+- `CreateWorkerPoolPattern<TState>`: Worker pool lifecycle (Available → Busy → CoolingDown)
+- `CreateErrorRecoveryPattern<TState>`: Error recovery pattern (Any → Error → Recovery → Idle)
+
+**Example:**
+
+```csharp
+var supervisorStateMachine = StateMachinePatterns.CreateSupervisorPattern<SupervisorContext>(
+    logger,
+    waitingTimeout: TimeSpan.FromMinutes(5));
+```
+
+### 13.4 AgentStateMachine<TState>
+
+Concrete implementation of state machine with timed transitions.
+
+**Namespace:** `DotNetAgents.Agents.StateMachines`
+
+```csharp
+public class AgentStateMachine<TState> : IStateMachine<TState> where TState : class
+{
+    public void AddTimeoutTransition(string fromState, string toState, TimeSpan timeout);
+}
+```
+
+**Example:**
+
+```csharp
+var stateMachine = builder.Build() as AgentStateMachine<MyContext>;
+stateMachine?.AddTimeoutTransition("Working", "Idle", TimeSpan.FromMinutes(30));
+```
+
+### 13.5 Adapter Pattern Interfaces
+
+Interfaces defined in component projects to avoid circular dependencies.
+
+**Supervisor:**
+- `ISupervisorStateMachine<TState>`: Defined in `DotNetAgents.Agents.Supervisor`
+- `StateMachineAdapter<TState>`: Adapter implementation
+
+**Voice:**
+- `IVoiceSessionStateMachine<TState>`: Defined in `DotNetAgents.Voice`
+- `VoiceSessionStateMachineAdapter<TState>`: Adapter implementation
+
+**Education:**
+- `ILearningSessionStateMachine<TState>`: Defined in `DotNetAgents.Education`
+- `LearningSessionStateMachineAdapter<TState>`: Adapter implementation
+
+**Core:**
+- `IAgentExecutionStateMachine<TState>`: Defined in `DotNetAgents.Core.Agents`
+- `AgentExecutionStateMachineAdapter<TState>`: Adapter implementation
+
+---
+
+## 14. Behavior Trees
+
+### 14.1 IBehaviorTreeNode<TContext>
+
+Core interface for behavior tree nodes.
+
+**Namespace:** `DotNetAgents.Agents.BehaviorTrees`
+
+```csharp
+public interface IBehaviorTreeNode<TContext> where TContext : class
+{
+    string Name { get; }
+    Task<BehaviorTreeNodeStatus> ExecuteAsync(TContext context, CancellationToken cancellationToken = default);
+    void Reset();
+}
+```
+
+**Node Status:**
+
+```csharp
+public enum BehaviorTreeNodeStatus
+{
+    Success,
+    Failure,
+    Running
+}
+```
+
+### 14.2 Composite Nodes
+
+**SequenceNode<TContext>**: Executes children sequentially, fails if any child fails.
+
+```csharp
+var sequence = new SequenceNode<MyContext>("Sequence", logger)
+    .AddChild(new ActionNode<MyContext>("Action1", ctx => DoAction1(ctx), logger))
+    .AddChild(new ActionNode<MyContext>("Action2", ctx => DoAction2(ctx), logger));
+```
+
+**SelectorNode<TContext>**: Executes children until one succeeds.
+
+```csharp
+var selector = new SelectorNode<MyContext>("Selector", logger)
+    .AddChild(new ConditionNode<MyContext>("CheckCondition1", ctx => ctx.Condition1, logger))
+    .AddChild(new ConditionNode<MyContext>("CheckCondition2", ctx => ctx.Condition2, logger));
+```
+
+**ParallelNode<TContext>**: Executes children in parallel.
+
+```csharp
+var parallel = new ParallelNode<MyContext>("Parallel", logger)
+    .AddChild(new ActionNode<MyContext>("Action1", ctx => DoAction1(ctx), logger))
+    .AddChild(new ActionNode<MyContext>("Action2", ctx => DoAction2(ctx), logger));
+```
+
+### 14.3 Leaf Nodes
+
+**ActionNode<TContext>**: Executes an action.
+
+```csharp
+var action = new ActionNode<MyContext>(
+    "MyAction",
+    async (ctx, ct) =>
+    {
+        await DoSomethingAsync(ctx, ct);
+        return BehaviorTreeNodeStatus.Success;
+    },
+    logger);
+```
+
+**ConditionNode<TContext>**: Checks a condition.
+
+```csharp
+var condition = new ConditionNode<MyContext>(
+    "MyCondition",
+    ctx => ctx.Value > 0,
+    logger);
+```
+
+**LLMActionNode<TContext>**: Uses LLM for decision-making.
+
+```csharp
+var llmNode = new LLMActionNode<MyContext>(
+    "LLMDecision",
+    llm,
+    promptTemplate: "Analyze: {Context}",
+    resultExtractor: (response, ctx) =>
+    {
+        if (response.Contains("success"))
+            return BehaviorTreeNodeStatus.Success;
+        return BehaviorTreeNodeStatus.Failure;
+    },
+    logger);
+```
+
+### 14.4 Decorator Nodes
+
+**RetryDecoratorNode<TContext>**: Retries child node on failure.
+
+```csharp
+var retry = new RetryDecoratorNode<MyContext>(
+    child: actionNode,
+    maxRetries: 3,
+    logger);
+```
+
+**TimeoutDecoratorNode<TContext>**: Limits execution time.
+
+```csharp
+var timeout = new TimeoutDecoratorNode<MyContext>(
+    child: actionNode,
+    timeout: TimeSpan.FromSeconds(30),
+    logger);
+```
+
+**CooldownDecoratorNode<TContext>**: Prevents execution within cooldown period.
+
+```csharp
+var cooldown = new CooldownDecoratorNode<MyContext>(
+    child: actionNode,
+    cooldownDuration: TimeSpan.FromMinutes(5),
+    logger);
+```
+
+### 14.5 BehaviorTree<TContext>
+
+Container for behavior tree with root node.
+
+**Namespace:** `DotNetAgents.Agents.BehaviorTrees`
+
+```csharp
+public class BehaviorTree<TContext> where TContext : class
+{
+    public string Name { get; }
+    public IBehaviorTreeNode<TContext> Root { get; }
+    public Task<BehaviorTreeNodeStatus> ExecuteAsync(TContext context, CancellationToken cancellationToken = default);
+    public void Reset();
+}
+```
+
+**Example:**
+
+```csharp
+var root = new SelectorNode<MyContext>("Root", logger)
+    .AddChild(sequenceNode)
+    .AddChild(fallbackNode);
+
+var tree = new BehaviorTree<MyContext>("MyTree", root);
+var result = await tree.ExecuteAsync(context);
+```
+
+### 14.6 BehaviorTreeExecutor<TContext>
+
+Executes behavior trees with observability.
+
+**Namespace:** `DotNetAgents.Agents.BehaviorTrees`
+
+```csharp
+public class BehaviorTreeExecutor<TContext> where TContext : class
+{
+    public Task<BehaviorTreeNodeStatus> ExecuteAsync(
+        BehaviorTree<TContext> tree,
+        TContext context,
+        CancellationToken cancellationToken = default);
+}
+```
+
+**Example:**
+
+```csharp
+var executor = new BehaviorTreeExecutor<MyContext>(logger);
+var result = await executor.ExecuteAsync(tree, context);
+```
+
+### 14.7 Domain-Specific Behavior Trees
+
+**TaskRoutingBehaviorTree**: Intelligent task routing for supervisor agents.
+
+**Namespace:** `DotNetAgents.Agents.Supervisor.BehaviorTrees`
+
+```csharp
+var taskRouter = new TaskRoutingBehaviorTree(supervisor, logger);
+var worker = await taskRouter.RouteTaskAsync(task);
+```
+
+**CommandProcessingBehaviorTree**: Command processing strategy selection.
+
+**Namespace:** `DotNetAgents.Voice.BehaviorTrees`
+
+```csharp
+var behaviorTree = new CommandProcessingBehaviorTree(
+    lowConfidenceThreshold: 0.6,
+    logger);
+var context = await behaviorTree.ProcessCommandAsync(commandState);
+```
+
+**AdaptiveLearningPathBehaviorTree**: Adaptive learning path determination.
+
+**Namespace:** `DotNetAgents.Education.BehaviorTrees`
+
+```csharp
+var behaviorTree = new AdaptiveLearningPathBehaviorTree(masteryCalculator, logger);
+var context = await behaviorTree.DetermineLearningPathAsync(
+    studentId,
+    availableConcepts,
+    studentMastery);
+```
+
+**ToolSelectionBehaviorTree**: Intelligent tool selection.
+
+**Namespace:** `DotNetAgents.Core.Agents.BehaviorTrees`
+
+```csharp
+var behaviorTree = new ToolSelectionBehaviorTree(logger);
+var context = await behaviorTree.SelectToolAsync(
+    requestedToolName,
+    availableTools,
+    capabilitySearch);
+```
+
+---
+
 ## Revision History
 
 | Version | Date | Changes |
 |---------|------|---------|
+| 2.0.0 | 2025-01-24 | Added State Machines and Behavior Trees API reference |
 | 1.0.0 | 2025-12-07 | Initial release |

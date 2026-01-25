@@ -1,0 +1,132 @@
+@page "/learn/{SubjectName}"
+@using TeachingAssistant.Data.Entities
+@using TeachingAssistant.StudentUI.Services
+@inject ApiClient ApiClient
+@inject TutorHubService TutorHub
+@inject ILogger<LearningSession> Logger
+
+<PageTitle>Learning Session - @SubjectName</PageTitle>
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-8">
+            <h2>@Subject Learning</h2>
+            
+            @if (currentSession == null)
+            {
+                <button class="btn btn-primary" @onclick="StartNewSession">Start New Session</button>
+            }
+            else
+            {
+                <div class="card">
+                    <div class="card-header">
+                        Session: @currentSession.SessionId
+                    </div>
+                    <div class="card-body">
+                        <p>Status: @currentSession.Status</p>
+                        <p>Started: @currentSession.CreatedAt</p>
+                    </div>
+                </div>
+            }
+        </div>
+        
+        <div class="col-md-4">
+            <h3>Chat with Tutor</h3>
+            <div class="chat-container" style="height: 400px; overflow-y: auto; border: 1px solid #ccc; padding: 10px;">
+                @foreach (var message in chatMessages)
+                {
+                    <div class="mb-2">
+                        <strong>@message.Sender:</strong> @message.Text
+                        <small class="text-muted">@message.Timestamp.ToString("HH:mm")</small>
+                    </div>
+                }
+            </div>
+            <div class="input-group mt-2">
+                <input type="text" class="form-control" @bind="messageInput" @onkeypress="HandleKeyPress" placeholder="Type your message..." />
+                <button class="btn btn-primary" @onclick="SendMessage">Send</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    [Parameter] public string SubjectName { get; set; } = string.Empty;
+    
+    private Subject Subject => Enum.TryParse<Subject>(SubjectName, out var subject) ? subject : Subject.Biology;
+
+    private WorkflowSessionDto? currentSession;
+    private List<ChatMessage> chatMessages = new();
+    private string messageInput = string.Empty;
+    private Guid studentId = Guid.Parse("00000000-0000-0000-0000-000000000001"); // TODO: Get from auth
+
+    protected override async Task OnInitializedAsync()
+    {
+        TutorHub.TutorResponseReceived += OnTutorResponse;
+        await TutorHub.StartAsync();
+        await TutorHub.JoinTutoringSessionAsync(studentId.ToString());
+    }
+
+    private async Task StartNewSession()
+    {
+        // TODO: Get content unit ID from curriculum sequencer
+        var contentUnitId = Guid.NewGuid(); // Placeholder
+        currentSession = await ApiClient.StartSocraticTutoringAsync(studentId.ToString(), contentUnitId);
+        if (currentSession != null)
+        {
+            chatMessages.Add(new ChatMessage
+            {
+                Sender = "System",
+                Text = "Session started! Your tutor is ready.",
+                Timestamp = DateTimeOffset.UtcNow
+            });
+        }
+    }
+
+    private async Task SendMessage()
+    {
+        if (string.IsNullOrWhiteSpace(messageInput))
+            return;
+
+        chatMessages.Add(new ChatMessage
+        {
+            Sender = "You",
+            Text = messageInput,
+            Timestamp = DateTimeOffset.UtcNow
+        });
+
+        await TutorHub.SendMessageToTutorAsync(studentId.ToString(), messageInput);
+        messageInput = string.Empty;
+    }
+
+    private async Task HandleKeyPress(KeyboardEventArgs e)
+    {
+        if (e.Key == "Enter")
+        {
+            await SendMessage();
+        }
+    }
+
+    private void OnTutorResponse(object response)
+    {
+        // Handle tutor response
+        chatMessages.Add(new ChatMessage
+        {
+            Sender = "Tutor",
+            Text = response.ToString() ?? "Response received",
+            Timestamp = DateTimeOffset.UtcNow
+        });
+        StateHasChanged();
+    }
+
+    public void Dispose()
+    {
+        TutorHub.TutorResponseReceived -= OnTutorResponse;
+    }
+}
+
+public class ChatMessage
+{
+    public string Sender { get; set; } = string.Empty;
+    public string Text { get; set; } = string.Empty;
+    public DateTimeOffset Timestamp { get; set; }
+}

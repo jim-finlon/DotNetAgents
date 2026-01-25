@@ -1,0 +1,27 @@
+{
+  "Logging": {
+    "LogLevel": {
+      "Default": "Debug",
+      "Microsoft.AspNetCore": "Information"
+    }
+  },
+  "ConnectionStrings": {
+    "DefaultConnection": "Host=192.168.4.25;Database=teaching_assistant;Username=ai;Password=ai8989@",
+    "MSSQLConnection": "Server=192.168.4.25,1433;Database=teaching_assistant;User Id=ai;Password=ai8989@;TrustServerCertificate=True"
+  },
+  "ApiBaseUrl": "https://localhost:5001",
+  "Authentication": {
+    "Google": {
+      "ClientId": "YOUR_GOOGLE_CLIENT_ID.apps.googleusercontent.com",
+      "ClientSecret": "YOUR_GOOGLE_CLIENT_SECRET"
+    },
+    "Microsoft": {
+      "ClientId": "YOUR_AZURE_AD_APPLICATION_ID",
+      "ClientSecret": "YOUR_AZURE_AD_CLIENT_SECRET"
+    },
+    "GitHub": {
+      "ClientId": "YOUR_GITHUB_CLIENT_ID",
+      "ClientSecret": "YOUR_GITHUB_CLIENT_SECRET"
+    }
+  }
+}

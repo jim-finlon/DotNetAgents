@@ -4,6 +4,8 @@ using DotNetAgents.Abstractions.Models;
 using DotNetAgents.Abstractions.Prompts;
 using DotNetAgents.Core.Prompts;
 using DotNetAgents.Abstractions.Tools;
+using DotNetAgents.Core.Tools;
+using DotNetAgents.Core.Agents;
 using DotNetAgents.Tools.BuiltIn;
 using FluentAssertions;
 using Moq;

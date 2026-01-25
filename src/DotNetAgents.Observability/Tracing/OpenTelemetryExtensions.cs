@@ -21,7 +21,8 @@ public static class OpenTelemetryExtensions
 
         return builder.AddSource("DotNetAgents.Core")
                       .AddSource("DotNetAgents.Workflow")
-                      .AddSource("DotNetAgents.Observability");
+                      .AddSource("DotNetAgents.Observability")
+                      .AddSource("DotNetAgents.Agents");
     }
 
     /// <summary>

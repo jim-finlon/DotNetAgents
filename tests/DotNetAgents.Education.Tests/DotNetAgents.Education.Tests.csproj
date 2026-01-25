@@ -21,7 +21,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\DotNetAgents.Education\DotNetAgents.Education.csproj" />
+    <ProjectReference Include="..\..\applications\TeachingAssistant\TeachingAssistant.Education\DotNetAgents.Education.csproj" />
   </ItemGroup>
 
 </Project>
