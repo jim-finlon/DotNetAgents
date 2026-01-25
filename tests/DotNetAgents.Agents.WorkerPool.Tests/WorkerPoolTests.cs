@@ -104,7 +104,8 @@ public class WorkerPoolTests
         await _workerPool.AddWorkerAsync("agent-1");
 
         // Act
-        var worker = await _workerPool.GetAvailableWorkerAsync(requiredCapability: null, CancellationToken.None);
+        IWorkerPool pool = _workerPool;
+        var worker = await pool.GetAvailableWorkerAsync(requiredCapability: null, CancellationToken.None);
 
         // Assert
         worker.Should().NotBeNull();
@@ -138,7 +139,8 @@ public class WorkerPoolTests
         await _workerPool.AddWorkerAsync("agent-1");
 
         // Act
-        var worker = await _workerPool.GetAvailableWorkerAsync(requiredCapability: null, CancellationToken.None);
+        IWorkerPool pool = _workerPool;
+        var worker = await pool.GetAvailableWorkerAsync(requiredCapability: null, CancellationToken.None);
 
         // Assert
         worker.Should().BeNull();
