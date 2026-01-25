@@ -9,19 +9,16 @@
 Welcome back! Follow these steps to quickly resume work:
 
 1. **Read this file** ✅ (you're here!)
-2. **Check Session State**: `/SESSION_STATE.md` - See what we're working on
-3. **Review Task List**: `/TASK_LIST.md` - Check completed and pending tasks
-4. **Check Lessons Learned**: `/LESSONS_LEARNED.md` - Understand key decisions
+2. **Review README**: `/README.md` - Project overview and getting started
+3. **Check Documentation**: `/docs/README.md` - Comprehensive documentation index
 
 ---
 
 ## 📍 Key Files Location
 
 ### Project Management Files (Update Frequently)
-- **Task List**: `/TASK_LIST.md` - Detailed task breakdown and progress
-- **Session State**: `/SESSION_STATE.md` - Current phase, blockers, progress
-- **Lessons Learned**: `/LESSONS_LEARNED.md` - Key decisions and patterns
-- **Resume Guide**: `/RESUME.md` - How to pick up where we left off
+- **README**: `/README.md` - Project overview and getting started
+- **Documentation**: `/docs/README.md` - Comprehensive documentation index
 
 ### Documentation (Reference)
 - **Requirements**: `/docs/REQUIREMENTS.md` - Functional and non-functional requirements
@@ -39,58 +36,47 @@ Welcome back! Follow these steps to quickly resume work:
 
 ## 🎯 Current Status
 
-**Phase:** Documentation & Setup  
-**Last Updated:** 2025-12-07  
-**Status:** Documentation complete, starting solution structure setup
+**Last Updated:** 2026-01-25  
+**Status:** Core framework in active development
 
-**What's Done:**
-- ✅ Comprehensive documentation improvements
-- ✅ Project management files created
-- ✅ Build and CI/CD documentation
-
-**What's Next:**
-- ⏳ Create solution structure (.sln file)
-- ⏳ Create Directory.Build.props
-- ⏳ Configure .gitignore and .cursorrules
-- ⏳ Initialize project structure
+**Recent Changes:**
+- ✅ TeachingAssistant moved to standalone project
+- ✅ JARVIS moved to standalone project
+- ✅ Solution files cleaned up
+- ✅ Outdated documentation removed
 
 ---
 
 ## 📝 Important Reminders
 
 ### Before Context Compression
-1. Update `/SESSION_STATE.md` with current progress
-2. Update `/TASK_LIST.md` with completed tasks
-3. Update `/LESSONS_LEARNED.md` with any new insights
-4. Commit all changes with descriptive message
+1. Commit all changes with descriptive message
+2. Update documentation as needed
+3. Keep code and docs in sync
 
 ### During Development
-- Update task list as you complete tasks
-- Document decisions in lessons learned
-- Update session state at milestones
 - Keep documentation in sync with code changes
+- Document architectural decisions in code comments
+- Update README when adding new features
 
 ---
 
 ## 🔍 Quick Navigation
 
-### "What was I working on?"
-→ Check `/SESSION_STATE.md`
-
-### "What's next?"
-→ Check `/TASK_LIST.md`
-
-### "Why was this decision made?"
-→ Check `/LESSONS_LEARNED.md`
-
-### "How do I resume work?"
-→ Check `/RESUME.md`
+### "What's the project about?"
+→ Check `/README.md`
 
 ### "What's the architecture?"
-→ Check `/docs/TECHNICAL_SPECIFICATIONS.md`
+→ Check `/docs/TECHNICAL_SPECIFICATIONS.md` or `/docs/architecture/ARCHITECTURE_SUMMARY.md`
 
 ### "What's the API contract?"
-→ Check `/docs/API_REFERENCE.md`
+→ Check `/docs/guides/API_REFERENCE.md`
+
+### "How do I get started?"
+→ Check `/docs/guides/INTEGRATION_GUIDE.md`
+
+### "Where's the documentation?"
+→ Check `/docs/README.md`
 
 ---
 
@@ -137,10 +123,10 @@ dotnet test
 ## 📚 Project Context
 
 ### Project Name
-**DotLangChain** - A .NET 9 library for document ingestion, embeddings, vector stores, and agent orchestration
+**DotNetAgents** - Enterprise-grade .NET 10 library for building AI agents, chains, and workflows
 
 ### Technology Stack
-- **.NET 9.0** with C# 13
+- **.NET 10.0** with C# 13
 - **xUnit** for testing
 - **FluentAssertions** for assertions
 - **Testcontainers.NET** for integration tests
@@ -159,40 +145,40 @@ dotnet test
 ## 🎓 Getting Started
 
 ### If You're New to This Project
-1. Read `/docs/REQUIREMENTS.md` for project overview
-2. Read `/docs/TECHNICAL_SPECIFICATIONS.md` for architecture
-3. Review `/TASK_LIST.md` to understand current phase
-4. Check `/LESSONS_LEARNED.md` for established patterns
+1. Read `/README.md` for project overview
+2. Read `/docs/architecture/ARCHITECTURE_SUMMARY.md` for architecture
+3. Review `/docs/guides/INTEGRATION_GUIDE.md` for integration examples
+4. Check `/docs/README.md` for documentation index
 
 ### If You're Resuming Work
-1. Read `/SESSION_STATE.md` for current context
-2. Review `/TASK_LIST.md` for next tasks
-3. Check git log for recent changes: `git log --oneline -10`
-4. Review any uncommitted changes: `git status`
+1. Check git log for recent changes: `git log --oneline -10`
+2. Review any uncommitted changes: `git status`
+3. Review recent commits to understand what changed
+4. Check `/docs/` for relevant documentation
 
 ---
 
 ## ✅ Session Checklist
 
 - [ ] Read this file (START_HERE.md)
-- [ ] Reviewed SESSION_STATE.md
-- [ ] Checked TASK_LIST.md
-- [ ] Reviewed LESSONS_LEARNED.md (if needed)
+- [ ] Reviewed README.md
 - [ ] Checked git status
+- [ ] Reviewed recent commits
 - [ ] Ready to continue work!
 
 ---
 
 ## 📞 Need Help?
 
-- **Project Structure**: See `/RESUME.md` for quick reference
-- **Architecture**: See `/docs/TECHNICAL_SPECIFICATIONS.md`
-- **API Design**: See `/docs/API_REFERENCE.md`
-- **Best Practices**: See `/LESSONS_LEARNED.md`
+- **Project Structure**: See `/README.md` for overview
+- **Architecture**: See `/docs/architecture/ARCHITECTURE_SUMMARY.md`
+- **API Design**: See `/docs/guides/API_REFERENCE.md`
+- **Integration**: See `/docs/guides/INTEGRATION_GUIDE.md`
+- **Documentation Index**: See `/docs/README.md`
 
 ---
 
-**Remember:** Update `/SESSION_STATE.md` and `/TASK_LIST.md` as you work!
+**Remember:** Keep documentation updated as you work!
 
-Last Updated: 2025-12-07
+Last Updated: 2026-01-25
 

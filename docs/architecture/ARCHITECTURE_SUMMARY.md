@@ -189,11 +189,11 @@ DotNetAgents follows a layered, modular architecture designed for enterprise-gra
 - `DotNetAgents.Agents.Messaging`: Message bus abstractions
 
 ### Application Packages
-- `applications/JARVIS/`: JARVIS voice assistant implementation
+- `../JARVIS/`: JARVIS voice assistant implementation (standalone project)
   - **Voice Session State Machine** (Idle → Listening → Processing → Responding)
   - **Dialog State Machine** (Initial → CollectingInfo → Confirming → Executing → Completed)
   - **Command Processing Behavior Tree** (Simple/MultiStep/Ambiguous strategies)
-- `applications/TeachingAssistant/`: Educational assistant implementation
+- `../TeachingAssistant/`: Educational assistant implementation (standalone project)
   - **Learning Session State Machine** (Initialized → Learning → Assessment → Review → Completed)
   - **Mastery State Machine** (Novice → Learning → Proficient → Master)
   - **Adaptive Learning Path Behavior Tree** (Review Needed, Mastery Gap, Prerequisite-Based)
