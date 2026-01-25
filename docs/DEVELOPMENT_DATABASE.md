@@ -6,29 +6,34 @@ This document contains connection information for the development PostgreSQL ser
 
 ### Server Details
 
-- **Host**: `anubis`
+- **Host**: `192.168.4.25` (or hostname `anubis` if DNS is configured)
 - **Port**: `5432` (standard PostgreSQL port)
 - **Username**: `ai`
-- **Password**: `YOUR_PASSWORD` (contact administrator for actual password)
+- **Password**: See `.env` file in project root (gitignored for security)
 - **Environment**: Development playground - full access granted
+- **Server Name**: Anubis
 
 ### Connection String Format
 
 #### Standard Connection String
 ```
-Host=anubis;Port=5432;Username=ai;Password=YOUR_PASSWORD;Database={database_name}
+Host=192.168.4.25;Port=5432;Username=ai;Password={password};Database={database_name}
 ```
 
 #### Npgsql Connection String (for .NET)
 ```
-Host=anubis;Port=5432;Username=ai;Password=YOUR_PASSWORD;Database={database_name};Pooling=true;MinPoolSize=0;MaxPoolSize=100
+Host=192.168.4.25;Port=5432;Username=ai;Password={password};Database={database_name};Pooling=true;MinPoolSize=0;MaxPoolSize=100
 ```
+
+**Note**: Actual password is stored in `.env` file (gitignored). Use environment variables or the `.env` file for local development.
 
 ### Example Usage
 
 #### Task and Knowledge Stores
 ```csharp
-var connectionString = "Host=anubis;Port=5432;Username=ai;Password=YOUR_PASSWORD;Database=dotnetagents_dev";
+// Get connection string from configuration or environment
+var connectionString = configuration.GetConnectionString("DefaultConnection") 
+    ?? "Host=192.168.4.25;Port=5432;Username=ai;Password={password};Database=dotnetagents_dev";
 
 services.AddPostgreSQLTaskStore(connectionString);
 services.AddPostgreSQLKnowledgeStore(connectionString);
@@ -37,7 +42,9 @@ services.AddPostgreSQLCheckpointStore<MyState>(connectionString);
 
 #### Vector Store
 ```csharp
-var connectionString = "Host=anubis;Port=5432;Username=ai;Password=YOUR_PASSWORD;Database=dotnetagents_vectors";
+// Get connection string from configuration or environment
+var connectionString = configuration.GetConnectionString("PostgreSQLVectors")
+    ?? "Host=192.168.4.25;Port=5432;Username=ai;Password={password};Database=dotnetagents_vectors";
 
 services.AddPostgreSQLVectorStore(
     connectionString,
@@ -54,6 +61,11 @@ For development, you can create separate databases for different purposes:
 - `dotnetagents_vectors` - Vector store database
 - `dotnetagents_workflow` - Workflow checkpoint storage
 - `dotnetagents_test` - Testing database
+- `teaching_assistant` - TeachingAssistant application database (PostgreSQL + MSSQL)
+
+**Note**: The TeachingAssistant project uses the `teaching_assistant` database. Connection strings are configured in the `.env` file:
+- PostgreSQL: `CONNECTIONSTRINGS__DEFAULTCONNECTION`
+- MSSQL: `CONNECTIONSTRINGS__MSSQLCONNECTION`
 
 ### Creating Databases
 
@@ -64,11 +76,22 @@ CREATE DATABASE dotnetagents_dev;
 CREATE DATABASE dotnetagents_vectors;
 CREATE DATABASE dotnetagents_workflow;
 CREATE DATABASE dotnetagents_test;
+CREATE DATABASE teaching_assistant;
 ```
 
 ### Security Note
 
-⚠️ **IMPORTANT**: This is a development server with full access. Never commit connection strings with passwords to version control. Use environment variables or secure configuration management in production.
+⚠️ **IMPORTANT**: 
+- This is a development server with full access
+- Never commit connection strings with passwords to version control
+- The `.env` file is gitignored and contains actual credentials
+- Use environment variables or secure configuration management in production
+- See `infrastructure/DEV_DATABASE.md` for more details on configuration precedence
+
+### Related Documentation
+
+- `infrastructure/DEV_DATABASE.md` - Detailed database setup instructions
+- `.env` file (project root) - Contains actual connection strings (gitignored)
 
 ### Environment Variable Setup
 
@@ -76,12 +99,17 @@ For local development, you can set environment variables:
 
 **PowerShell:**
 ```powershell
-$env:POSTGRES_HOST="anubis"
+$env:POSTGRES_HOST="192.168.4.25"
 $env:POSTGRES_PORT="5432"
 $env:POSTGRES_USER="ai"
-$env:POSTGRES_PASSWORD="YOUR_PASSWORD"
+$env:POSTGRES_PASSWORD="{password_from_env_file}"
 $env:POSTGRES_DATABASE="dotnetagents_dev"
 ```
+
+**Note**: The `.env` file in the project root contains the actual connection strings. ASP.NET Core doesn't automatically load `.env` files, so you can:
+- Use `DotNetEnv` package to load `.env` files programmatically
+- Set environment variables manually
+- Use `appsettings.Development.json` (gitignored) for local development
 
 **Connection String from Environment:**
 ```csharp
@@ -99,7 +127,10 @@ To test the connection programmatically:
 ```csharp
 using Npgsql;
 
-var connectionString = "Host=anubis;Port=5432;Username=ai;Password=YOUR_PASSWORD;Database=postgres";
+// Get connection string from environment or configuration
+var connectionString = Environment.GetEnvironmentVariable("CONNECTIONSTRINGS__DEFAULTCONNECTION")
+    ?? "Host=192.168.4.25;Port=5432;Username=ai;Password={password};Database=postgres";
+
 await using var connection = new NpgsqlConnection(connectionString);
 await connection.OpenAsync();
 var version = await connection.PostgreSqlVersion;

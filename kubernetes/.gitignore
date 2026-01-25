@@ -1,0 +1,9 @@
+# Secrets - NEVER COMMIT
+secrets.yaml
+**/secrets.yaml
+**/*secrets*.yaml
+!**/secrets.yaml.example
+
+# Helm dependencies
+helm/teaching-assistant/charts/
+helm/teaching-assistant/Chart.lock

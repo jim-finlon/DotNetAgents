@@ -1,0 +1,59 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: teaching-assistant-ingress
+  namespace: teaching-assistant
+  annotations:
+    cert-manager.io/cluster-issuer: "letsencrypt-prod"
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/proxy-body-size: "10m"
+spec:
+  ingressClassName: nginx
+  tls:
+  - hosts:
+    - api.teachingassistant.local
+    - student.teachingassistant.local
+    - parent.teachingassistant.local
+    - admin.teachingassistant.local
+    secretName: teaching-assistant-tls
+  rules:
+  - host: api.teachingassistant.local
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: teaching-assistant-api
+            port:
+              number: 80
+  - host: student.teachingassistant.local
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: teaching-assistant-student-ui
+            port:
+              number: 80
+  - host: parent.teachingassistant.local
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: teaching-assistant-parent-ui
+            port:
+              number: 80
+  - host: admin.teachingassistant.local
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: teaching-assistant-admin-ui
+            port:
+              number: 80

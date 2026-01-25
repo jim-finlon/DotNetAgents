@@ -1,0 +1,177 @@
+# Default values for teaching-assistant
+replicaCount: 2
+
+image:
+  registry: ""
+  pullPolicy: IfNotPresent
+
+api:
+  enabled: true
+  image:
+    repository: teaching-assistant-api
+    tag: "latest"
+  replicaCount: 2
+  resources:
+    requests:
+      memory: "512Mi"
+      cpu: "250m"
+    limits:
+      memory: "2Gi"
+      cpu: "1000m"
+  service:
+    type: ClusterIP
+    port: 80
+
+studentUI:
+  enabled: true
+  image:
+    repository: teaching-assistant-student-ui
+    tag: "latest"
+  replicaCount: 2
+  resources:
+    requests:
+      memory: "256Mi"
+      cpu: "100m"
+    limits:
+      memory: "512Mi"
+      cpu: "500m"
+  service:
+    type: ClusterIP
+    port: 80
+
+parentUI:
+  enabled: true
+  image:
+    repository: teaching-assistant-parent-ui
+    tag: "latest"
+  replicaCount: 2
+  resources:
+    requests:
+      memory: "512Mi"
+      cpu: "250m"
+    limits:
+      memory: "1Gi"
+      cpu: "1000m"
+  service:
+    type: ClusterIP
+    port: 80
+
+adminUI:
+  enabled: true
+  image:
+    repository: teaching-assistant-admin-ui
+    tag: "latest"
+  replicaCount: 1
+  resources:
+    requests:
+      memory: "512Mi"
+      cpu: "250m"
+    limits:
+      memory: "1Gi"
+      cpu: "1000m"
+  service:
+    type: ClusterIP
+    port: 80
+
+vllm:
+  enabled: true
+  image:
+    repository: vllm/vllm-openai
+    tag: "latest"
+  replicaCount: 1
+  modelName: "mistralai/Mistral-7B-Instruct-v0.2"
+  resources:
+    requests:
+      memory: "16Gi"
+      cpu: "4"
+      nvidia.com/gpu: 1
+    limits:
+      memory: "32Gi"
+      cpu: "8"
+      nvidia.com/gpu: 1
+
+ollama:
+  enabled: true
+  image:
+    repository: ollama/ollama
+    tag: "latest"
+  replicaCount: 1
+  storage:
+    size: 50Gi
+  resources:
+    requests:
+      memory: "8Gi"
+      cpu: "2"
+      nvidia.com/gpu: 1
+    limits:
+      memory: "16Gi"
+      cpu: "4"
+      nvidia.com/gpu: 1
+
+postgresql:
+  enabled: true
+  auth:
+    postgresPassword: ""
+    database: "teaching_assistant"
+  primary:
+    persistence:
+      enabled: true
+      size: 100Gi
+  image:
+    registry: docker.io
+    repository: pgvector/pgvector
+    tag: "pg16"
+
+ingress:
+  enabled: true
+  className: "nginx"
+  annotations:
+    cert-manager.io/cluster-issuer: "letsencrypt-prod"
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+  hosts:
+    - host: api.teachingassistant.local
+      paths:
+        - path: /
+          pathType: Prefix
+    - host: student.teachingassistant.local
+      paths:
+        - path: /
+          pathType: Prefix
+    - host: parent.teachingassistant.local
+      paths:
+        - path: /
+          pathType: Prefix
+    - host: admin.teachingassistant.local
+      paths:
+        - path: /
+          pathType: Prefix
+  tls:
+    - secretName: teaching-assistant-tls
+      hosts:
+        - api.teachingassistant.local
+        - student.teachingassistant.local
+        - parent.teachingassistant.local
+        - admin.teachingassistant.local
+
+secrets:
+  jwtSecretKey: ""
+  postgresPassword: ""
+  openaiApiKey: ""
+  anthropicApiKey: ""
+
+monitoring:
+  prometheus:
+    enabled: true
+    retention: 30d
+    storage:
+      size: 50Gi
+  grafana:
+    enabled: true
+    adminPassword: ""
+    storage:
+      size: 10Gi
+  loki:
+    enabled: true
+    retention: 720h
+    storage:
+      size: 50Gi

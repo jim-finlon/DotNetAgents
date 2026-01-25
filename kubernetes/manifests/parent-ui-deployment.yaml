@@ -1,0 +1,74 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: teaching-assistant-parent-ui
+  namespace: teaching-assistant
+  labels:
+    app: teaching-assistant-parent-ui
+    component: frontend
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: teaching-assistant-parent-ui
+  template:
+    metadata:
+      labels:
+        app: teaching-assistant-parent-ui
+        component: frontend
+    spec:
+      containers:
+      - name: parent-ui
+        image: teaching-assistant-parent-ui:latest
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 80
+          name: http
+          protocol: TCP
+        env:
+        - name: ASPNETCORE_ENVIRONMENT
+          value: "Production"
+        - name: API_BASE_URL
+          valueFrom:
+            configMapKeyRef:
+              name: teaching-assistant-config
+              key: API_BASE_URL
+        resources:
+          requests:
+            memory: "512Mi"
+            cpu: "250m"
+          limits:
+            memory: "1Gi"
+            cpu: "1000m"
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 80
+          initialDelaySeconds: 30
+          periodSeconds: 10
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: 80
+          initialDelaySeconds: 10
+          periodSeconds: 5
+      imagePullSecrets:
+      - name: registry-secret
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: teaching-assistant-parent-ui
+  namespace: teaching-assistant
+  labels:
+    app: teaching-assistant-parent-ui
+spec:
+  type: ClusterIP
+  ports:
+  - port: 80
+    targetPort: 80
+    protocol: TCP
+    name: http
+  selector:
+    app: teaching-assistant-parent-ui

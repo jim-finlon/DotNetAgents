@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: teaching-assistant-config
+  namespace: teaching-assistant
+data:
+  ASPNETCORE_ENVIRONMENT: "Production"
+  ASPNETCORE_URLS: "http://+:80"
+  # Database connection strings should be in secrets, not configmaps
+  # These are placeholders - actual values should be in secrets.yaml
+  API_BASE_URL: "http://teaching-assistant-api:80"
+  JWT_SETTINGS__ISSUER: "TeachingAssistant"
+  JWT_SETTINGS__AUDIENCE: "TeachingAssistantUsers"
+  JWT_SETTINGS__EXPIRATIONMINUTES: "60"

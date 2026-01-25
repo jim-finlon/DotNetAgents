@@ -1,0 +1,99 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: teaching-assistant-api
+  namespace: teaching-assistant
+  labels:
+    app: teaching-assistant-api
+    component: api
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: teaching-assistant-api
+  template:
+    metadata:
+      labels:
+        app: teaching-assistant-api
+        component: api
+    spec:
+      containers:
+      - name: api
+        image: teaching-assistant-api:latest
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 80
+          name: http
+          protocol: TCP
+        env:
+        - name: ASPNETCORE_ENVIRONMENT
+          valueFrom:
+            configMapKeyRef:
+              name: teaching-assistant-config
+              key: ASPNETCORE_ENVIRONMENT
+        - name: ASPNETCORE_URLS
+          valueFrom:
+            configMapKeyRef:
+              name: teaching-assistant-config
+              key: ASPNETCORE_URLS
+        - name: CONNECTIONSTRINGS__DEFAULTCONNECTION
+          valueFrom:
+            secretKeyRef:
+              name: teaching-assistant-secrets
+              key: CONNECTIONSTRINGS__DEFAULTCONNECTION
+        - name: CONNECTIONSTRINGS__MSSQLCONNECTION
+          valueFrom:
+            secretKeyRef:
+              name: teaching-assistant-secrets
+              key: CONNECTIONSTRINGS__MSSQLCONNECTION
+        - name: JWT_SETTINGS__SECRETKEY
+          valueFrom:
+            secretKeyRef:
+              name: teaching-assistant-secrets
+              key: JWT_SETTINGS__SECRETKEY
+        envFrom:
+        - configMapRef:
+            name: teaching-assistant-config
+        resources:
+          requests:
+            memory: "512Mi"
+            cpu: "250m"
+          limits:
+            memory: "2Gi"
+            cpu: "1000m"
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 80
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          timeoutSeconds: 5
+          failureThreshold: 3
+        readinessProbe:
+          httpGet:
+            path: /health/ready
+            port: 80
+          initialDelaySeconds: 10
+          periodSeconds: 5
+          timeoutSeconds: 3
+          failureThreshold: 3
+      imagePullSecrets:
+      - name: registry-secret
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: teaching-assistant-api
+  namespace: teaching-assistant
+  labels:
+    app: teaching-assistant-api
+spec:
+  type: ClusterIP
+  ports:
+  - port: 80
+    targetPort: 80
+    protocol: TCP
+    name: http
+  selector:
+    app: teaching-assistant-api
