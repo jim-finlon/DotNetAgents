@@ -45,9 +45,29 @@ Additional documentation files:
 - `DEVELOPMENT_DATABASE.md` - Development database configuration
 - `AISESSIONPERSISTENCE_COMPARISON.md` - Comparison with AiSessionPersistence project
 
+### `/kubernetes/`
+Kubernetes deployment documentation:
+- `README.md` - Kubernetes deployment guide
+- `DEPLOYMENT_SUMMARY.md` - Deployment summary and status
+- `/manifests/` - Kubernetes manifest files
+  - `namespace.yaml` - Namespace definition
+  - `configmap.yaml` - Application configuration
+  - `secrets.yaml.example` - Secrets template
+  - `*-deployment.yaml` - Service deployments
+  - `ingress.yaml` - Ingress configuration
+- `/monitoring/` - Monitoring stack manifests
+  - `prometheus-deployment.yaml` - Prometheus configuration
+  - `grafana-deployment.yaml` - Grafana configuration
+  - `loki-deployment.yaml` - Loki and Promtail configuration
+- `/helm/` - Helm charts
+  - `/teaching-assistant/` - TeachingAssistant Helm chart
+
 ## 🔍 Quick Links
 
 - **Getting Started**: See the main [README.md](../README.md)
-- **Architecture**: Start with `/architecture/technical-specification.md`
+- **Architecture**: Start with `/architecture/ARCHITECTURE_SUMMARY.md` or `/architecture/technical-specification.md`
 - **Integration**: See `/guides/INTEGRATION_GUIDE.md`
+- **Comparison**: See `/comparison.md` for comparison with LangChain, LangGraph, and Microsoft Agent Framework
+- **Kubernetes Deployment**: See `/kubernetes/README.md` for production deployment
 - **Status**: Check `/status/PROJECT_STATUS.md` for current progress
+- **Database Setup**: See `/DEVELOPMENT_DATABASE.md` for database configuration

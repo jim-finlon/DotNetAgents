@@ -121,20 +121,33 @@ DotNetAgents follows a layered, modular architecture designed for enterprise-gra
 
 **Components:**
 - **Agent Registry**: Agent discovery and status tracking
+  - `InMemoryAgentRegistry` - Single-instance deployments
+  - `PostgreSQLAgentRegistry` - Distributed deployments
 - **Worker Pool**: Load balancing, auto-scaling, worker management
   - **Optional state machine integration** for lifecycle tracking
   - **Backward compatible** with `AgentStatus` enum
+  - State-based worker selection
 - **Supervisor Agent**: Task delegation and coordination
   - **State machine integration** (Monitoring → Analyzing → Delegating → Waiting)
   - **Behavior tree integration** for intelligent task routing
   - **LLM-based routing** for complex decision-making
-- **Message Bus**: Agent-to-agent communication (In-Memory, Kafka, RabbitMQ, Redis, SignalR)
+- **Message Bus**: Agent-to-agent communication with 5 implementations:
+  - **In-Memory** (`DotNetAgents.Agents.Messaging.InMemory`) - Development/testing
+  - **Kafka** (`DotNetAgents.Agents.Messaging.Kafka`) - High-throughput distributed systems
+  - **RabbitMQ** (`DotNetAgents.Agents.Messaging.RabbitMQ`) - Guaranteed delivery
+  - **Redis** (`DotNetAgents.Agents.Messaging.Redis`) - Real-time pub/sub
+  - **SignalR** (`DotNetAgents.Agents.Messaging.SignalR`) - Web-based real-time communication
+- **Task Queue & Store**: Task management and persistence
+  - `InMemoryTaskQueue` - Single-instance
+  - `PostgreSQLTaskQueue` - Distributed
 - **State-Based Selection**: Worker pool selection based on state machine states
 
 **Patterns:**
 - Supervisor-Worker: Hierarchical task delegation
 - Peer-to-Peer: Direct agent communication
 - Broadcast: One-to-many messaging
+- Request-Response: Synchronous agent communication
+- Publish-Subscribe: Event-driven agent communication
 
 ### Workflow Engine (`DotNetAgents.Workflow`)
 
@@ -200,9 +213,35 @@ DotNetAgents follows a layered, modular architecture designed for enterprise-gra
 
 ### Infrastructure
 - `DotNetAgents.Storage.*`: Storage implementations
+  - `DotNetAgents.Storage.TaskKnowledge.PostgreSQL` - PostgreSQL storage
+  - `DotNetAgents.Storage.TaskKnowledge.SqlServer` - SQL Server storage
+  - `DotNetAgents.Storage.Agents.PostgreSQL` - Agent registry storage
 - `DotNetAgents.Observability`: Logging, tracing, metrics
+  - OpenTelemetry integration
+  - Cost tracking
+  - Health checks
 - `DotNetAgents.Security`: Security features
+  - Secrets management
+  - Input validation
+  - Rate limiting
+  - Audit logging
 - `DotNetAgents.Configuration`: Configuration management
+
+### Deployment & Infrastructure
+- **Kubernetes**: Complete manifests and Helm charts
+  - Application deployments (API, UIs)
+  - LLM services (vLLM, Ollama)
+  - Database (PostgreSQL with pgvector)
+  - Ingress configuration
+- **Monitoring Stack**:
+  - Prometheus for metrics collection
+  - Grafana for visualization
+  - Loki for log aggregation
+  - Promtail for log collection
+- **Docker**: Docker Compose and Dockerfiles
+  - vLLM container configuration
+  - Ollama container configuration
+  - GPU support
 
 ## Design Principles
 

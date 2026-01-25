@@ -34,8 +34,10 @@ DotNetAgents targets .NET 10 (LTS) to leverage cutting-edge AI optimizations and
 - **🔍 RAG**: Retrieval-Augmented Generation with document loaders and vector stores
 - **🛠️ Tools**: 19 built-in tools + extensible tool system for external integrations
 - **👥 Multi-Agent Workflows**: Supervisor-worker patterns, agent registry, load balancing, auto-scaling
-- **📨 Agent Messaging**: Multiple message bus implementations (In-Memory, Kafka, RabbitMQ, Redis Pub/Sub)
+- **📨 Agent Messaging**: Multiple message bus implementations (In-Memory, Kafka, RabbitMQ, Redis Pub/Sub, SignalR)
 - **📚 Education Extensions**: Specialized components for educational AI applications (pedagogy, safety, assessment, compliance)
+- **☸️ Kubernetes Ready**: Complete Kubernetes manifests and Helm charts for production deployment
+- **📊 Monitoring Stack**: Prometheus, Grafana, and Loki integration for observability
 
 ### Document Loaders (10 Types)
 - ✅ **PDF** (with page splitting)
@@ -77,6 +79,8 @@ DotNetAgents targets .NET 10 (LTS) to leverage cutting-edge AI optimizations and
 - 🏥 **Health Checks**: Integration with ASP.NET Core health checks
 - 📝 **Configuration**: Centralized configuration with multiple sources
 - 🚀 **.NET 10 Optimized**: Built on .NET 10 (LTS) with AI-focused performance improvements
+- ☸️ **Kubernetes Ready**: Complete Kubernetes manifests, Helm charts, and deployment guides
+- 📊 **Production Monitoring**: Prometheus, Grafana, and Loki integration out of the box
 
 ### Educational Extensions (DotNetAgents.Education)
 - **🎓 Pedagogy**: Socratic dialogue engine, spaced repetition (SM2), mastery tracking
@@ -181,6 +185,15 @@ DotNetAgents uses a modular package architecture:
 - **`DotNetAgents.Storage.TaskKnowledge.PostgreSQL`** - PostgreSQL storage for checkpoints, tasks, and knowledge
 - **`DotNetAgents.Agents.StateMachines`** - State machine implementation for agent lifecycle management
 - **`DotNetAgents.Agents.BehaviorTrees`** - Behavior tree implementation for autonomous agent decision-making
+- **`DotNetAgents.Agents.Registry`** - Agent registry and discovery
+- **`DotNetAgents.Agents.Supervisor`** - Supervisor agent for task delegation
+- **`DotNetAgents.Agents.WorkerPool`** - Worker pool management with load balancing
+- **`DotNetAgents.Agents.Tasks`** - Task queue and store implementations
+- **`DotNetAgents.Agents.Messaging`** - Message bus abstractions
+- **`DotNetAgents.Agents.Messaging.Kafka`** - Kafka message bus implementation
+- **`DotNetAgents.Agents.Messaging.RabbitMQ`** - RabbitMQ message bus implementation
+- **`DotNetAgents.Agents.Messaging.Redis`** - Redis Pub/Sub message bus implementation
+- **`DotNetAgents.Agents.Messaging.SignalR`** - SignalR message bus implementation
 - **`DotNetAgents.Configuration`** - Configuration management
 - **`DotNetAgents.Observability`** - Logging, tracing, metrics
 - **`DotNetAgents.Security`** - Security features
@@ -194,6 +207,8 @@ DotNetAgents uses a modular package architecture:
 - **[Project Status](docs/status/PROJECT_STATUS.md)** - Current development status and completed features
 - **[API Reference](docs/guides/API_REFERENCE.md)** - API documentation
 - **[Testing Strategy](docs/guides/TESTING_STRATEGY.md)** - Testing guidelines and best practices
+- **[Kubernetes Deployment](kubernetes/README.md)** - Production deployment with Kubernetes and Helm
+- **[Development Database](docs/DEVELOPMENT_DATABASE.md)** - Database setup and configuration
 - **[Contributing](CONTRIBUTING.md)** - How to contribute
 - **[Code of Conduct](CODE_OF_CONDUCT.md)** - Community guidelines
 
@@ -222,6 +237,17 @@ Core Abstractions Layer
 Integrations & Infrastructure
 ```
 
+### Infrastructure & Deployment
+
+DotNetAgents includes production-ready infrastructure:
+
+- **Kubernetes**: Complete manifests for all services, Helm charts for easy deployment
+- **Monitoring**: Prometheus for metrics, Grafana for visualization, Loki for logs
+- **Docker**: Docker Compose for local development, optimized Dockerfiles for LLM services
+- **Message Buses**: 5 implementations (In-Memory, Kafka, RabbitMQ, Redis, SignalR) for different deployment scenarios
+
+See [Kubernetes Deployment Guide](kubernetes/README.md) for production deployment instructions.
+
 ## 🧪 Requirements
 
 - **.NET 10.0 SDK or later** (LTS) - Required for AI optimizations and Microsoft Agent Framework support
@@ -249,6 +275,27 @@ We welcome contributions! Please see our [Contributing Guide](CONTRIBUTING.md) f
 4. Build: `dotnet build`
 5. Run tests: `dotnet test`
 
+### Infrastructure Setup
+
+**Local Development (Docker Compose):**
+```bash
+cd docker
+docker-compose up -d
+```
+
+**Kubernetes Deployment:**
+```bash
+# Using Helm (recommended)
+helm install teaching-assistant ./kubernetes/helm/teaching-assistant \
+  --namespace teaching-assistant
+
+# Or using manifests
+kubectl apply -f kubernetes/manifests/
+kubectl apply -f kubernetes/monitoring/
+```
+
+See [Kubernetes Deployment Guide](kubernetes/README.md) for detailed instructions.
+
 ## 📝 License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
@@ -272,6 +319,9 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - ✅ Workflow visualization
 - ✅ Human-in-the-loop support
 - ✅ Multi-agent workflows with supervisor-worker patterns
+- ✅ Complete message bus implementations (Kafka, RabbitMQ, Redis, SignalR)
+- ✅ Kubernetes deployment manifests and Helm charts
+- ✅ Production monitoring stack (Prometheus, Grafana, Loki)
 
 **See [Project Status](docs/status/PROJECT_STATUS.md) for detailed status.**
 

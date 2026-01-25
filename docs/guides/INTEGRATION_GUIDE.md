@@ -666,13 +666,172 @@ var result = await executor.ExecuteAsync(tree, context);
 
 See [Behavior Trees README](../../src/DotNetAgents.Agents.BehaviorTrees/README.md) for detailed documentation.
 
+## Multi-Agent Messaging
+
+DotNetAgents provides comprehensive multi-agent communication through message buses with 5 implementations for different deployment scenarios.
+
+### Message Bus Implementations
+
+#### In-Memory (Development/Testing)
+```csharp
+using DotNetAgents.Agents.Messaging;
+using DotNetAgents.Agents.Registry;
+
+services.AddInMemoryAgentRegistry();
+services.AddInMemoryAgentMessageBus();
+```
+
+**Use Cases:** Single-instance deployments, development, testing
+
+#### Kafka (High-Throughput Production)
+```csharp
+using DotNetAgents.Agents.Messaging.Kafka;
+
+services.AddKafkaAgentMessageBus(options =>
+{
+    options.BootstrapServers = "localhost:9092";
+    options.TopicPrefix = "agents";
+    options.ConsumerGroupId = "agent-workers";
+});
+```
+
+**Use Cases:** High-throughput distributed systems, event streaming, microservices
+
+#### RabbitMQ (Guaranteed Delivery)
+```csharp
+using DotNetAgents.Agents.Messaging.RabbitMQ;
+
+services.AddRabbitMQAgentMessageBus(options =>
+{
+    options.HostName = "localhost";
+    options.ExchangeName = "agent-messages";
+    options.QueuePrefix = "agents";
+});
+```
+
+**Use Cases:** Systems requiring guaranteed delivery, complex routing, request-response patterns
+
+#### Redis (Real-Time Pub/Sub)
+```csharp
+using DotNetAgents.Agents.Messaging.Redis;
+
+services.AddRedisAgentMessageBus(options =>
+{
+    options.ConnectionString = "localhost:6379";
+    options.ChannelPrefix = "agents:";
+});
+```
+
+**Use Cases:** Real-time pub/sub, when Redis infrastructure exists, ephemeral messaging
+
+#### SignalR (Web-Based Real-Time)
+```csharp
+using DotNetAgents.Agents.Messaging.SignalR;
+
+services.AddSignalRAgentMessageBus(options =>
+{
+    options.HubUrl = "https://your-server.com/hubs/agentmessages";
+    options.ReconnectDelay = TimeSpan.FromSeconds(5);
+});
+```
+
+**Use Cases:** Web-based applications, browser-to-server real-time communication
+
+### Basic Usage
+
+```csharp
+using DotNetAgents.Agents.Messaging;
+using DotNetAgents.Agents.Registry;
+using DotNetAgents.Agents.Supervisor;
+
+// Get services
+var messageBus = serviceProvider.GetRequiredService<IAgentMessageBus>();
+var agentRegistry = serviceProvider.GetRequiredService<IAgentRegistry>();
+var supervisor = serviceProvider.GetRequiredService<ISupervisorAgent>();
+
+// Send a message to a specific agent
+var message = new AgentMessage
+{
+    FromAgentId = "supervisor-1",
+    ToAgentId = "worker-1",
+    MessageType = "task_assignment",
+    Payload = new { TaskId = "task-123", Data = "..." }
+};
+
+var result = await messageBus.SendAsync(message);
+
+// Subscribe to messages
+var subscription = await messageBus.SubscribeAsync("worker-1", async (msg, ct) =>
+{
+    Console.WriteLine($"Received: {msg.MessageType}");
+    // Handle message
+});
+
+// Broadcast to all agents
+var broadcast = new AgentMessage
+{
+    FromAgentId = "supervisor-1",
+    ToAgentId = "*", // Broadcast
+    MessageType = "system_update",
+    Payload = new { Message = "System maintenance in 5 minutes" }
+};
+
+await messageBus.BroadcastAsync(broadcast);
+```
+
+### Supervisor-Worker Pattern
+
+```csharp
+using DotNetAgents.Agents.Supervisor;
+using DotNetAgents.Agents.Tasks;
+
+// Submit tasks to workers
+var task = new WorkerTask
+{
+    TaskType = "analyze_document",
+    Input = documentData,
+    RequiredCapability = "document_analysis"
+};
+
+var taskId = await supervisor.SubmitTaskAsync(task);
+
+// Get task result
+var result = await supervisor.GetTaskResultAsync(taskId);
+if (result?.Success == true)
+{
+    Console.WriteLine($"Task completed: {result.Output}");
+}
+```
+
+### Multi-Agent Workflows
+
+```csharp
+using DotNetAgents.Workflow.MultiAgent;
+
+// Create workflow with multi-agent nodes
+var workflow = WorkflowBuilder<MultiAgentWorkflowState>.Create()
+    .AddNode("delegate-tasks", new DelegateToWorkerNode<MultiAgentWorkflowState>(
+        supervisor,
+        state => CreateTasksFromState(state)))
+    .AddNode("aggregate-results", new AggregateResultsNode<MultiAgentWorkflowState>(
+        supervisor,
+        AggregateResults,
+        waitForAllTasks: true))
+    .SetEntryPoint("delegate-tasks")
+    .AddEdge("delegate-tasks", "aggregate-results")
+    .Build();
+```
+
+See [Multi-Agent Workflows Plan](../architecture/MULTI_AGENT_WORKFLOWS_PLAN.md) for detailed documentation.
+
 ## Examples
 
 See the sample applications for complete working examples:
 
 - **`DotNetAgents.Samples.TasksAndKnowledge`**: Task creation, knowledge capture, bootstrap generation
-- **`DotNetAgents.Samples.MultiAgent`**: Supervisor-worker patterns, agent registry, worker pool
+- **`DotNetAgents.Samples.MultiAgent`**: Supervisor-worker patterns, agent registry, worker pool, message buses
 - **`DotNetAgents.Samples.StateMachines`**: State machine patterns, registry integration, message bus integration
+- **`DotNetAgents.Samples.Education`**: Educational extensions, pedagogy, safety, assessment features
 
 ## Additional Resources
 
@@ -680,5 +839,7 @@ See the sample applications for complete working examples:
 - [Knowledge Package README](../../src/DotNetAgents.Knowledge/README.md)
 - [State Machines README](../../src/DotNetAgents.Agents.StateMachines/README.md)
 - [Behavior Trees README](../../src/DotNetAgents.Agents.BehaviorTrees/README.md)
+- [Multi-Agent Workflows Plan](../architecture/MULTI_AGENT_WORKFLOWS_PLAN.md)
+- [Kubernetes Deployment](../../kubernetes/README.md)
 - [Workflow Documentation](../status/PROJECT_STATUS.md)
 - [Samples](../../samples/README.md)
