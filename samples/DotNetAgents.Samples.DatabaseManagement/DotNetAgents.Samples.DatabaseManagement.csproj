@@ -1,0 +1,25 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <LangVersion>13</LangVersion>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\DotNetAgents.Database.Abstractions\DotNetAgents.Database.Abstractions.csproj" />
+    <ProjectReference Include="..\..\src\DotNetAgents.Database.Analysis\DotNetAgents.Database.Analysis.csproj" />
+    <ProjectReference Include="..\..\src\DotNetAgents.Database.AI\DotNetAgents.Database.AI.csproj" />
+    <ProjectReference Include="..\..\src\DotNetAgents.Database.Validation\DotNetAgents.Database.Validation.csproj" />
+    <ProjectReference Include="..\..\src\DotNetAgents.Database.Orchestration\DotNetAgents.Database.Orchestration.csproj" />
+    <ProjectReference Include="..\..\src\DotNetAgents.Database.Security\DotNetAgents.Database.Security.csproj" />
+    <ProjectReference Include="..\..\src\Providers\DotNetAgents.Providers.OpenAI\DotNetAgents.Providers.OpenAI.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="9.0.0" />
+  </ItemGroup>
+
+</Project>

@@ -4,6 +4,94 @@ All notable changes to DotNetAgents will be documented in this file.
 
 ## [Unreleased] - 2026-01-25
 
+### Added - Database Management Capabilities
+
+#### Database Schema Analysis
+- **Schema Analyzers**: Complete schema extraction for SQL Server and PostgreSQL
+  - Table, column, constraint, and index analysis
+  - View, stored procedure, function, and sequence extraction
+  - Provider-agnostic interface with factory pattern
+  - Location: `src/DotNetAgents.Database.Analysis/`
+  - Guide: `docs/guides/DATABASE_MANAGEMENT.md`
+
+#### AI-Powered Database Operations
+- **Query Optimization**: AI-powered query optimization using LLM
+  - PostgreSQL-specific optimizations
+  - Index recommendations
+  - Performance improvement suggestions
+  - Location: `src/DotNetAgents.Database.AI/`
+
+- **Type Mapping**: Intelligent type mapping with data analysis
+  - Optimal type recommendations based on data patterns
+  - Storage efficiency analysis
+  - Performance implications
+  - Location: `src/DotNetAgents.Database.AI/`
+
+- **Procedure Conversion**: Convert stored procedures between database systems
+  - Syntax conversion
+  - Function/operator mapping
+  - Error handling pattern conversion
+  - Location: `src/DotNetAgents.Database.AI/`
+  - Guide: `docs/guides/AI_DATABASE_OPERATIONS.md`
+
+#### Database Validation
+- **Pre-Flight Validation**: Pre-operation validation checks
+  - Connection validation
+  - Permissions checking
+  - Disk space validation
+  - Location: `src/DotNetAgents.Database.Validation/`
+
+- **Post-Operation Validation**: Result validation after operations
+  - Operation result verification
+  - Data integrity checks
+  - Location: `src/DotNetAgents.Database.Validation/`
+
+#### Operation Orchestration
+- **Operation Orchestrator**: Complex operation coordination
+  - Checkpointing support
+  - Progress tracking
+  - Error recovery
+  - Location: `src/DotNetAgents.Database.Orchestration/`
+
+- **Error Recovery Service**: Automatic error recovery
+  - Recovery strategies (retry, rollback, resume, skip)
+  - Checkpoint management
+  - Location: `src/DotNetAgents.Database.Orchestration/`
+
+#### Security
+- **Secure Connection Management**: Secrets-based connection handling
+  - Integration with `ISecretsProvider`
+  - Connection string masking for logging
+  - Security validation
+  - Location: `src/DotNetAgents.Database.Security/`
+
+#### Tools
+- **Database Tools**: 6 new database management tools for agents
+  - `database_schema_analyze` - Schema analysis
+  - `database_validate` - Validation operations
+  - `database_index` - Index management
+  - `ai_query_optimizer` - AI query optimization
+  - `ai_type_mapper` - Intelligent type mapping
+  - `ai_procedure_converter` - Procedure conversion
+  - Location: `src/DotNetAgents.Tools.BuiltIn/Tools/`
+
+#### Sample Project
+- **Database Management Sample**: Complete demonstration
+  - Schema analysis examples
+  - AI-powered operations
+  - Validation and orchestration
+  - Location: `samples/DotNetAgents.Samples.DatabaseManagement/`
+
+#### Development Database Access
+- **Anubis Development Server**: Full access to PostgreSQL and SQL Server
+  - Server: 192.168.4.25 (Anubis)
+  - PostgreSQL: Port 5432, Username: ai
+  - SQL Server: Port 1433, Username: ai
+  - Connection strings in `.env` file (gitignored)
+  - Documentation: `docs/DEVELOPMENT_DATABASE.md`
+
+## [Unreleased] - 2026-01-25
+
 ### Added - Phase 3: Production Hardening
 
 #### Observability

@@ -1,7 +1,7 @@
 # DotNetAgents Comparison Guide
 
-**Last Updated:** January 2026  
-**Version:** 3.0
+**Last Updated:** January 25, 2026  
+**Version:** 3.1
 
 ## Overview
 
@@ -35,6 +35,8 @@ This document compares DotNetAgents with LangChain, LangGraph, and Microsoft Age
 | **Disaster Recovery** | ✅ Complete Runbooks | ⚠️ Community | ⚠️ Community | ⚠️ Partial |
 | **Education Extensions** | ✅ Complete | ❌ | ❌ | ❌ |
 | **Certification Program** | ✅ 4 Levels | ❌ | ❌ | ❌ |
+| **Database Management** | ✅ Complete | ⚠️ Limited | ⚠️ Limited | ⚠️ Limited |
+| **AI Database Operations** | ✅ Query Opt, Type Mapping, Conversion | ❌ | ❌ | ❌ |
 | **Type Safety** | ✅ Strong Typing | ⚠️ Dynamic | ⚠️ Dynamic | ✅ Strong Typing |
 | **Performance** | ✅ .NET 10 Optimized | ⚠️ Python GIL | ⚠️ Python GIL | ✅ .NET Optimized |
 
@@ -593,7 +595,43 @@ await marketplace.PublishAsync(integration);
 - **Microsoft Agent Framework**: Basic resilience
 - **DotNetAgents**: Comprehensive resilience and testing infrastructure
 
-### 19. Ecosystem Integration
+### 19. Database Management
+
+#### DotNetAgents
+```csharp
+// Schema Analysis
+var analyzer = await factory.GetAnalyzerAsync(connectionString);
+var schema = await analyzer.AnalyzeAsync(connectionString);
+
+// AI Query Optimization
+var optimizer = new AIQueryOptimizer(llm);
+var result = await optimizer.OptimizeAsync(query);
+
+// Type Mapping
+var mapper = new AITypeMapper(llm);
+var recommendation = await mapper.SuggestMappingAsync(column);
+
+// Procedure Conversion
+var converter = new AIProcedureConverter(llm);
+var converted = await converter.ConvertAsync(procedure, "PostgreSQL");
+```
+
+**Features:**
+- ✅ Schema analysis (SQL Server, PostgreSQL)
+- ✅ AI-powered query optimization
+- ✅ Intelligent type mapping
+- ✅ Stored procedure conversion
+- ✅ Pre-flight validation
+- ✅ Operation orchestration
+- ✅ Error recovery
+- ✅ Secure connection management
+
+**Comparison:**
+- **LangChain/LangGraph**: Limited database management capabilities
+- **Microsoft Agent Framework**: Basic database support
+- **DotNetAgents**: Comprehensive database management with AI-powered operations
+
+### 20. Ecosystem Integration
 
 #### DotNetAgents
 - ✅ Microsoft Agent Framework compatible
@@ -746,6 +784,7 @@ var workflow = new StateGraph<MyState>()
 | **Kubernetes** | ✅ | ⚠️ | ⚠️ | ⚠️ |
 | **Monitoring** | ✅ | ⚠️ | ⚠️ | ⚠️ |
 | **Education** | ✅ | ❌ | ❌ | ❌ |
+| **Database Management** | ✅ | ⚠️ | ⚠️ | ⚠️ |
 | **Type Safety** | ✅ | ⚠️ | ⚠️ | ✅ |
 | **Performance** | ✅ | ⚠️ | ⚠️ | ✅ |
 
@@ -757,9 +796,10 @@ DotNetAgents provides a comprehensive, production-ready alternative to LangChain
 - ✅ Most complete feature set
 - ✅ Strong typing and developer experience
 - ✅ Production-ready infrastructure
-- ✅ Unique features (behavior trees, education extensions)
+- ✅ Unique features (behavior trees, education extensions, database management)
 - ✅ Best multi-agent messaging support
 - ✅ Comprehensive monitoring stack
+- ✅ AI-powered database operations (query optimization, type mapping, procedure conversion)
 
 **Best For:**
 - .NET/C# developers

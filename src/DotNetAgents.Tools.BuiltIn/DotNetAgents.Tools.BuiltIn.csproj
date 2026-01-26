@@ -12,8 +12,12 @@
   <ItemGroup>
     <ProjectReference Include="..\DotNetAgents.Abstractions\DotNetAgents.Abstractions.csproj" />
     <ProjectReference Include="..\DotNetAgents.Core\DotNetAgents.Core.csproj" />
+    <ProjectReference Include="..\DotNetAgents.Database.Abstractions\DotNetAgents.Database.Abstractions.csproj" />
+    <ProjectReference Include="..\DotNetAgents.Database.Analysis\DotNetAgents.Database.Analysis.csproj" />
+    <ProjectReference Include="..\DotNetAgents.Database.AI\DotNetAgents.Database.AI.csproj" />
     <PackageReference Include="HtmlAgilityPack" Version="1.11.71" />
     <PackageReference Include="System.Text.Json" Version="9.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="9.0.0" />
   </ItemGroup>
 
 </Project>

@@ -1186,6 +1186,107 @@ See the sample applications for complete working examples:
 - **`DotNetAgents.Samples.JARVISVoice`**: Voice command processing
 - **`DotNetAgents.Workflow.Designer.Web`**: Visual workflow designer UI
 
+## Database Management
+
+### Overview
+
+DotNetAgents provides comprehensive database management capabilities for agents, including schema analysis, AI-powered operations, validation, and orchestration.
+
+### Installation
+
+```bash
+dotnet add package DotNetAgents.Database.Abstractions
+dotnet add package DotNetAgents.Database.Analysis
+dotnet add package DotNetAgents.Database.AI
+dotnet add package DotNetAgents.Database.Validation
+dotnet add package DotNetAgents.Database.Orchestration
+dotnet add package DotNetAgents.Database.Security
+```
+
+### Basic Setup
+
+```csharp
+using DotNetAgents.Database.Analysis;
+using DotNetAgents.Database.Validation;
+using DotNetAgents.Database.Orchestration;
+using DotNetAgents.Database.Security;
+using DotNetAgents.Security.Secrets;
+
+var services = new ServiceCollection();
+
+// Add database services
+services.AddDatabaseSchemaAnalyzers();
+services.AddSchemaAnalyzerFactory();
+services.AddDatabaseValidation();
+services.AddDatabaseOrchestration();
+services.AddSingleton<ISecretsProvider, EnvironmentSecretsProvider>();
+services.AddDatabaseSecurity();
+
+// Add AI services (optional, requires LLM provider)
+services.AddOpenAI(apiKey, "gpt-4");
+services.AddDatabaseAI();
+```
+
+### Schema Analysis
+
+```csharp
+var factory = serviceProvider.GetRequiredService<SchemaAnalyzerFactory>();
+var analyzer = await factory.GetAnalyzerAsync(connectionString);
+
+if (analyzer != null)
+{
+    var schema = await analyzer.AnalyzeAsync(connectionString);
+    var stats = schema.GetStatistics();
+    
+    Console.WriteLine($"Database: {schema.Name}");
+    Console.WriteLine($"Tables: {stats.TableCount}");
+}
+```
+
+### AI-Powered Operations
+
+```csharp
+// Query Optimization
+var optimizer = serviceProvider.GetRequiredService<AIQueryOptimizer>();
+var result = await optimizer.OptimizeAsync("SELECT * FROM users");
+
+// Type Mapping
+var typeMapper = serviceProvider.GetRequiredService<AITypeMapper>();
+var recommendation = await typeMapper.SuggestMappingAsync(column);
+
+// Procedure Conversion
+var converter = serviceProvider.GetRequiredService<AIProcedureConverter>();
+var converted = await converter.ConvertAsync(procedure, "PostgreSQL");
+```
+
+### Validation
+
+```csharp
+var validator = serviceProvider.GetRequiredService<IDatabaseValidator>();
+var result = await validator.ValidateAsync(connectionString);
+
+if (result.IsValid)
+{
+    Console.WriteLine("Validation passed");
+}
+```
+
+### Orchestration
+
+```csharp
+var orchestrator = serviceProvider.GetRequiredService<IDatabaseOperationOrchestrator>();
+
+var operation = new DatabaseOperation
+{
+    Type = "migration",
+    TargetConnectionString = connectionString
+};
+
+var result = await orchestrator.ExecuteAsync(operation, "operation-1");
+```
+
+See [Database Management Guide](./DATABASE_MANAGEMENT.md) and [AI Database Operations Guide](./AI_DATABASE_OPERATIONS.md) for complete documentation.
+
 ## Additional Resources
 
 ### Core Packages
@@ -1200,6 +1301,8 @@ See the sample applications for complete working examples:
 - [Advanced Multi-Agent Patterns Guide](./ADVANCED_MULTI_AGENT_PATTERNS.md)
 - [Edge Computing Guide](./EDGE_COMPUTING.md)
 - [Ecosystem Integrations Guide](./ECOSYSTEM_INTEGRATIONS.md)
+- [Database Management Guide](./DATABASE_MANAGEMENT.md)
+- [AI Database Operations Guide](./AI_DATABASE_OPERATIONS.md)
 - [Distributed Tracing Examples](../examples/DISTRIBUTED_TRACING.md)
 
 ### Production & Operations

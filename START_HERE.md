@@ -42,6 +42,25 @@ Welcome back! Follow these steps to quickly resume work:
 - **Grafana Dashboards**: `/docs/guides/GRAFANA_DASHBOARDS.md`
 - **Load Testing**: `/docs/guides/LOAD_TESTING.md`
 - **Chaos Engineering**: `/docs/guides/CHAOS_ENGINEERING.md`
+- **Database Management**: `/docs/guides/DATABASE_MANAGEMENT.md`
+- **AI Database Operations**: `/docs/guides/AI_DATABASE_OPERATIONS.md`
+
+---
+
+## 🗄️ Development Database Access
+
+For development and testing, you have access to both PostgreSQL and SQL Server on **Anubis** (192.168.4.25):
+
+- **PostgreSQL**: Port 5432, Username: `ai` - Full access granted
+- **SQL Server**: Port 1433, Username: `ai` - Full access granted
+- **Credentials**: Stored in `.env` file (gitignored, see `.env.example` for format)
+
+**Quick Setup:**
+1. Copy `.env.example` to `.env`
+2. Edit `.env` with your credentials (already configured for Anubis)
+3. Load environment variables in your application
+
+See [Development Database Configuration](docs/DEVELOPMENT_DATABASE.md) for complete details.
 
 ---
 
@@ -63,6 +82,12 @@ Welcome back! Follow these steps to quickly resume work:
   - Plugin architecture and integration marketplace
   - Community infrastructure and education materials
   - Certification program and learning paths
+- ✅ **Database Management Capabilities** - 100% Complete
+  - Schema analysis for SQL Server and PostgreSQL
+  - AI-powered query optimization, type mapping, procedure conversion
+  - Pre-flight and post-operation validation
+  - Operation orchestration with checkpointing and error recovery
+  - Secure connection management
 - ✅ All documentation updated to reflect new features
 
 ---
@@ -110,6 +135,11 @@ Welcome back! Follow these steps to quickly resume work:
 → Check `/docs/guides/ALERTING.md` (Prometheus alerts)
 → Check `/docs/guides/GRAFANA_DASHBOARDS.md` (Monitoring)
 → Check `/docs/operations/DISASTER_RECOVERY.md` (Recovery procedures)
+
+### "How do I access the development databases?"
+→ Check `/docs/DEVELOPMENT_DATABASE.md` - Complete database configuration
+→ Check `.env.example` - Connection string template (copy to `.env` and fill in credentials)
+→ Check `/infrastructure/DEV_DATABASE.md` - Infrastructure setup details
 
 ---
 

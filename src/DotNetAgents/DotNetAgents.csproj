@@ -34,6 +34,14 @@
     <!-- MCP: Model Context Protocol client library -->
     <ProjectReference Include="..\DotNetAgents.Mcp\DotNetAgents.Mcp.csproj" />
     
+    <!-- Database Packages: Database management and operations -->
+    <ProjectReference Include="..\DotNetAgents.Database.Abstractions\DotNetAgents.Database.Abstractions.csproj" />
+    <ProjectReference Include="..\DotNetAgents.Database.Analysis\DotNetAgents.Database.Analysis.csproj" />
+    <ProjectReference Include="..\DotNetAgents.Database.AI\DotNetAgents.Database.AI.csproj" />
+    <ProjectReference Include="..\DotNetAgents.Database.Validation\DotNetAgents.Database.Validation.csproj" />
+    <ProjectReference Include="..\DotNetAgents.Database.Orchestration\DotNetAgents.Database.Orchestration.csproj" />
+    <ProjectReference Include="..\DotNetAgents.Database.Security\DotNetAgents.Database.Security.csproj" />
+    
     <!-- Storage Packages: Task and knowledge storage implementations -->
     <ProjectReference Include="..\DotNetAgents.Storage.TaskKnowledge.PostgreSQL\DotNetAgents.Storage.TaskKnowledge.PostgreSQL.csproj" />
     <ProjectReference Include="..\DotNetAgents.Storage.TaskKnowledge.SqlServer\DotNetAgents.Storage.TaskKnowledge.SqlServer.csproj" />

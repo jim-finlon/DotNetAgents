@@ -200,6 +200,46 @@ dotnet run
 
 **Note:** This sample demonstrates end-to-end distributed tracing. No API key required for basic tracing.
 
+### 10. DatabaseManagement
+
+Demonstrates comprehensive database management capabilities including schema analysis, AI-powered operations, validation, and orchestration.
+
+**Features:**
+- Database schema analysis (SQL Server, PostgreSQL)
+- AI-powered query optimization
+- Intelligent type mapping
+- Stored procedure conversion
+- Pre-flight validation
+- Operation orchestration with checkpointing
+
+**Run:**
+```bash
+cd DotNetAgents.Samples.DatabaseManagement
+dotnet run
+```
+
+**Note:** 
+- Requires database connection string. Set `POSTGRES_CONNECTION_STRING` or `SQL_SERVER_CONNECTION_STRING` environment variable.
+- For development, connection strings are available in `.env` file (see `.env.example` for format).
+- Development servers available on Anubis (192.168.4.25) - see [Development Database Configuration](../docs/DEVELOPMENT_DATABASE.md).
+- AI features require OpenAI API key.
+
+**Features:**
+- OpenTelemetry integration
+- Distributed tracing setup
+- Correlation ID propagation
+- Multi-agent workflow tracing
+- Chain and LLM call tracing
+- Console and OTLP exporters
+
+**Run:**
+```bash
+cd DotNetAgents.Samples.Tracing
+dotnet run
+```
+
+**Note:** This sample demonstrates end-to-end distributed tracing. No API key required for basic tracing.
+
 ## Setting Up
 
 1. Set your OpenAI API key:

@@ -40,6 +40,8 @@ User guides and how-to documentation:
 - `CHAOS_ENGINEERING.md` - Chaos engineering and resilience testing
 - `CIRCUIT_BREAKERS.md` - Circuit breaker patterns
 - `GRACEFUL_DEGRADATION.md` - Graceful degradation strategies
+- `DATABASE_MANAGEMENT.md` - Database management capabilities guide
+- `AI_DATABASE_OPERATIONS.md` - AI-powered database operations guide
 
 ### `/status/`
 Project status documents:
@@ -77,7 +79,9 @@ Additional documentation files:
 - `PACKAGE_METADATA.md` - Package metadata and NuGet information
 - `PERFORMANCE_BENCHMARKS.md` - Performance benchmarks and metrics
 - `GIT_WORKFLOW.md` - Git workflow and branching strategy
-- `DEVELOPMENT_DATABASE.md` - Development database configuration
+- `DEVELOPMENT_DATABASE.md` - Development database configuration (Anubis server)
+- `DEVELOPMENT_DATABASE_SETUP.md` - Quick database setup guide
+- `DATABASE_MANAGEMENT_INTEGRATION_SUMMARY.md` - Database management integration summary
 - `AISESSIONPERSISTENCE_COMPARISON.md` - Comparison with AiSessionPersistence project
 - `PHASE3_COMPLETE_SUMMARY.md` - Phase 3 completion summary
 - `PHASE4_COMPLETE_SUMMARY.md` - Phase 4 completion summary

@@ -32,7 +32,8 @@ DotNetAgents targets .NET 10 (LTS) to leverage cutting-edge AI optimizations and
 - **🌳 Behavior Trees**: Hierarchical decision-making for autonomous agents with composite, decorator, and integration nodes
 - **💾 Memory**: Short-term and long-term memory with vector-based storage
 - **🔍 RAG**: Retrieval-Augmented Generation with document loaders and vector stores
-- **🛠️ Tools**: 19 built-in tools + extensible tool system for external integrations
+- **🛠️ Tools**: 19+ built-in tools + extensible tool system for external integrations
+- **🗄️ Database Management**: Schema analysis, AI-powered operations, validation, orchestration
 - **👥 Multi-Agent Workflows**: Supervisor-worker patterns, agent registry, load balancing, auto-scaling
 - **📨 Agent Messaging**: Multiple message bus implementations (In-Memory, Kafka, RabbitMQ, Redis Pub/Sub, SignalR)
 - **📚 Education Extensions**: Specialized components for educational AI applications (pedagogy, safety, assessment, compliance)
@@ -93,6 +94,17 @@ DotNetAgents targets .NET 10 (LTS) to leverage cutting-edge AI optimizations and
 - **🔍 Retrieval**: Curriculum-aware content retrieval with prerequisite checking
 - **✅ Compliance**: FERPA/GDPR compliance, RBAC, comprehensive audit logging
 - **🏢 Multi-Tenancy**: Tenant isolation, tenant-specific configuration
+
+## 🗄️ Development Database Access
+
+For development and testing, you have access to both PostgreSQL and SQL Server on **Anubis** (192.168.4.25):
+
+- **PostgreSQL**: Port 5432, Username: `ai`
+- **SQL Server**: Port 1433, Username: `ai`
+- **Full Access**: Create, modify, and delete databases as needed
+- **Credentials**: Stored in `.env` file (gitignored)
+
+See [Development Database Configuration](docs/DEVELOPMENT_DATABASE.md) for details.
 
 ## 🚀 Quick Start
 
@@ -205,6 +217,12 @@ DotNetAgents uses a modular package architecture:
 - **`DotNetAgents.Tools.Development`** - AI-powered development tools (chain generator, workflow builder, debugging assistant)
 - **`DotNetAgents.Edge`** - Edge computing support (mobile, offline mode, edge-optimized models)
 - **`DotNetAgents.Ecosystem`** - Plugin architecture and integration marketplace
+- **`DotNetAgents.Database.Abstractions`** - Database schema domain model
+- **`DotNetAgents.Database.Analysis`** - Schema analyzers for SQL Server and PostgreSQL
+- **`DotNetAgents.Database.AI`** - AI-powered database operations (query optimization, type mapping, procedure conversion)
+- **`DotNetAgents.Database.Validation`** - Pre-flight and post-operation validators
+- **`DotNetAgents.Database.Orchestration`** - Operation orchestrator with checkpointing and error recovery
+- **`DotNetAgents.Database.Security`** - Secure connection management and secrets handling
 - **`DotNetAgents.Configuration`** - Configuration management
 - **`DotNetAgents.Observability`** - Logging, tracing, metrics, distributed tracing
 - **`DotNetAgents.Security`** - Security features
@@ -237,6 +255,8 @@ DotNetAgents uses a modular package architecture:
 - **[Advanced Multi-Agent Patterns](docs/guides/ADVANCED_MULTI_AGENT_PATTERNS.md)** - Swarm intelligence, hierarchical organizations, marketplace
 - **[Edge Computing](docs/guides/EDGE_COMPUTING.md)** - Mobile and edge deployment guide
 - **[Ecosystem Integrations](docs/guides/ECOSYSTEM_INTEGRATIONS.md)** - Plugin architecture and marketplace
+- **[Database Management](docs/guides/DATABASE_MANAGEMENT.md)** - Complete database management guide
+- **[AI Database Operations](docs/guides/AI_DATABASE_OPERATIONS.md)** - AI-powered database operations
 
 ### Community
 - **[Community Guide](docs/community/COMMUNITY_GUIDE.md)** - Community resources and getting involved
