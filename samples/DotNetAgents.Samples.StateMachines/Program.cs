@@ -1,6 +1,7 @@
 using DotNetAgents.Agents.Registry;
 using DotNetAgents.Agents.Messaging;
 using DotNetAgents.Agents.StateMachines;
+using DotNetAgents.Ecosystem;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 
@@ -34,6 +35,8 @@ class Program
         // Setup services
         var services = new ServiceCollection();
         services.AddLogging(builder => builder.AddConsole().SetMinimumLevel(LogLevel.Information));
+        services.AddDotNetAgentsEcosystem(); // Enable plugin system
+        services.AddStateMachines(); // Register State Machines plugin
         services.AddInMemoryAgentRegistry();
         services.AddInMemoryAgentMessageBus();
 

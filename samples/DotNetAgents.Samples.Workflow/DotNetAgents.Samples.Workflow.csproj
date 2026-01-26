@@ -10,6 +10,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\DotNetAgents.Abstractions\DotNetAgents.Abstractions.csproj" />
+    <ProjectReference Include="..\..\src\DotNetAgents.Ecosystem\DotNetAgents.Ecosystem.csproj" />
     <ProjectReference Include="..\..\src\DotNetAgents.Workflow\DotNetAgents.Workflow.csproj" />
     <ProjectReference Include="..\..\src\Providers\DotNetAgents.Providers.OpenAI\DotNetAgents.Providers.OpenAI.csproj" />
   </ItemGroup>

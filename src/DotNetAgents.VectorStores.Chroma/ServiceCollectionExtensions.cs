@@ -1,4 +1,5 @@
 using DotNetAgents.Abstractions.Retrieval;
+using DotNetAgents.Ecosystem;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 
@@ -25,6 +26,9 @@ public static class ServiceCollectionExtensions
     {
         ArgumentNullException.ThrowIfNull(services);
         ArgumentException.ThrowIfNullOrWhiteSpace(baseUrl);
+
+        // Register the Chroma vector store plugin
+        services.AddPlugin(new ChromaVectorStorePlugin());
 
         services.AddHttpClient<ChromaVectorStore>(client =>
         {

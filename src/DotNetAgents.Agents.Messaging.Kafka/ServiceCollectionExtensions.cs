@@ -1,3 +1,4 @@
+using DotNetAgents.Ecosystem;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
@@ -22,6 +23,9 @@ public static class ServiceCollectionExtensions
     {
         ArgumentNullException.ThrowIfNull(services);
 
+        // Register the Kafka message bus plugin
+        services.AddPlugin(new KafkaMessageBusPlugin());
+
         if (configure != null)
         {
             services.Configure(configure);
@@ -42,6 +46,9 @@ public static class ServiceCollectionExtensions
         string configurationSectionName = "Kafka")
     {
         ArgumentNullException.ThrowIfNull(services);
+
+        // Register the Kafka message bus plugin
+        services.AddPlugin(new KafkaMessageBusPlugin());
 
         services.AddOptions<KafkaOptions>()
             .BindConfiguration(configurationSectionName);

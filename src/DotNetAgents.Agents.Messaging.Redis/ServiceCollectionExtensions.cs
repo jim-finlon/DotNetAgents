@@ -1,4 +1,5 @@
 using DotNetAgents.Agents.Messaging;
+using DotNetAgents.Ecosystem;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 
@@ -20,6 +21,9 @@ public static class ServiceCollectionExtensions
         Action<RedisOptions>? configure = null)
     {
         ArgumentNullException.ThrowIfNull(services);
+
+        // Register the Redis message bus plugin
+        services.AddPlugin(new RedisMessageBusPlugin());
 
         if (configure != null)
         {

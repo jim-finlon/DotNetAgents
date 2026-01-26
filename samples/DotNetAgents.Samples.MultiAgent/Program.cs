@@ -5,6 +5,7 @@ using DotNetAgents.Agents.Supervisor;
 using DotNetAgents.Agents.Supervisor.BehaviorTrees;
 using DotNetAgents.Agents.Tasks;
 using DotNetAgents.Agents.WorkerPool;
+using DotNetAgents.Ecosystem;
 using DotNetAgents.Workflow.Graph;
 using DotNetAgents.Workflow.MultiAgent;
 using DotNetAgents.Workflow.Execution;
@@ -41,6 +42,8 @@ class Program
         // Setup services
         var services = new ServiceCollection();
         services.AddLogging(builder => builder.AddConsole().SetMinimumLevel(LogLevel.Information));
+        services.AddDotNetAgentsEcosystem(); // Enable plugin system
+        services.AddStateMachines(); // Register State Machines plugin
 
         // Register in-memory implementations
         services.AddInMemoryAgentRegistry();

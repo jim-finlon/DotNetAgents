@@ -1,3 +1,4 @@
+using DotNetAgents.Ecosystem;
 using DotNetAgents.Mcp.Abstractions;
 using DotNetAgents.Mcp.Configuration;
 using DotNetAgents.Mcp.Routing;
@@ -23,6 +24,9 @@ public static class ServiceCollectionExtensions
         Action<McpClientOptions>? configure = null)
     {
         ArgumentNullException.ThrowIfNull(services);
+
+        // Register the MCP plugin
+        services.AddPlugin(new McpPlugin());
 
         var options = new McpClientOptions();
         configure?.Invoke(options);

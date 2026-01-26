@@ -1,4 +1,5 @@
 using DotNetAgents.Agents.Messaging;
+using DotNetAgents.Ecosystem;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Options;
@@ -22,6 +23,9 @@ public static class ServiceCollectionExtensions
     {
         ArgumentNullException.ThrowIfNull(services);
 
+        // Register the SignalR message bus plugin
+        services.AddPlugin(new SignalRMessageBusPlugin());
+
         if (configure != null)
         {
             services.Configure(configure);
@@ -43,6 +47,9 @@ public static class ServiceCollectionExtensions
     {
         ArgumentNullException.ThrowIfNull(services);
         ArgumentNullException.ThrowIfNull(options);
+
+        // Register the SignalR message bus plugin
+        services.AddPlugin(new SignalRMessageBusPlugin());
 
         services.AddSingleton(Microsoft.Extensions.Options.Options.Create(options));
         services.TryAddSingleton<IAgentMessageBus, SignalRAgentMessageBus>();

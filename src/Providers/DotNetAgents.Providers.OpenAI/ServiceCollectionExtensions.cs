@@ -1,4 +1,5 @@
 using DotNetAgents.Abstractions.Models;
+using DotNetAgents.Ecosystem;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 
@@ -26,6 +27,9 @@ public static class ServiceCollectionExtensions
     {
         ArgumentNullException.ThrowIfNull(services);
         ArgumentException.ThrowIfNullOrWhiteSpace(apiKey);
+
+        // Register the OpenAI provider plugin
+        services.AddPlugin(new OpenAIProviderPlugin());
 
         services.AddHttpClient<OpenAIModel>(client =>
         {
@@ -60,6 +64,9 @@ public static class ServiceCollectionExtensions
         ArgumentNullException.ThrowIfNull(services);
         ArgumentException.ThrowIfNullOrWhiteSpace(apiKey);
         ArgumentNullException.ThrowIfNull(configureOptions);
+
+        // Register the OpenAI provider plugin (idempotent)
+        services.AddPlugin(new OpenAIProviderPlugin());
 
         var options = new OpenAIOptions
         {

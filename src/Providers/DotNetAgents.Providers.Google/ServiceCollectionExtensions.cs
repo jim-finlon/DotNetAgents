@@ -1,4 +1,5 @@
 using DotNetAgents.Abstractions.Models;
+using DotNetAgents.Ecosystem;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 
@@ -26,6 +27,8 @@ public static class ServiceCollectionExtensions
     {
         ArgumentNullException.ThrowIfNull(services);
         ArgumentException.ThrowIfNullOrWhiteSpace(apiKey);
+
+        services.AddPlugin(new GoogleProviderPlugin());
 
         services.AddHttpClient<GeminiModel>(client =>
         {

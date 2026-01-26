@@ -34,6 +34,11 @@ User guides and how-to documentation:
 - `ADVANCED_MULTI_AGENT_PATTERNS.md` - Advanced multi-agent patterns guide
 - `EDGE_COMPUTING.md` - Edge computing and mobile deployment guide
 - `ECOSYSTEM_INTEGRATIONS.md` - Plugin architecture and marketplace guide
+- `BEHAVIOR_TREES.md` - Behavior trees guide with examples and patterns
+- `MESSAGE_BUSES.md` - Message bus implementations guide (Kafka, RabbitMQ, Redis, SignalR)
+- `VECTOR_STORES.md` - Vector store comparison and usage guide
+- `DOCUMENT_LOADERS.md` - Document loader comparison and usage guide
+- `LLM_PROVIDERS.md` - LLM provider comparison and usage guide
 - `ALERTING.md` - Prometheus alerting configuration
 - `GRAFANA_DASHBOARDS.md` - Grafana dashboard setup and usage
 - `LOAD_TESTING.md` - Load testing with NBomber
@@ -49,6 +54,9 @@ Project status documents:
 ### `/examples/`
 Example documentation and tutorials:
 - `DISTRIBUTED_TRACING.md` - Distributed tracing examples and setup
+- `PLUGIN_ARCHITECTURE.md` - Comprehensive plugin architecture examples
+- `BEHAVIOR_TREE_INTEGRATION.md` - Behavior tree integration examples
+- `STATE_MACHINE_INTEGRATION.md` - State machine integration examples
 
 ### `/operations/`
 Operations and production documentation:
@@ -108,6 +116,8 @@ Kubernetes deployment documentation:
 - **Main README**: [README.md](../README.md)
 - **Integration Guide**: `/guides/INTEGRATION_GUIDE.md`
 - **API Reference**: `/guides/API_REFERENCE.md`
+- **Plugin Architecture**: `/examples/PLUGIN_ARCHITECTURE.md`
+- **Behavior Trees**: `/guides/BEHAVIOR_TREES.md`
 
 ### Production & Operations
 - **Distributed Tracing**: `/examples/DISTRIBUTED_TRACING.md`
@@ -124,6 +134,13 @@ Kubernetes deployment documentation:
 - **Advanced Multi-Agent**: `/guides/ADVANCED_MULTI_AGENT_PATTERNS.md`
 - **Edge Computing**: `/guides/EDGE_COMPUTING.md`
 - **Ecosystem**: `/guides/ECOSYSTEM_INTEGRATIONS.md`
+- **Behavior Trees**: `/guides/BEHAVIOR_TREES.md`
+
+### Provider & Integration Guides
+- **Message Buses**: `/guides/MESSAGE_BUSES.md` - Kafka, RabbitMQ, Redis, SignalR
+- **Vector Stores**: `/guides/VECTOR_STORES.md` - PostgreSQL, Pinecone, Weaviate, Qdrant, Chroma
+- **Document Loaders**: `/guides/DOCUMENT_LOADERS.md` - PDF, CSV, Excel, EPUB, Markdown, etc.
+- **LLM Providers**: `/guides/LLM_PROVIDERS.md` - OpenAI, Anthropic, Google, AWS, Local, etc.
 
 ### Community & Education
 - **Community Guide**: `/community/COMMUNITY_GUIDE.md`

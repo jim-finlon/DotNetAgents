@@ -1,4 +1,5 @@
 using DotNetAgents.Abstractions.Retrieval;
+using DotNetAgents.Ecosystem;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 
@@ -27,6 +28,9 @@ public static class ServiceCollectionExtensions
     {
         ArgumentNullException.ThrowIfNull(services);
         ArgumentException.ThrowIfNullOrWhiteSpace(connectionString);
+
+        // Register the PostgreSQL vector store plugin
+        services.AddPlugin(new PostgreSQLVectorStorePlugin());
 
         services.AddSingleton<IVectorStore>(sp =>
         {

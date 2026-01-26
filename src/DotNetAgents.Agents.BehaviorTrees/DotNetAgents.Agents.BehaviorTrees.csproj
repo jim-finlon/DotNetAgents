@@ -20,6 +20,7 @@
     <ProjectReference Include="..\DotNetAgents.Workflow\DotNetAgents.Workflow.csproj" />
     <ProjectReference Include="..\DotNetAgents.Observability\DotNetAgents.Observability.csproj" />
     <ProjectReference Include="..\DotNetAgents.Core\DotNetAgents.Core.csproj" />
+    <ProjectReference Include="..\DotNetAgents.Ecosystem\DotNetAgents.Ecosystem.csproj" />
   </ItemGroup>
 
 </Project>

@@ -1,4 +1,5 @@
 using DotNetAgents.Abstractions.Retrieval;
+using DotNetAgents.Ecosystem;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 
@@ -29,6 +30,9 @@ public static class ServiceCollectionExtensions
         ArgumentException.ThrowIfNullOrWhiteSpace(apiKey);
         ArgumentException.ThrowIfNullOrWhiteSpace(indexName);
         ArgumentException.ThrowIfNullOrWhiteSpace(environment);
+
+        // Register the Pinecone vector store plugin
+        services.AddPlugin(new PineconeVectorStorePlugin());
 
         services.AddHttpClient<PineconeVectorStore>(client =>
         {
@@ -67,6 +71,9 @@ public static class ServiceCollectionExtensions
         ArgumentException.ThrowIfNullOrWhiteSpace(indexName);
         ArgumentException.ThrowIfNullOrWhiteSpace(environment);
         ArgumentNullException.ThrowIfNull(httpClient);
+
+        // Register the Pinecone vector store plugin (idempotent)
+        services.AddPlugin(new PineconeVectorStorePlugin());
 
         services.AddSingleton<IVectorStore>(sp =>
         {

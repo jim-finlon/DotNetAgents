@@ -1,4 +1,5 @@
 using DotNetAgents.Abstractions.Models;
+using DotNetAgents.Ecosystem;
 using DotNetAgents.Providers.OpenAI;
 using DotNetAgents.Workflow.Checkpoints;
 using DotNetAgents.Workflow.Execution;
@@ -30,6 +31,7 @@ class Program
         // Setup services
         var services = new ServiceCollection();
         services.AddLogging(builder => builder.AddConsole().SetMinimumLevel(LogLevel.Information));
+        services.AddDotNetAgentsEcosystem(); // Enable plugin system
 
         // Add OpenAI provider (requires OPENAI_API_KEY environment variable)
         var apiKey = Environment.GetEnvironmentVariable("OPENAI_API_KEY");

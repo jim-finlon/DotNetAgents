@@ -1,3 +1,4 @@
+using DotNetAgents.Ecosystem;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 
@@ -19,6 +20,9 @@ public static class ServiceCollectionExtensions
         Action<EdgeModelConfiguration>? configure = null)
     {
         ArgumentNullException.ThrowIfNull(services);
+
+        // Register the edge plugin
+        services.AddPlugin(new EdgePlugin());
 
         // Register offline cache
         services.TryAddSingleton<IOfflineCache, InMemoryOfflineCache>();

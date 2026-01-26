@@ -11,6 +11,7 @@
     <ProjectReference Include="..\..\src\DotNetAgents.Agents.StateMachines\DotNetAgents.Agents.StateMachines.csproj" />
     <ProjectReference Include="..\..\src\DotNetAgents.Agents.Registry\DotNetAgents.Agents.Registry.csproj" />
     <ProjectReference Include="..\..\src\DotNetAgents.Agents.Messaging\DotNetAgents.Agents.Messaging.csproj" />
+    <ProjectReference Include="..\..\src\DotNetAgents.Ecosystem\DotNetAgents.Ecosystem.csproj" />
   </ItemGroup>
 
   <ItemGroup>

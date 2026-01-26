@@ -1,4 +1,5 @@
 using DotNetAgents.Abstractions.Models;
+using DotNetAgents.Ecosystem;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 
@@ -33,6 +34,8 @@ public static class ServiceCollectionExtensions
     {
         ArgumentNullException.ThrowIfNull(services);
         ArgumentException.ThrowIfNullOrWhiteSpace(modelId);
+
+        services.AddPlugin(new AWSProviderPlugin());
 
         services.AddHttpClient<BedrockModel>(client =>
         {

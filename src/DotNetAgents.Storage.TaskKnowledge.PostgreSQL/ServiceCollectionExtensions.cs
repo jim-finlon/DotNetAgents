@@ -1,3 +1,4 @@
+using DotNetAgents.Ecosystem;
 using DotNetAgents.Knowledge.Storage;
 using DotNetAgents.Tasks.Storage;
 using DotNetAgents.Workflow.Checkpoints;
@@ -27,6 +28,9 @@ public static class ServiceCollectionExtensions
     {
         ArgumentNullException.ThrowIfNull(services);
         ArgumentException.ThrowIfNullOrWhiteSpace(connectionString);
+
+        // Register the PostgreSQL storage plugin
+        services.AddPlugin(new PostgreSQLStoragePlugin());
 
         services.AddSingleton<ICheckpointStore<TState>>(sp =>
         {
@@ -81,6 +85,9 @@ public static class ServiceCollectionExtensions
         ArgumentNullException.ThrowIfNull(services);
         ArgumentException.ThrowIfNullOrWhiteSpace(connectionString);
 
+        // Register the PostgreSQL storage plugin (idempotent)
+        services.AddPlugin(new PostgreSQLStoragePlugin());
+
         services.AddSingleton<ITaskStore>(sp =>
         {
             var logger = sp.GetService<ILogger<PostgreSQLTaskStore>>();
@@ -104,6 +111,9 @@ public static class ServiceCollectionExtensions
     {
         ArgumentNullException.ThrowIfNull(services);
         ArgumentException.ThrowIfNullOrWhiteSpace(connectionString);
+
+        // Register the PostgreSQL storage plugin (idempotent)
+        services.AddPlugin(new PostgreSQLStoragePlugin());
 
         services.AddSingleton<IKnowledgeStore>(sp =>
         {

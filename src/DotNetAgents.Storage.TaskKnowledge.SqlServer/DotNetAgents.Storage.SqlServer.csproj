@@ -13,6 +13,7 @@
     <ProjectReference Include="..\DotNetAgents.Workflow\DotNetAgents.Workflow.csproj" />
     <ProjectReference Include="..\DotNetAgents.Tasks\DotNetAgents.Tasks.csproj" />
     <ProjectReference Include="..\DotNetAgents.Knowledge\DotNetAgents.Knowledge.csproj" />
+    <ProjectReference Include="..\DotNetAgents.Ecosystem\DotNetAgents.Ecosystem.csproj" />
   </ItemGroup>
 
   <ItemGroup>

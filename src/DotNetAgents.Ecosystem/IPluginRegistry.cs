@@ -91,7 +91,7 @@ public class PluginMetadata
     public List<string> Tags { get; set; } = new();
 
     /// <summary>
-    /// Gets or sets the plugin dependencies.
+    /// Gets or sets the plugin dependencies (plugin IDs that must be loaded first).
     /// </summary>
     public List<string> Dependencies { get; set; } = new();
 
@@ -104,4 +104,9 @@ public class PluginMetadata
     /// Gets or sets the plugin documentation URL.
     /// </summary>
     public string? DocumentationUrl { get; set; }
+
+    /// <summary>
+    /// Gets or sets the minimum required DotNetAgents.Core version.
+    /// </summary>
+    public string? MinimumCoreVersion { get; set; }
 }

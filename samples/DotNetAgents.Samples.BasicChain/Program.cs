@@ -3,6 +3,7 @@ using DotNetAgents.Core.Chains;
 using DotNetAgents.Abstractions.Models;
 using DotNetAgents.Abstractions.Prompts;
 using DotNetAgents.Core.Prompts;
+using DotNetAgents.Ecosystem;
 using DotNetAgents.Providers.OpenAI;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -22,6 +23,7 @@ class Program
         // Setup services
         var services = new ServiceCollection();
         services.AddLogging(builder => builder.AddConsole().SetMinimumLevel(LogLevel.Information));
+        services.AddDotNetAgentsEcosystem(); // Enable plugin system
 
         // Add OpenAI provider (requires OPENAI_API_KEY environment variable)
         var apiKey = Environment.GetEnvironmentVariable("OPENAI_API_KEY");

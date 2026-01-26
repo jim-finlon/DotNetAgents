@@ -1,4 +1,5 @@
 using DotNetAgents.Abstractions.Models;
+using DotNetAgents.Ecosystem;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 
@@ -32,6 +33,8 @@ public static class ServiceCollectionExtensions
         ArgumentException.ThrowIfNullOrWhiteSpace(endpoint);
         ArgumentException.ThrowIfNullOrWhiteSpace(apiKey);
         ArgumentException.ThrowIfNullOrWhiteSpace(deploymentName);
+
+        services.AddPlugin(new AzureProviderPlugin());
 
         services.AddHttpClient<AzureOpenAIModel>(client =>
         {

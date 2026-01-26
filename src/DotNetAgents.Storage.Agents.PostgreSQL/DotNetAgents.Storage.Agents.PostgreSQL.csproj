@@ -10,13 +10,14 @@
     <ProjectReference Include="..\DotNetAgents.Abstractions\DotNetAgents.Abstractions.csproj" />
     <ProjectReference Include="..\DotNetAgents.Agents.Registry\DotNetAgents.Agents.Registry.csproj" />
     <ProjectReference Include="..\DotNetAgents.Agents.Tasks\DotNetAgents.Agents.Tasks.csproj" />
+    <ProjectReference Include="..\DotNetAgents.Ecosystem\DotNetAgents.Ecosystem.csproj" />
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Npgsql" Version="9.0.2" />
     <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="10.0.0" />
     <PackageReference Include="Microsoft.Extensions.Options" Version="10.0.0" />
-    <PackageReference Include="System.Text.Json" Version="9.0.0" />
+    <PackageReference Include="System.Text.Json" Version="10.0.0" />
   </ItemGroup>
 
 </Project>

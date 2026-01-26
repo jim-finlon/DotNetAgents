@@ -13,7 +13,7 @@
     <ProjectReference Include="..\DotNetAgents.Abstractions\DotNetAgents.Abstractions.csproj" />
     <ProjectReference Include="..\DotNetAgents.Core\DotNetAgents.Core.csproj" />
     <PackageReference Include="HtmlAgilityPack" Version="1.11.71" />
-    <PackageReference Include="System.Text.Json" Version="9.0.0" />
+    <PackageReference Include="System.Text.Json" Version="10.0.0" />
   </ItemGroup>
 
 </Project>

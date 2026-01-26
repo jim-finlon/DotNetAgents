@@ -9,13 +9,14 @@
   <ItemGroup>
     <ProjectReference Include="..\DotNetAgents.Agents.Messaging\DotNetAgents.Agents.Messaging.csproj" />
     <ProjectReference Include="..\DotNetAgents.Agents.Registry\DotNetAgents.Agents.Registry.csproj" />
+    <ProjectReference Include="..\DotNetAgents.Ecosystem\DotNetAgents.Ecosystem.csproj" />
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="RabbitMQ.Client" Version="6.8.1" />
     <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="10.0.0" />
     <PackageReference Include="Microsoft.Extensions.Options" Version="10.0.0" />
-    <PackageReference Include="System.Text.Json" Version="9.0.0" />
+    <PackageReference Include="System.Text.Json" Version="10.0.0" />
   </ItemGroup>
 
 </Project>

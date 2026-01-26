@@ -28,13 +28,14 @@ DotNetAgents targets .NET 10 (LTS) to leverage cutting-edge AI optimizations and
 - **🤖 AI Agents**: Build intelligent agents with tool calling and decision-making capabilities
 - **🔗 Chains**: Compose complex workflows with sequential and parallel execution (LCEL-like declarative syntax)
 - **📊 Workflows**: Stateful, resumable workflows with checkpointing and visualization (LangGraph-like)
-- **🔄 State Machines**: Manage agent lifecycle and operational states with hierarchical, parallel, and timed transitions
-- **🌳 Behavior Trees**: Hierarchical decision-making for autonomous agents with composite, decorator, and integration nodes
+- **🔌 Plugin Architecture**: Extensible plugin system with automatic discovery, dependency resolution, and lifecycle management
+- **🔄 State Machines**: Manage agent lifecycle and operational states with hierarchical, parallel, and timed transitions (Plugin)
+- **🌳 Behavior Trees**: Hierarchical decision-making for autonomous agents with composite, decorator, and integration nodes (Plugin)
 - **💾 Memory**: Short-term and long-term memory with vector-based storage
 - **🔍 RAG**: Retrieval-Augmented Generation with document loaders and vector stores
 - **🛠️ Tools**: 19 built-in tools + extensible tool system for external integrations
 - **👥 Multi-Agent Workflows**: Supervisor-worker patterns, agent registry, load balancing, auto-scaling
-- **📨 Agent Messaging**: Multiple message bus implementations (In-Memory, Kafka, RabbitMQ, Redis Pub/Sub, SignalR)
+- **📨 Agent Messaging**: Multiple message bus implementations (In-Memory, Kafka, RabbitMQ, Redis Pub/Sub, SignalR) (Plugins)
 - **📚 Education Extensions**: Specialized components for educational AI applications (pedagogy, safety, assessment, compliance)
 - **☸️ Kubernetes Ready**: Complete Kubernetes manifests and Helm charts for production deployment
 - **📊 Monitoring Stack**: Prometheus, Grafana, and Loki integration for observability
@@ -148,6 +149,30 @@ var chain = ChainBuilder
 var result = await chain.InvokeAsync("Hello, world!");
 ```
 
+#### Plugin Architecture
+
+DotNetAgents uses a plugin architecture for extensibility. Plugins are automatically discovered and registered:
+
+```csharp
+// Enable plugin system
+services.AddDotNetAgentsEcosystem();
+
+// Register specific plugins
+services.AddStateMachines();
+services.AddBehaviorTrees();
+services.AddSwarmIntelligence();
+
+// Or enable automatic discovery
+services.EnablePluginDiscovery(); // Discovers all plugins from loaded assemblies
+
+// Infrastructure packages auto-register as plugins when used
+services.AddRabbitMQMessageBus(options => { ... });
+services.AddPostgreSQLVectorStore(connectionString);
+services.AddOpenAI(apiKey, modelName);
+```
+
+See [Plugin Architecture Migration Guide](docs/PLUGIN_ARCHITECTURE_MIGRATION.md) for details.
+
 #### Creating a Workflow
 
 ```csharp
@@ -217,6 +242,16 @@ DotNetAgents uses a modular package architecture:
 - **[Quick Start Guide](docs/guides/INTEGRATION_GUIDE.md)** - Get started with DotNetAgents
 - **[Comparison Guide](docs/comparison.md)** - DotNetAgents vs LangChain, LangGraph, and Microsoft Agent Framework
 - **[API Reference](docs/guides/API_REFERENCE.md)** - API documentation
+- **[Complete Examples Index](docs/COMPLETE_EXAMPLES_INDEX.md)** - All examples and samples
+
+### Core Features
+- **[Plugin Architecture](docs/examples/PLUGIN_ARCHITECTURE.md)** - Creating and using plugins
+- **[Behavior Trees](docs/guides/BEHAVIOR_TREES.md)** - Behavior tree patterns and examples
+- **[State Machines](docs/examples/STATE_MACHINE_INTEGRATION.md)** - State machine integration
+- **[Message Buses](docs/guides/MESSAGE_BUSES.md)** - Kafka, RabbitMQ, Redis, SignalR implementations
+- **[Vector Stores](docs/guides/VECTOR_STORES.md)** - PostgreSQL, Pinecone, Weaviate, Qdrant, Chroma
+- **[Document Loaders](docs/guides/DOCUMENT_LOADERS.md)** - PDF, CSV, Excel, EPUB, Markdown, etc.
+- **[LLM Providers](docs/guides/LLM_PROVIDERS.md)** - OpenAI, Anthropic, Google, AWS, Local providers
 
 ### Production & Operations
 - **[Distributed Tracing](docs/examples/DISTRIBUTED_TRACING.md)** - OpenTelemetry tracing setup and examples

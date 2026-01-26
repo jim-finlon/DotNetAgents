@@ -1,4 +1,5 @@
 using DotNetAgents.Abstractions.Models;
+using DotNetAgents.Ecosystem;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 
@@ -25,6 +26,8 @@ public static class ServiceCollectionExtensions
         Action<HttpClient>? configureHttpClient = null)
     {
         ArgumentNullException.ThrowIfNull(services);
+
+        services.AddPlugin(new LMStudioProviderPlugin());
 
         services.AddHttpClient<LMStudioModel>(client =>
         {

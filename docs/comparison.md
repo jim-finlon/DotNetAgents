@@ -543,6 +543,36 @@ var result = await edgeAgent.ExecuteAsync(input); // Auto fallback to offline
 
 ### 16. Plugin Architecture & Ecosystem
 
+**DotNetAgents** features a comprehensive plugin architecture with:
+- Automatic plugin discovery from loaded assemblies
+- Dependency resolution and initialization order management
+- Plugin lifecycle management (initialization, shutdown)
+- Rich plugin metadata (version, dependencies, categories, tags)
+- Plugin registry for querying and managing plugins
+- Integration marketplace for sharing plugins
+
+**Example:**
+```csharp
+// Enable plugin system
+services.AddDotNetAgentsEcosystem();
+
+// Register plugins explicitly
+services.AddStateMachines();
+services.AddBehaviorTrees();
+
+// Or enable automatic discovery
+services.EnablePluginDiscovery(); // Discovers all plugins automatically
+
+// Infrastructure packages auto-register as plugins
+services.AddRabbitMQMessageBus(options => { ... });
+services.AddPostgreSQLVectorStore(connectionString);
+services.AddOpenAI(apiKey, modelName);
+```
+
+**LangChain/LangGraph**: Community-driven plugins via community packages  
+**Microsoft Agent Framework**: Limited plugin support  
+**DotNetAgents**: Built-in plugin architecture with discovery, dependency resolution, and lifecycle management
+
 #### DotNetAgents
 ```csharp
 // Plugin system

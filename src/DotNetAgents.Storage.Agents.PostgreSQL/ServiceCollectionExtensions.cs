@@ -1,5 +1,6 @@
 using DotNetAgents.Agents.Registry;
 using DotNetAgents.Agents.Tasks;
+using DotNetAgents.Ecosystem;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 
@@ -23,6 +24,9 @@ public static class ServiceCollectionExtensions
         ArgumentNullException.ThrowIfNull(services);
         ArgumentException.ThrowIfNullOrEmpty(connectionString);
 
+        // Register the PostgreSQL agent storage plugin
+        services.AddPlugin(new PostgreSQLAgentStoragePlugin());
+
         services.TryAddSingleton<IAgentRegistry>(sp =>
         {
             var logger = sp.GetService<Microsoft.Extensions.Logging.ILogger<PostgreSQLAgentRegistry>>();
@@ -44,6 +48,9 @@ public static class ServiceCollectionExtensions
     {
         ArgumentNullException.ThrowIfNull(services);
         ArgumentException.ThrowIfNullOrEmpty(connectionString);
+
+        // Register the PostgreSQL agent storage plugin (idempotent)
+        services.AddPlugin(new PostgreSQLAgentStoragePlugin());
 
         services.TryAddSingleton<ITaskQueue>(sp =>
         {

@@ -26,26 +26,40 @@
     <ProjectReference Include="..\DotNetAgents.Configuration\DotNetAgents.Configuration.csproj" />
     <ProjectReference Include="..\DotNetAgents.Observability\DotNetAgents.Observability.csproj" />
     <ProjectReference Include="..\DotNetAgents.Security\DotNetAgents.Security.csproj" />
+    <ProjectReference Include="..\DotNetAgents.Ecosystem\DotNetAgents.Ecosystem.csproj" />
+    
+    <!-- Plugin Packages: Agent capabilities and specialized features (now plugins) -->
+    <ProjectReference Include="..\DotNetAgents.Agents.StateMachines\DotNetAgents.Agents.StateMachines.csproj" />
+    <ProjectReference Include="..\DotNetAgents.Agents.BehaviorTrees\DotNetAgents.Agents.BehaviorTrees.csproj" />
+    <ProjectReference Include="..\DotNetAgents.Agents.Swarm\DotNetAgents.Agents.Swarm.csproj" />
+    <ProjectReference Include="..\DotNetAgents.Agents.Hierarchical\DotNetAgents.Agents.Hierarchical.csproj" />
+    <ProjectReference Include="..\DotNetAgents.Agents.Marketplace\DotNetAgents.Agents.Marketplace.csproj" />
+    <ProjectReference Include="..\DotNetAgents.Mcp\DotNetAgents.Mcp.csproj" />
+    <ProjectReference Include="..\DotNetAgents.Edge\DotNetAgents.Edge.csproj" />
     
     <!-- Application Packages: Moved to applications/ directory (not included in metapackage) -->
     <!-- Education: applications/TeachingAssistant/TeachingAssistant.Education/ -->
     <!-- Voice: applications/JARVIS/JARVIS.Voice/ -->
     
-    <!-- MCP: Model Context Protocol client library -->
-    <ProjectReference Include="..\DotNetAgents.Mcp\DotNetAgents.Mcp.csproj" />
-    
-    <!-- Storage Packages: Task and knowledge storage implementations -->
+    <!-- Storage Packages: Task and knowledge storage implementations (now plugins) -->
     <ProjectReference Include="..\DotNetAgents.Storage.TaskKnowledge.PostgreSQL\DotNetAgents.Storage.TaskKnowledge.PostgreSQL.csproj" />
     <ProjectReference Include="..\DotNetAgents.Storage.TaskKnowledge.SqlServer\DotNetAgents.Storage.TaskKnowledge.SqlServer.csproj" />
+    <ProjectReference Include="..\DotNetAgents.Storage.Agents.PostgreSQL\DotNetAgents.Storage.Agents.PostgreSQL.csproj" />
     
-    <!-- Vector Store Packages: Vector similarity search implementations -->
+    <!-- Vector Store Packages: Vector similarity search implementations (now plugins) -->
     <ProjectReference Include="..\DotNetAgents.VectorStores.Pinecone\DotNetAgents.VectorStores.Pinecone.csproj" />
     <ProjectReference Include="..\DotNetAgents.VectorStores.PostgreSQL\DotNetAgents.VectorStores.PostgreSQL.csproj" />
     <ProjectReference Include="..\DotNetAgents.VectorStores.Weaviate\DotNetAgents.VectorStores.Weaviate.csproj" />
     <ProjectReference Include="..\DotNetAgents.VectorStores.Qdrant\DotNetAgents.VectorStores.Qdrant.csproj" />
     <ProjectReference Include="..\DotNetAgents.VectorStores.Chroma\DotNetAgents.VectorStores.Chroma.csproj" />
     
-    <!-- Provider Packages: LLM provider integrations -->
+    <!-- Message Bus Packages: Agent messaging implementations (now plugins) -->
+    <ProjectReference Include="..\DotNetAgents.Agents.Messaging.RabbitMQ\DotNetAgents.Agents.Messaging.RabbitMQ.csproj" />
+    <ProjectReference Include="..\DotNetAgents.Agents.Messaging.Kafka\DotNetAgents.Agents.Messaging.Kafka.csproj" />
+    <ProjectReference Include="..\DotNetAgents.Agents.Messaging.Redis\DotNetAgents.Agents.Messaging.Redis.csproj" />
+    <ProjectReference Include="..\DotNetAgents.Agents.Messaging.SignalR\DotNetAgents.Agents.Messaging.SignalR.csproj" />
+    
+    <!-- Provider Packages: LLM provider integrations (now plugins) -->
     <!-- Cloud APIs: Major cloud providers -->
     <ProjectReference Include="..\Providers\DotNetAgents.Providers.OpenAI\DotNetAgents.Providers.OpenAI.csproj" />
     <ProjectReference Include="..\Providers\DotNetAgents.Providers.Azure\DotNetAgents.Providers.Azure.csproj" />
@@ -61,6 +75,9 @@
     <ProjectReference Include="..\Providers\DotNetAgents.Providers.Ollama\DotNetAgents.Providers.Ollama.csproj" />
     <ProjectReference Include="..\Providers\DotNetAgents.Providers.LMStudio\DotNetAgents.Providers.LMStudio.csproj" />
     <ProjectReference Include="..\Providers\DotNetAgents.Providers.vLLM\DotNetAgents.Providers.vLLM.csproj" />
+    
+    <!-- Note: All packages above are now registered as plugins via the plugin system. -->
+    <!-- Plugins are automatically discovered and registered when AddDotNetAgentsEcosystem() is called. -->
   </ItemGroup>
 
 </Project>
