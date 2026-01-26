@@ -36,6 +36,7 @@ DotNetAgents targets .NET 10 (LTS) to leverage cutting-edge AI optimizations and
 - **👥 Multi-Agent Workflows**: Supervisor-worker patterns, agent registry, load balancing, auto-scaling
 - **📨 Agent Messaging**: Multiple message bus implementations (In-Memory, Kafka, RabbitMQ, Redis Pub/Sub, SignalR)
 - **📚 Education Extensions**: Specialized components for educational AI applications (pedagogy, safety, assessment, compliance)
+- **🧬 Evolutionary Agents**: Self-improving agents through genetic algorithms - agents evolve over generations to optimize performance
 - **☸️ Kubernetes Ready**: Complete Kubernetes manifests and Helm charts for production deployment
 - **📊 Monitoring Stack**: Prometheus, Grafana, and Loki integration for observability
 
@@ -200,6 +201,7 @@ DotNetAgents uses a modular package architecture:
 - **`DotNetAgents.Agents.Swarm`** - Swarm intelligence algorithms for agent coordination
 - **`DotNetAgents.Agents.Hierarchical`** - Hierarchical agent organizations
 - **`DotNetAgents.Agents.Marketplace`** - Agent marketplace and discovery
+- **`DotNetAgents.Agents.Evolutionary`** - Evolutionary Agent System - self-improving agents through genetic algorithms
 - **`DotNetAgents.Workflow.Designer`** - Visual workflow designer backend API
 - **`DotNetAgents.Workflow.Designer.Web`** - Visual workflow designer Blazor UI
 - **`DotNetAgents.Tools.Development`** - AI-powered development tools (chain generator, workflow builder, debugging assistant)
@@ -218,6 +220,11 @@ DotNetAgents uses a modular package architecture:
 - **[Comparison Guide](docs/comparison.md)** - DotNetAgents vs LangChain, LangGraph, and Microsoft Agent Framework
 - **[API Reference](docs/guides/API_REFERENCE.md)** - API documentation
 
+### World-Class Innovations
+- **[Evolutionary Agents Guide](docs/guides/EVOLUTIONARY_AGENTS.md)** - Self-improving agents through genetic algorithms
+- **[Evolutionary Agents Innovation](docs/guides/EVOLUTIONARY_AGENTS_INNOVATION.md)** - Deep dive into the innovation
+- **[Evolutionary Agents Examples](docs/examples/EVOLUTIONARY_AGENTS.md)** - Comprehensive examples
+
 ### Production & Operations
 - **[Distributed Tracing](docs/examples/DISTRIBUTED_TRACING.md)** - OpenTelemetry tracing setup and examples
 - **[Alerting Guide](docs/guides/ALERTING.md)** - Prometheus alerting configuration
@@ -231,6 +238,7 @@ DotNetAgents uses a modular package architecture:
 - **[Graceful Degradation](docs/guides/GRACEFUL_DEGRADATION.md)** - Degradation strategies
 
 ### Innovation Features
+- **[Evolutionary Agents](docs/guides/EVOLUTIONARY_AGENTS.md)** - Self-improving agents through genetic algorithms - world-class innovation
 - **[Visual Workflow Designer](docs/guides/VISUAL_WORKFLOW_DESIGNER.md)** - Visual workflow design guide
 - **[Workflow Designer UI](docs/guides/WORKFLOW_DESIGNER_UI.md)** - Frontend UI guide
 - **[AI-Powered Tools](docs/guides/AI_POWERED_TOOLS.md)** - Chain generator, workflow builder, debugging assistant
@@ -365,6 +373,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - ✅ **AI-Powered Development Tools** - Chain generator, workflow builder, debugging assistant
 - ✅ **Edge Computing Support** - Mobile packages, offline mode, edge-optimized models
 - ✅ **Plugin Architecture** - Extensible plugin system and integration marketplace
+- ✅ **Evolutionary Agents** - Self-improving agents through genetic algorithms with NEAT-style innovation tracking, semantic operations, island model evolution, and enhanced hive mind
 - ✅ Kubernetes deployment manifests and Helm charts
 - ✅ Production monitoring stack (Prometheus, Grafana, Loki)
 - ✅ **Distributed Tracing** - OpenTelemetry integration with examples

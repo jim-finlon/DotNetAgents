@@ -35,10 +35,13 @@ This document compares DotNetAgents with LangChain, LangGraph, and Microsoft Age
 | **Disaster Recovery** | ✅ Complete Runbooks | ⚠️ Community | ⚠️ Community | ⚠️ Partial |
 | **Education Extensions** | ✅ Complete | ❌ | ❌ | ❌ |
 | **Certification Program** | ✅ 4 Levels | ❌ | ❌ | ❌ |
+| **Evolutionary Agents** | ✅ Complete | ❌ | ❌ | ❌ |
 | **Type Safety** | ✅ Strong Typing | ⚠️ Dynamic | ⚠️ Dynamic | ✅ Strong Typing |
 | **Performance** | ✅ .NET 10 Optimized | ⚠️ Python GIL | ⚠️ Python GIL | ✅ .NET Optimized |
 
 ## Detailed Feature Comparison
+
+---
 
 ### 1. Core Architecture
 
@@ -126,6 +129,8 @@ LLM Providers
 - Limited community examples
 - No behavior trees
 
+---
+
 ### 2. Chains & Composition
 
 #### DotNetAgents
@@ -159,6 +164,8 @@ chain = prompt | llm | output_parser
 - DotNetAgents provides similar functionality with stronger typing
 - Better IDE support and compile-time checking
 - More explicit error handling
+
+---
 
 ### 3. Workflows & State Management
 
@@ -200,6 +207,8 @@ workflow.set_entry_point("start")
 - Additional integration with state machines and behavior trees
 - Strong typing provides better IDE support
 
+---
+
 ### 4. State Machines
 
 #### DotNetAgents
@@ -224,6 +233,8 @@ var stateMachine = new StateMachineBuilder<MyState>()
 - **LangChain/LangGraph**: No native state machine support
 - **Microsoft Agent Framework**: Has state machines but less feature-rich
 - **DotNetAgents**: Most comprehensive state machine implementation
+
+---
 
 ### 5. Behavior Trees
 
@@ -250,6 +261,8 @@ var tree = new BehaviorTreeBuilder<Context>()
 - **LangChain/LangGraph**: No behavior tree support
 - **Microsoft Agent Framework**: No behavior tree support
 - **DotNetAgents**: Unique feature - comprehensive behavior tree implementation
+
+---
 
 ### 6. Multi-Agent Systems
 
@@ -303,6 +316,8 @@ var taskId = await supervisor.SubmitTaskAsync(task);
 - Complete supervisor-worker pattern implementation
 - Unique swarm intelligence and hierarchical organization features
 
+---
+
 ### 7. Message Bus Implementations
 
 #### DotNetAgents
@@ -337,6 +352,8 @@ var taskId = await supervisor.SubmitTaskAsync(task);
 - **LangChain/LangGraph**: Limited message bus options, mostly community-driven
 - **Microsoft Agent Framework**: Basic messaging, fewer options
 - **DotNetAgents**: Most comprehensive message bus support
+
+---
 
 ### 8. Infrastructure & Deployment
 
@@ -379,6 +396,8 @@ var taskId = await supervisor.SubmitTaskAsync(task);
 - **Microsoft Agent Framework**: Basic deployment guides
 - **DotNetAgents**: Production-ready Kubernetes infrastructure
 
+---
+
 ### 9. Educational Extensions
 
 #### DotNetAgents
@@ -401,6 +420,8 @@ var taskId = await supervisor.SubmitTaskAsync(task);
 - **Microsoft Agent Framework**: No educational extensions
 - **DotNetAgents**: Unique comprehensive educational AI package
 
+---
+
 ### 10. Type Safety & Developer Experience
 
 #### DotNetAgents
@@ -422,6 +443,8 @@ var taskId = await supervisor.SubmitTaskAsync(task);
 - Fewer runtime errors
 - Better refactoring support
 
+---
+
 ### 11. Performance
 
 #### DotNetAgents
@@ -441,6 +464,8 @@ var taskId = await supervisor.SubmitTaskAsync(task);
 - DotNetAgents provides better performance for production workloads
 - Lower latency for LLM API calls
 - Better memory efficiency
+
+---
 
 ### 12. Visual Workflow Designer
 
@@ -464,6 +489,8 @@ await designer.SaveWorkflowAsync(workflow);
 - **LangChain/LangGraph**: No visual designer
 - **Microsoft Agent Framework**: Limited visual tools
 - **DotNetAgents**: Complete visual workflow designer with polished UI
+
+---
 
 ### 13. AI-Powered Development Tools
 
@@ -491,6 +518,8 @@ var suggestions = await assistant.AnalyzeAsync(executionLog);
 - **LangChain/LangGraph**: No AI-powered development tools
 - **Microsoft Agent Framework**: No AI-powered development tools
 - **DotNetAgents**: Unique AI-powered development assistance
+
+---
 
 ### 14. Advanced Multi-Agent Patterns
 
@@ -520,6 +549,8 @@ var results = await marketplace.SearchAgentsAsync("document analyzer", filters);
 - **Microsoft Agent Framework**: Limited multi-agent patterns
 - **DotNetAgents**: Most comprehensive multi-agent coordination
 
+---
+
 ### 15. Edge Computing Support
 
 #### DotNetAgents
@@ -541,7 +572,72 @@ var result = await edgeAgent.ExecuteAsync(input); // Auto fallback to offline
 - **Microsoft Agent Framework**: Some edge support
 - **DotNetAgents**: Complete edge computing solution
 
-### 16. Plugin Architecture & Ecosystem
+---
+
+### 16. Evolutionary Agents (World-Class Innovation) 🌟
+
+> **World-Class Innovation**: First comprehensive evolutionary agent system for AI agents that enables self-improving AI agents through genetic algorithms.
+
+#### DotNetAgents
+```csharp
+// Evolutionary Agent System - Agents that evolve and improve themselves
+var engine = serviceProvider.GetRequiredService<IEvolutionEngine>();
+
+var result = await engine.EvolveAsync(new EvolutionConfig
+{
+    PopulationSize = 100,
+    EliteCount = 5,
+    MutationRate = 0.05,
+    CrossoverRate = 0.8,
+    UseSpeciation = true,
+    TerminationCondition = new TerminationCondition
+    {
+        MaxGenerations = 50,
+        TargetFitness = 0.95
+    }
+}, cancellationToken);
+
+// Best agent automatically evolved
+var bestAgent = adapter.ToAgentExecutor(result.BestAgent, llm, toolRegistry);
+```
+
+**Features:**
+- ✅ **Agent Chromosomes** - Complete agent configuration as evolvable genome
+- ✅ **Multiple Gene Types** - Prompt, Tool, Strategy, Model, BehaviorTree, StateMachine, Numeric
+- ✅ **NEAT-Style Innovation Tracking** - Meaningful crossover between different structures
+- ✅ **Genetic Operators** - Tournament/Roulette/Rank/NSGA2 selection, SinglePoint/Uniform/NEAT/Semantic crossover, Standard/Adaptive/Semantic mutation
+- ✅ **Multi-Objective Optimization** - NSGA-II for Pareto-optimal solutions
+- ✅ **Island Model Evolution** - Parallel evolution with migration
+- ✅ **Enhanced Hive Mind** - Novelty detection, knowledge extraction, provenance tracking
+- ✅ **Distributed Evaluation** - Parallel fitness evaluation via message buses
+- ✅ **Semantic Operations** - LLM-based prompt merging and mutation
+- ✅ **Adaptive Mutation** - Mutation rates adjust based on diversity
+- ✅ **Behavior Tree & State Machine Evolution** - Evolve decision-making structures
+- ✅ **Observability** - Prometheus metrics for evolution progress
+- ✅ **Storage Layer** - Persistence for evolution runs and chromosomes
+
+**Key Innovations:**
+1. **Self-Improving Agents** - Agents automatically evolve to better configurations
+2. **NEAT-Style Innovation** - Track gene history for meaningful crossover
+3. **Semantic Genetic Operations** - Use LLMs for intelligent prompt merging
+4. **Structure Evolution** - Evolve behavior trees and state machines, not just parameters
+5. **Enhanced Hive Mind** - Accumulate and share knowledge across generations
+6. **Island Model** - Prevent premature convergence with parallel evolution
+
+**Comparison:**
+- **LangChain/LangGraph**: No evolutionary agent support
+- **Microsoft Agent Framework**: No evolutionary agent support
+- **DotNetAgents**: **World-class innovation** - First comprehensive evolutionary agent system for AI agents
+
+**Use Cases:**
+- Customer support agents that improve over time
+- Code generation agents that evolve better prompts
+- Research assistants that optimize their strategies
+- Any agent that needs to improve without manual tuning
+
+---
+
+### 17. Plugin Architecture & Ecosystem
 
 #### DotNetAgents
 ```csharp
@@ -559,13 +655,16 @@ await marketplace.PublishAsync(integration);
 - ✅ Integration marketplace
 - ✅ Category-based organization
 - ✅ Search and discovery
+- ✅ **Evolutionary Agents Plugin** - Self-improving agents through genetic algorithms
 
 **Comparison:**
 - **LangChain/LangGraph**: Community-driven plugins
 - **Microsoft Agent Framework**: Limited plugin support
-- **DotNetAgents**: Built-in plugin architecture and marketplace
+- **DotNetAgents**: Built-in plugin architecture and marketplace with innovative plugins
 
-### 17. Observability & Monitoring
+---
+
+### 18. Observability & Monitoring
 
 #### DotNetAgents
 - ✅ **Distributed Tracing** - OpenTelemetry integration with examples
@@ -579,7 +678,9 @@ await marketplace.PublishAsync(integration);
 - **Microsoft Agent Framework**: Basic monitoring
 - **DotNetAgents**: Production-ready observability stack
 
-### 18. Resilience & Testing
+---
+
+### 19. Resilience & Testing
 
 #### DotNetAgents
 - ✅ **Circuit Breakers** - Automatic failure handling
@@ -593,7 +694,9 @@ await marketplace.PublishAsync(integration);
 - **Microsoft Agent Framework**: Basic resilience
 - **DotNetAgents**: Comprehensive resilience and testing infrastructure
 
-### 19. Ecosystem Integration
+---
+
+### 20. Ecosystem Integration
 
 #### DotNetAgents
 - ✅ Microsoft Agent Framework compatible
@@ -613,6 +716,8 @@ await marketplace.PublishAsync(integration);
 - DotNetAgents integrates seamlessly with .NET ecosystem
 - Better for .NET-based applications
 - LangChain better for Python-based applications
+
+---
 
 ## Migration Guide
 
@@ -661,6 +766,8 @@ var workflow = new StateGraph<MyState>()
 - DotNetAgents provides more message bus options
 - Supervisor-worker pattern is more complete
 - Better integration with state machines
+
+---
 
 ## When to Choose DotNetAgents
 
@@ -716,6 +823,12 @@ var workflow = new StateGraph<MyState>()
     - You want load testing and chaos engineering
     - You need disaster recovery procedures
 
+11. **Self-Improving Agents**
+    - You want agents that evolve and improve automatically
+    - You need to optimize agent configurations without manual tuning
+    - You want to explore vast configuration spaces
+    - You need agents that learn from experience
+
 ### ⚠️ Consider Alternatives When:
 
 1. **Python Ecosystem Required**
@@ -732,6 +845,8 @@ var workflow = new StateGraph<MyState>()
    - You need Microsoft Agent Framework specific features
    - You're building Azure-only solutions
 
+---
+
 ## Feature Parity Matrix
 
 | Feature Category | DotNetAgents | LangChain | LangGraph | MS Agent Framework |
@@ -746,8 +861,11 @@ var workflow = new StateGraph<MyState>()
 | **Kubernetes** | ✅ | ⚠️ | ⚠️ | ⚠️ |
 | **Monitoring** | ✅ | ⚠️ | ⚠️ | ⚠️ |
 | **Education** | ✅ | ❌ | ❌ | ❌ |
+| **Evolutionary Agents** | ✅ | ❌ | ❌ | ❌ |
 | **Type Safety** | ✅ | ⚠️ | ⚠️ | ✅ |
 | **Performance** | ✅ | ⚠️ | ⚠️ | ✅ |
+
+---
 
 ## Conclusion
 
@@ -757,9 +875,10 @@ DotNetAgents provides a comprehensive, production-ready alternative to LangChain
 - ✅ Most complete feature set
 - ✅ Strong typing and developer experience
 - ✅ Production-ready infrastructure
-- ✅ Unique features (behavior trees, education extensions)
+- ✅ **World-class innovations** (Evolutionary Agents, behavior trees, education extensions)
 - ✅ Best multi-agent messaging support
 - ✅ Comprehensive monitoring stack
+- ✅ **Self-improving agents** - Agents that evolve and optimize themselves
 
 **Best For:**
 - .NET/C# developers

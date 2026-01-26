@@ -28,6 +28,7 @@ User guides and how-to documentation:
 - `TESTING_STRATEGY.md` - Testing strategy and guidelines
 - `BUILD_AND_CICD.md` - Build and CI/CD pipeline documentation
 - `VERSIONING_AND_MIGRATION.md` - Versioning strategy and migration guides
+- `EVOLUTIONARY_AGENTS.md` - Evolutionary Agents guide - self-improving agents through genetic algorithms
 - `VISUAL_WORKFLOW_DESIGNER.md` - Visual workflow designer guide
 - `WORKFLOW_DESIGNER_UI.md` - Workflow designer UI guide
 - `AI_POWERED_TOOLS.md` - AI-powered development tools guide
@@ -49,6 +50,7 @@ Project status documents:
 ### `/examples/`
 Example documentation and tutorials:
 - `DISTRIBUTED_TRACING.md` - Distributed tracing examples and setup
+- `EVOLUTIONARY_AGENTS.md` - Evolutionary Agents examples and tutorials
 
 ### `/operations/`
 Operations and production documentation:
@@ -119,6 +121,8 @@ Kubernetes deployment documentation:
 - **Chaos Engineering**: `/guides/CHAOS_ENGINEERING.md`
 
 ### Innovation Features
+- **Evolutionary Agents**: `/guides/EVOLUTIONARY_AGENTS.md` - Self-improving agents through genetic algorithms
+- **Evolutionary Agents Innovation**: `/guides/EVOLUTIONARY_AGENTS_INNOVATION.md` - Deep dive into the innovation
 - **Visual Workflow Designer**: `/guides/VISUAL_WORKFLOW_DESIGNER.md`
 - **AI-Powered Tools**: `/guides/AI_POWERED_TOOLS.md`
 - **Advanced Multi-Agent**: `/guides/ADVANCED_MULTI_AGENT_PATTERNS.md`
