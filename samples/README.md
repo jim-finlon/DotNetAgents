@@ -200,6 +200,26 @@ dotnet run
 
 **Note:** This sample demonstrates end-to-end distributed tracing. No API key required for basic tracing.
 
+### 10. Evolutionary
+
+Demonstrates evolutionary agents that self-improve through genetic algorithms.
+
+**Features:**
+- Agent chromosome system with multiple gene types
+- Genetic operators (selection, crossover, mutation)
+- Fitness evaluation with multiple metrics
+- Evolution engine with population management
+- Generation history and statistics
+- Best agent extraction and testing
+
+**Run:**
+```bash
+cd DotNetAgents.Samples.Evolutionary
+dotnet run
+```
+
+**Note:** This sample demonstrates how agents evolve over generations to improve performance. Requires OPENAI_API_KEY for full functionality. See [Evolutionary Agents Guide](../docs/guides/EVOLUTIONARY_AGENTS.md) for detailed documentation.
+
 ## Setting Up
 
 1. Set your OpenAI API key:
