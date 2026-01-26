@@ -1,7 +1,7 @@
 # DotNetAgents Comparison Guide
 
-**Last Updated:** January 2025  
-**Version:** 2.0
+**Last Updated:** January 2026  
+**Version:** 3.0
 
 ## Overview
 
@@ -19,9 +19,22 @@ This document compares DotNetAgents with LangChain, LangGraph, and Microsoft Age
 | **Multi-Agent** | ✅ Complete | ⚠️ Partial | ✅ | ✅ |
 | **Message Buses** | ✅ 5 Implementations | ⚠️ Limited | ⚠️ Limited | ⚠️ Limited |
 | **Checkpointing** | ✅ Full Support | ❌ | ✅ | ⚠️ Partial |
+| **Visual Designer** | ✅ Blazor WebAssembly UI | ❌ | ❌ | ⚠️ Partial |
+| **AI Development Tools** | ✅ Chain/Workflow Generator | ❌ | ❌ | ❌ |
+| **Swarm Intelligence** | ✅ 4 Algorithms | ❌ | ❌ | ❌ |
+| **Hierarchical Agents** | ✅ Complete | ❌ | ❌ | ⚠️ Partial |
+| **Agent Marketplace** | ✅ Complete | ❌ | ❌ | ❌ |
+| **Edge Computing** | ✅ Mobile/Offline | ❌ | ❌ | ⚠️ Partial |
+| **Plugin Architecture** | ✅ Complete | ⚠️ Community | ⚠️ Community | ⚠️ Partial |
 | **Kubernetes** | ✅ Complete | ⚠️ Community | ⚠️ Community | ⚠️ Partial |
 | **Monitoring** | ✅ Prometheus/Grafana/Loki | ⚠️ Community | ⚠️ Community | ⚠️ Partial |
+| **Distributed Tracing** | ✅ OpenTelemetry | ⚠️ Community | ⚠️ Community | ⚠️ Partial |
+| **Alerting** | ✅ Prometheus Alerts | ⚠️ Community | ⚠️ Community | ⚠️ Partial |
+| **Load Testing** | ✅ NBomber Suite | ⚠️ Community | ⚠️ Community | ⚠️ Partial |
+| **Chaos Engineering** | ✅ Complete | ⚠️ Community | ⚠️ Community | ⚠️ Partial |
+| **Disaster Recovery** | ✅ Complete Runbooks | ⚠️ Community | ⚠️ Community | ⚠️ Partial |
 | **Education Extensions** | ✅ Complete | ❌ | ❌ | ❌ |
+| **Certification Program** | ✅ 4 Levels | ❌ | ❌ | ❌ |
 | **Type Safety** | ✅ Strong Typing | ⚠️ Dynamic | ⚠️ Dynamic | ✅ Strong Typing |
 | **Performance** | ✅ .NET 10 Optimized | ⚠️ Python GIL | ⚠️ Python GIL | ✅ .NET Optimized |
 
@@ -279,10 +292,16 @@ var taskId = await supervisor.SubmitTaskAsync(task);
 - ✅ Agent coordination
 - ⚠️ Limited message bus options
 
+**Advanced Features:**
+- ✅ **Swarm Intelligence** - 4 coordination algorithms (PSO, ACO, Flocking, Consensus)
+- ✅ **Hierarchical Organizations** - Teams, departments, tree structures
+- ✅ **Agent Marketplace** - Discovery, search, ratings, subscriptions
+
 **Comparison:**
 - DotNetAgents provides the most comprehensive multi-agent infrastructure
 - Multiple message bus implementations for different use cases
 - Complete supervisor-worker pattern implementation
+- Unique swarm intelligence and hierarchical organization features
 
 ### 7. Message Bus Implementations
 
@@ -333,17 +352,27 @@ var taskId = await supervisor.SubmitTaskAsync(task);
 
 **Monitoring:**
 - ✅ Prometheus deployment
-- ✅ Grafana dashboards
+- ✅ Grafana dashboards (3 comprehensive dashboards)
 - ✅ Loki log aggregation
 - ✅ Promtail log collection
 - ✅ Service discovery
 - ✅ RBAC configuration
+- ✅ **Distributed Tracing** - OpenTelemetry integration
+- ✅ **Prometheus Alerting** - 15+ alert rules
+- ✅ **Cost Tracking** - LLM cost monitoring
 
 **Docker:**
 - ✅ Docker Compose for local development
 - ✅ vLLM Dockerfile
 - ✅ Ollama Dockerfile
 - ✅ GPU support
+
+**Resilience & Testing:**
+- ✅ **Circuit Breakers** - Automatic failure handling
+- ✅ **Graceful Degradation** - Fallback strategies
+- ✅ **Load Testing Suite** - NBomber-based performance testing
+- ✅ **Chaos Engineering** - Resilience validation
+- ✅ **Disaster Recovery** - Complete runbooks and procedures
 
 **Comparison:**
 - **LangChain/LangGraph**: Community-provided Kubernetes configs
@@ -413,7 +442,158 @@ var taskId = await supervisor.SubmitTaskAsync(task);
 - Lower latency for LLM API calls
 - Better memory efficiency
 
-### 12. Ecosystem Integration
+### 12. Visual Workflow Designer
+
+#### DotNetAgents
+```csharp
+// Visual designer with drag-and-drop UI
+// Backend API + Blazor WebAssembly frontend
+var designer = new WorkflowDesignerService();
+await designer.SaveWorkflowAsync(workflow);
+```
+
+**Features:**
+- ✅ Beautiful Blazor WebAssembly UI
+- ✅ Drag-and-drop node placement
+- ✅ Real-time execution visualization
+- ✅ Node property editor
+- ✅ Workflow export/import
+- ✅ Modern gradient design with animations
+
+**Comparison:**
+- **LangChain/LangGraph**: No visual designer
+- **Microsoft Agent Framework**: Limited visual tools
+- **DotNetAgents**: Complete visual workflow designer with polished UI
+
+### 13. AI-Powered Development Tools
+
+#### DotNetAgents
+```csharp
+// Chain Generator - Natural language to code
+var generator = new ChainGenerator(llm);
+var chain = await generator.GenerateAsync("Create a chain that processes user input");
+
+// Workflow Builder - Natural language to workflow
+var builder = new WorkflowBuilder(llm);
+var workflow = await builder.BuildAsync("Create a workflow for document processing");
+
+// Debugging Assistant - Analyze and fix issues
+var assistant = new DebuggingAssistant(llm);
+var suggestions = await assistant.AnalyzeAsync(executionLog);
+```
+
+**Features:**
+- ✅ Chain Generator (natural language → C# code)
+- ✅ Workflow Builder (natural language → workflow definitions)
+- ✅ Debugging Assistant (execution analysis + suggestions)
+
+**Comparison:**
+- **LangChain/LangGraph**: No AI-powered development tools
+- **Microsoft Agent Framework**: No AI-powered development tools
+- **DotNetAgents**: Unique AI-powered development assistance
+
+### 14. Advanced Multi-Agent Patterns
+
+#### DotNetAgents
+```csharp
+// Swarm Intelligence
+var swarm = new SwarmCoordinator("swarm-1", registry, workerPool);
+var distribution = await swarm.DistributeTaskAsync(task, SwarmCoordinationStrategy.ParticleSwarm);
+
+// Hierarchical Organizations
+var org = new HierarchicalAgentOrganization(registry);
+var team = await org.CreateNodeAsync("Engineering Team");
+await org.AddAgentToNodeAsync(team.Id, "agent-1", role: "Senior Developer");
+
+// Agent Marketplace
+var marketplace = new InMemoryAgentMarketplace(registry);
+var results = await marketplace.SearchAgentsAsync("document analyzer", filters);
+```
+
+**Features:**
+- ✅ Swarm Intelligence (4 algorithms: PSO, ACO, Flocking, Consensus)
+- ✅ Hierarchical Organizations (teams, departments, tree structures)
+- ✅ Agent Marketplace (discovery, search, ratings, subscriptions)
+
+**Comparison:**
+- **LangChain/LangGraph**: No advanced multi-agent patterns
+- **Microsoft Agent Framework**: Limited multi-agent patterns
+- **DotNetAgents**: Most comprehensive multi-agent coordination
+
+### 15. Edge Computing Support
+
+#### DotNetAgents
+```csharp
+// Edge agent with offline support
+var edgeAgent = new EdgeAgent(executor, cache, edgeModelProvider);
+var result = await edgeAgent.ExecuteAsync(input); // Auto fallback to offline
+```
+
+**Features:**
+- ✅ Mobile-friendly packages (iOS/Android/.NET MAUI)
+- ✅ Offline mode with automatic fallback
+- ✅ Edge-optimized model configurations
+- ✅ Network monitoring
+- ✅ Offline cache management
+
+**Comparison:**
+- **LangChain/LangGraph**: Limited edge support
+- **Microsoft Agent Framework**: Some edge support
+- **DotNetAgents**: Complete edge computing solution
+
+### 16. Plugin Architecture & Ecosystem
+
+#### DotNetAgents
+```csharp
+// Plugin system
+var plugin = new MyPlugin();
+await registry.RegisterAsync(plugin);
+
+// Integration marketplace
+var marketplace = new InMemoryIntegrationMarketplace();
+await marketplace.PublishAsync(integration);
+```
+
+**Features:**
+- ✅ Extensible plugin architecture
+- ✅ Integration marketplace
+- ✅ Category-based organization
+- ✅ Search and discovery
+
+**Comparison:**
+- **LangChain/LangGraph**: Community-driven plugins
+- **Microsoft Agent Framework**: Limited plugin support
+- **DotNetAgents**: Built-in plugin architecture and marketplace
+
+### 17. Observability & Monitoring
+
+#### DotNetAgents
+- ✅ **Distributed Tracing** - OpenTelemetry integration with examples
+- ✅ **Prometheus Alerting** - 15+ alert rules for production
+- ✅ **Grafana Dashboards** - 3 comprehensive monitoring dashboards
+- ✅ **Cost Tracking** - LLM cost monitoring and reporting
+- ✅ **Structured Logging** - Comprehensive logging throughout
+
+**Comparison:**
+- **LangChain/LangGraph**: Community-provided monitoring
+- **Microsoft Agent Framework**: Basic monitoring
+- **DotNetAgents**: Production-ready observability stack
+
+### 18. Resilience & Testing
+
+#### DotNetAgents
+- ✅ **Circuit Breakers** - Automatic failure handling
+- ✅ **Graceful Degradation** - Fallback strategies for LLM, DB, Message Bus
+- ✅ **Load Testing Suite** - NBomber-based performance testing
+- ✅ **Chaos Engineering** - Resilience validation tests
+- ✅ **Disaster Recovery** - Complete runbooks and procedures
+
+**Comparison:**
+- **LangChain/LangGraph**: Limited resilience patterns
+- **Microsoft Agent Framework**: Basic resilience
+- **DotNetAgents**: Comprehensive resilience and testing infrastructure
+
+### 19. Ecosystem Integration
 
 #### DotNetAgents
 - ✅ Microsoft Agent Framework compatible
@@ -422,6 +602,7 @@ var taskId = await supervisor.SubmitTaskAsync(task);
 - ✅ OpenTelemetry integration
 - ✅ Health checks integration
 - ✅ Dependency Injection throughout
+- ✅ Plugin architecture for extensions
 
 #### LangChain/LangGraph
 - ✅ Python ecosystem integration
@@ -509,6 +690,31 @@ var workflow = new StateGraph<MyState>()
    - You need .NET 10 optimizations
    - You want lower latency
    - You need better memory efficiency
+
+6. **Visual Workflow Design**
+   - You want drag-and-drop workflow creation
+   - You need visual debugging and execution tracking
+   - You prefer GUI over code-first approach
+
+7. **Advanced Multi-Agent Coordination**
+   - You need swarm intelligence algorithms
+   - You want hierarchical agent organizations
+   - You need agent discovery and marketplace
+
+8. **Edge & Mobile Deployment**
+   - You're building mobile applications
+   - You need offline capabilities
+   - You want edge-optimized models
+
+9. **Production Observability**
+   - You need distributed tracing
+   - You want comprehensive alerting
+   - You need cost tracking and monitoring
+
+10. **Resilience & Reliability**
+    - You need circuit breakers and graceful degradation
+    - You want load testing and chaos engineering
+    - You need disaster recovery procedures
 
 ### ⚠️ Consider Alternatives When:
 

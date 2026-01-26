@@ -180,17 +180,25 @@ dotnet run
 
 **Note:** This sample works without an OpenAI API key.
 
-### 9. Behavior Trees (Coming Soon)
+### 9. Tracing
 
-Demonstrates behavior trees for autonomous agent decision-making.
+Demonstrates distributed tracing with OpenTelemetry across multi-agent workflows.
 
 **Features:**
-- Basic behavior tree construction
-- Composite nodes (Sequence, Selector, Parallel)
-- Decorator nodes (Retry, Timeout, Cooldown)
-- LLM integration nodes
-- Workflow integration nodes
-- State machine integration nodes
+- OpenTelemetry integration
+- Distributed tracing setup
+- Correlation ID propagation
+- Multi-agent workflow tracing
+- Chain and LLM call tracing
+- Console and OTLP exporters
+
+**Run:**
+```bash
+cd DotNetAgents.Samples.Tracing
+dotnet run
+```
+
+**Note:** This sample demonstrates end-to-end distributed tracing. No API key required for basic tracing.
 
 ## Setting Up
 
@@ -208,8 +216,58 @@ Demonstrates behavior trees for autonomous agent decision-making.
    dotnet run
    ```
 
+## New Features Samples
+
+### Visual Workflow Designer
+
+The visual workflow designer is a separate Blazor WebAssembly application:
+
+**Location:** `src/DotNetAgents.Workflow.Designer.Web/`
+
+**Features:**
+- Drag-and-drop workflow creation
+- Real-time execution visualization
+- Node property editor
+- Workflow export/import
+
+**Run:**
+```bash
+cd src/DotNetAgents.Workflow.Designer.Web
+dotnet run
+```
+
+Navigate to `https://localhost:5001` to use the visual designer.
+
+### AI-Powered Development Tools
+
+Located in `src/DotNetAgents.Tools.Development/`:
+
+- **ChainGenerator** - Generate chains from natural language
+- **WorkflowBuilder** - Build workflows from descriptions
+- **DebuggingAssistant** - Analyze and fix workflow issues
+
+### Advanced Multi-Agent Patterns
+
+Located in:
+- `src/DotNetAgents.Agents.Swarm/` - Swarm intelligence
+- `src/DotNetAgents.Agents.Hierarchical/` - Hierarchical organizations
+- `src/DotNetAgents.Agents.Marketplace/` - Agent marketplace
+
+See [Advanced Multi-Agent Patterns Guide](../docs/guides/ADVANCED_MULTI_AGENT_PATTERNS.md) for examples.
+
+### Edge Computing
+
+Located in `src/DotNetAgents.Edge/`:
+
+- Mobile-friendly packages
+- Offline mode support
+- Edge-optimized models
+
+See [Edge Computing Guide](../docs/guides/EDGE_COMPUTING.md) for examples.
+
 ## Notes
 
-- All samples require an OpenAI API key
+- Most samples require an OpenAI API key (set `OPENAI_API_KEY` environment variable)
+- Some samples work without API keys (StateMachines, TasksAndKnowledge, Tracing)
 - Some samples may incur API costs
 - Samples are for demonstration purposes only

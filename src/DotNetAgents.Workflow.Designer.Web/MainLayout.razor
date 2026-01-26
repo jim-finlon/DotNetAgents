@@ -1,0 +1,20 @@
+@inherits LayoutComponentBase
+
+<div class="page">
+    <div class="sidebar">
+        <NavMenu />
+    </div>
+
+    <main>
+        <div class="top-row">
+            <div style="display: flex; align-items: center; gap: 12px;">
+                <span style="font-size: 28px;">🎯</span>
+                <h1>DotNetAgents Workflow Designer</h1>
+            </div>
+        </div>
+
+        <article class="content">
+            @Body
+        </article>
+    </main>
+</div>

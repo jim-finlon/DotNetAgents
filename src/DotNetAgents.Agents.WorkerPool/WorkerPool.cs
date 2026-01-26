@@ -14,6 +14,7 @@ public class WorkerPool : IWorkerPool
     private readonly IAgentRegistry _agentRegistry;
     private readonly ILoadBalancer _loadBalancer;
     private readonly IAutoScaler? _autoScaler;
+    private readonly ITaskQueue? _taskQueue;
     private readonly LoadBalancingStrategy _defaultStrategy;
     private readonly ILogger<WorkerPool>? _logger;
     private readonly HashSet<string> _workerIds = new();
@@ -29,6 +30,7 @@ public class WorkerPool : IWorkerPool
     /// <param name="agentRegistry">The agent registry.</param>
     /// <param name="loadBalancer">Optional load balancer. If null, uses default <see cref="LoadBalancer"/>.</param>
     /// <param name="autoScaler">Optional auto-scaler. If null, auto-scaling is disabled.</param>
+    /// <param name="taskQueue">Optional task queue. If provided, enables accurate pending task count for auto-scaling.</param>
     /// <param name="defaultStrategy">The default load balancing strategy to use.</param>
     /// <param name="logger">Optional logger instance.</param>
     /// <param name="stateProvider">Optional state provider for state-based worker selection.</param>
@@ -36,6 +38,7 @@ public class WorkerPool : IWorkerPool
         IAgentRegistry agentRegistry,
         ILoadBalancer? loadBalancer = null,
         IAutoScaler? autoScaler = null,
+        ITaskQueue? taskQueue = null,
         LoadBalancingStrategy defaultStrategy = LoadBalancingStrategy.PriorityBased,
         ILogger<WorkerPool>? logger = null,
         IWorkerStateProvider? stateProvider = null)
@@ -43,6 +46,7 @@ public class WorkerPool : IWorkerPool
         _agentRegistry = agentRegistry ?? throw new ArgumentNullException(nameof(agentRegistry));
         _loadBalancer = loadBalancer ?? new LoadBalancer();
         _autoScaler = autoScaler;
+        _taskQueue = taskQueue;
         _defaultStrategy = defaultStrategy;
         _logger = logger;
         _stateProvider = stateProvider;
@@ -307,8 +311,10 @@ public class WorkerPool : IWorkerPool
             var allWorkers = _agentRegistry.GetAllAsync(cancellationToken).GetAwaiter().GetResult();
             var poolWorkers = allWorkers.Where(w => _workerIds.Contains(w.AgentId)).ToList();
 
-            // Get pending task count (would need access to task queue)
-            var pendingTaskCount = 0; // TODO: Inject ITaskQueue to get actual count
+            // Get pending task count from task queue if available
+            var pendingTaskCount = _taskQueue != null
+                ? _taskQueue.GetPendingCountAsync(cancellationToken).GetAwaiter().GetResult()
+                : 0;
 
             var averageDuration = _taskDurations.Count > 0
                 ? TimeSpan.FromMilliseconds(_taskDurations.Average(d => d.TotalMilliseconds))

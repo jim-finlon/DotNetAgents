@@ -11,6 +11,13 @@ This guide covers integrating DotNetAgents packages into your application, with 
 5. [Storage Options](#storage-options)
 6. [Workflow Integration](#workflow-integration)
 7. [Bootstrap Generation](#bootstrap-generation)
+8. [Visual Workflow Designer](#visual-workflow-designer)
+9. [AI-Powered Development Tools](#ai-powered-development-tools)
+10. [Advanced Multi-Agent Patterns](#advanced-multi-agent-patterns)
+11. [Edge Computing](#edge-computing)
+12. [Observability & Tracing](#observability--tracing)
+13. [Resilience Patterns](#resilience-patterns)
+14. [Plugin Architecture](#plugin-architecture)
 
 ## Quick Start
 
@@ -824,21 +831,388 @@ var workflow = WorkflowBuilder<MultiAgentWorkflowState>.Create()
 
 See [Multi-Agent Workflows Plan](../architecture/MULTI_AGENT_WORKFLOWS_PLAN.md) for detailed documentation.
 
+## Visual Workflow Designer
+
+### Overview
+
+The Visual Workflow Designer provides a beautiful, drag-and-drop interface for creating and managing workflows.
+
+### Installation
+
+```bash
+dotnet add package DotNetAgents.Workflow.Designer
+dotnet add package DotNetAgents.Workflow.Designer.Web
+```
+
+### Using the Visual Designer
+
+**Web UI:**
+```bash
+cd src/DotNetAgents.Workflow.Designer.Web
+dotnet run
+```
+
+Navigate to `https://localhost:5001` to access the visual designer.
+
+**Backend API:**
+```csharp
+using DotNetAgents.Workflow.Designer;
+
+services.AddScoped<IWorkflowDesignerService, WorkflowDesignerService>();
+
+var designer = serviceProvider.GetRequiredService<IWorkflowDesignerService>();
+
+// Save workflow
+await designer.SaveWorkflowAsync(workflow);
+
+// Validate workflow
+var result = await designer.ValidateWorkflowAsync(workflow);
+
+// Execute workflow
+var executionId = await designer.ExecuteWorkflowAsync(workflow.Name);
+```
+
+See [Visual Workflow Designer Guide](./VISUAL_WORKFLOW_DESIGNER.md) for complete documentation.
+
+## AI-Powered Development Tools
+
+### Overview
+
+AI-powered tools for generating chains, building workflows, and debugging issues.
+
+### Installation
+
+```bash
+dotnet add package DotNetAgents.Tools.Development
+```
+
+### Chain Generator
+
+Generate chain code from natural language:
+
+```csharp
+using DotNetAgents.Tools.Development;
+
+var generator = new ChainGenerator(llm);
+var result = await generator.GenerateAsync(
+    "Create a chain that processes user input and generates a response");
+
+Console.WriteLine(result.Code);
+Console.WriteLine(result.Explanation);
+```
+
+### Workflow Builder
+
+Build workflows from natural language:
+
+```csharp
+var builder = new WorkflowBuilder(llm);
+var workflow = await builder.BuildAsync(
+    "Create a workflow for document processing with validation");
+```
+
+### Debugging Assistant
+
+Analyze execution logs and suggest fixes:
+
+```csharp
+var assistant = new DebuggingAssistant(llm);
+var analysis = await assistant.AnalyzeAsync(executionLog);
+
+foreach (var issue in analysis.Issues)
+{
+    Console.WriteLine($"Issue: {issue.Description}");
+    Console.WriteLine($"Fix: {issue.SuggestedFix}");
+}
+```
+
+See [AI-Powered Tools Guide](./AI_POWERED_TOOLS.md) for complete documentation.
+
+## Advanced Multi-Agent Patterns
+
+### Swarm Intelligence
+
+Coordinate agents using swarm algorithms:
+
+```csharp
+using DotNetAgents.Agents.Swarm;
+
+var swarm = new SwarmCoordinator("swarm-1", registry, workerPool);
+
+// Add agents to swarm
+await swarm.AddAgentAsync("agent-1");
+await swarm.AddAgentAsync("agent-2");
+
+// Distribute task using particle swarm optimization
+var distribution = await swarm.DistributeTaskAsync(
+    task,
+    SwarmCoordinationStrategy.ParticleSwarm);
+```
+
+### Hierarchical Organizations
+
+Organize agents into teams and departments:
+
+```csharp
+using DotNetAgents.Agents.Hierarchical;
+
+var org = new HierarchicalAgentOrganization(registry);
+
+// Create organization structure
+var engineering = await org.CreateNodeAsync("Engineering");
+var backendTeam = await org.CreateNodeAsync("Backend Team", engineering.Id);
+
+// Add agents
+await org.AddAgentToNodeAsync(backendTeam.Id, "agent-1", role: "Senior Developer");
+```
+
+### Agent Marketplace
+
+Discover and share agents:
+
+```csharp
+using DotNetAgents.Agents.Marketplace;
+
+var marketplace = new InMemoryAgentMarketplace(registry);
+
+// Publish agent
+var listing = new AgentListing { /* ... */ };
+await marketplace.PublishAgentAsync(listing);
+
+// Search agents
+var results = await marketplace.SearchAgentsAsync("document analyzer");
+```
+
+See [Advanced Multi-Agent Patterns Guide](./ADVANCED_MULTI_AGENT_PATTERNS.md) for complete documentation.
+
+## Edge Computing
+
+### Overview
+
+Edge computing support for mobile and offline deployments.
+
+### Installation
+
+```bash
+dotnet add package DotNetAgents.Edge
+```
+
+### Basic Usage
+
+```csharp
+using DotNetAgents.Edge;
+
+services.AddDotNetAgentsEdge(config =>
+{
+    config.ModelType = EdgeModelType.Quantized;
+    config.MaxModelSizeMB = 100;
+});
+
+var edgeAgent = serviceProvider.GetRequiredService<IEdgeAgent>();
+
+// Execute with automatic offline fallback
+var result = await edgeAgent.ExecuteAsync(input);
+```
+
+See [Edge Computing Guide](./EDGE_COMPUTING.md) for complete documentation.
+
+## Observability & Tracing
+
+### Distributed Tracing
+
+Set up OpenTelemetry tracing:
+
+```csharp
+using OpenTelemetry.Trace;
+
+services.AddOpenTelemetry()
+    .ConfigureResource(resource => resource
+        .AddService("MyAgentService", serviceVersion: "1.0.0"))
+    .WithTracing(tracing =>
+    {
+        tracing.AddDotNetAgentsInstrumentation()
+               .AddHttpClientInstrumentation()
+               .AddConsoleExporter();
+    });
+```
+
+### Prometheus Metrics
+
+Metrics are automatically collected. Configure Prometheus to scrape:
+
+```yaml
+scrape_configs:
+  - job_name: 'dotnetagents'
+    static_configs:
+      - targets: ['localhost:9090']
+```
+
+### Grafana Dashboards
+
+Import dashboards from `kubernetes/grafana/dashboards/`:
+- `dotnetagents-overview.json`
+- `dotnetagents-agents.json`
+- `dotnetagents-llm.json`
+
+See [Distributed Tracing Examples](../examples/DISTRIBUTED_TRACING.md) and [Grafana Dashboards Guide](./GRAFANA_DASHBOARDS.md) for complete documentation.
+
+## Resilience Patterns
+
+### Circuit Breakers
+
+```csharp
+using DotNetAgents.Abstractions.Resilience;
+
+var circuitBreaker = new CircuitBreaker(new CircuitBreakerOptions
+{
+    FailureThreshold = 5,
+    SuccessThreshold = 2,
+    Timeout = TimeSpan.FromSeconds(30)
+});
+
+try
+{
+    await circuitBreaker.ExecuteAsync(async () =>
+    {
+        return await llm.GenerateAsync(messages);
+    });
+}
+catch (CircuitBreakerOpenException)
+{
+    // Circuit is open, use fallback
+}
+```
+
+### Graceful Degradation
+
+```csharp
+// LLM fallback
+try
+{
+    return await primaryLLM.GenerateAsync(messages);
+}
+catch
+{
+    return await fallbackLLM.GenerateAsync(messages);
+}
+
+// Database fallback to cache
+try
+{
+    return await database.GetAsync(key);
+}
+catch
+{
+    return await cache.GetAsync(key);
+}
+```
+
+See [Circuit Breakers Guide](./CIRCUIT_BREAKERS.md) and [Graceful Degradation Guide](./GRACEFUL_DEGRADATION.md) for complete documentation.
+
+## Plugin Architecture
+
+### Overview
+
+Extensible plugin system for third-party integrations.
+
+### Installation
+
+```bash
+dotnet add package DotNetAgents.Ecosystem
+```
+
+### Creating a Plugin
+
+```csharp
+using DotNetAgents.Ecosystem;
+
+public class MyPlugin : IPlugin
+{
+    public string Id => "my-plugin";
+    public string Name => "My Plugin";
+    public string Version => "1.0.0";
+    // ... other properties
+
+    public async Task InitializeAsync(IPluginContext context, CancellationToken cancellationToken = default)
+    {
+        // Initialize plugin
+    }
+
+    public Task ShutdownAsync(CancellationToken cancellationToken = default)
+    {
+        // Cleanup
+        return Task.CompletedTask;
+    }
+}
+```
+
+### Registering Plugins
+
+```csharp
+services.AddDotNetAgentsEcosystem();
+
+var registry = serviceProvider.GetRequiredService<IPluginRegistry>();
+await registry.RegisterAsync(new MyPlugin());
+```
+
+### Integration Marketplace
+
+```csharp
+var marketplace = serviceProvider.GetRequiredService<IIntegrationMarketplace>();
+
+// Publish integration
+var integration = new IntegrationListing { /* ... */ };
+await marketplace.PublishAsync(integration);
+
+// Search integrations
+var results = await marketplace.SearchAsync("custom tool");
+```
+
+See [Ecosystem Integrations Guide](./ECOSYSTEM_INTEGRATIONS.md) for complete documentation.
+
 ## Examples
 
 See the sample applications for complete working examples:
 
+- **`DotNetAgents.Samples.BasicChain`**: Basic chain composition
+- **`DotNetAgents.Samples.AgentWithTools`**: Agent with tool calling
+- **`DotNetAgents.Samples.Workflow`**: Stateful workflows
+- **`DotNetAgents.Samples.RAG`**: Retrieval-augmented generation
+- **`DotNetAgents.Samples.Education`**: Educational extensions
 - **`DotNetAgents.Samples.TasksAndKnowledge`**: Task creation, knowledge capture, bootstrap generation
 - **`DotNetAgents.Samples.MultiAgent`**: Supervisor-worker patterns, agent registry, worker pool, message buses
 - **`DotNetAgents.Samples.StateMachines`**: State machine patterns, registry integration, message bus integration
-- **`DotNetAgents.Samples.Education`**: Educational extensions, pedagogy, safety, assessment features
+- **`DotNetAgents.Samples.Tracing`**: Distributed tracing with OpenTelemetry
+- **`DotNetAgents.Samples.JARVISVoice`**: Voice command processing
+- **`DotNetAgents.Workflow.Designer.Web`**: Visual workflow designer UI
 
 ## Additional Resources
 
+### Core Packages
 - [Tasks Package README](../../src/DotNetAgents.Tasks/README.md)
 - [Knowledge Package README](../../src/DotNetAgents.Knowledge/README.md)
 - [State Machines README](../../src/DotNetAgents.Agents.StateMachines/README.md)
 - [Behavior Trees README](../../src/DotNetAgents.Agents.BehaviorTrees/README.md)
+
+### New Features
+- [Visual Workflow Designer Guide](./VISUAL_WORKFLOW_DESIGNER.md)
+- [AI-Powered Tools Guide](./AI_POWERED_TOOLS.md)
+- [Advanced Multi-Agent Patterns Guide](./ADVANCED_MULTI_AGENT_PATTERNS.md)
+- [Edge Computing Guide](./EDGE_COMPUTING.md)
+- [Ecosystem Integrations Guide](./ECOSYSTEM_INTEGRATIONS.md)
+- [Distributed Tracing Examples](../examples/DISTRIBUTED_TRACING.md)
+
+### Production & Operations
+- [Alerting Guide](./ALERTING.md)
+- [Grafana Dashboards Guide](./GRAFANA_DASHBOARDS.md)
+- [Load Testing Guide](./LOAD_TESTING.md)
+- [Chaos Engineering Guide](./CHAOS_ENGINEERING.md)
+- [Circuit Breakers Guide](./CIRCUIT_BREAKERS.md)
+- [Graceful Degradation Guide](./GRACEFUL_DEGRADATION.md)
+- [Disaster Recovery](../operations/DISASTER_RECOVERY.md)
+- [Operations Runbook](../operations/RUNBOOK.md)
+
+### Architecture & Deployment
 - [Multi-Agent Workflows Plan](../architecture/MULTI_AGENT_WORKFLOWS_PLAN.md)
 - [Kubernetes Deployment](../../kubernetes/README.md)
 - [Workflow Documentation](../status/PROJECT_STATUS.md)

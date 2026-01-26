@@ -57,6 +57,7 @@ public static class ServiceCollectionExtensions
         {
             var agentRegistry = sp.GetRequiredService<DotNetAgents.Agents.Registry.IAgentRegistry>();
             var logger = sp.GetService<Microsoft.Extensions.Logging.ILogger<WorkerPool>>();
+            var taskQueue = sp.GetService<DotNetAgents.Agents.Tasks.ITaskQueue>();
             
             // Get state provider if factory is registered
             IWorkerStateProvider? stateProvider = null;
@@ -76,6 +77,7 @@ public static class ServiceCollectionExtensions
                 agentRegistry,
                 loadBalancer: null,
                 autoScaler: null,
+                taskQueue: taskQueue,
                 defaultStrategy: LoadBalancing.LoadBalancingStrategy.PriorityBased,
                 logger: logger,
                 stateProvider: stateProvider);

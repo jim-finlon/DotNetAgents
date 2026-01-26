@@ -74,13 +74,16 @@ DotNetAgents targets .NET 10 (LTS) to leverage cutting-edge AI optimizations and
 
 ### Enterprise Features
 - 🔒 **Security**: Secrets management, input validation, rate limiting
-- 📈 **Observability**: Structured logging, distributed tracing, cost tracking
+- 📈 **Observability**: Structured logging, distributed tracing, cost tracking, Prometheus alerts, Grafana dashboards
 - ⚡ **Performance**: Multi-level caching, connection pooling, async throughout - Leveraging .NET 10 AI optimizations
 - 🏥 **Health Checks**: Integration with ASP.NET Core health checks
 - 📝 **Configuration**: Centralized configuration with multiple sources
 - 🚀 **.NET 10 Optimized**: Built on .NET 10 (LTS) with AI-focused performance improvements
 - ☸️ **Kubernetes Ready**: Complete Kubernetes manifests, Helm charts, and deployment guides
 - 📊 **Production Monitoring**: Prometheus, Grafana, and Loki integration out of the box
+- 🔄 **Resilience**: Circuit breakers, retry policies, graceful degradation
+- 🧪 **Testing**: Load testing suite, chaos engineering tests
+- 📋 **Disaster Recovery**: Complete runbooks and recovery procedures
 
 ### Educational Extensions (DotNetAgents.Education)
 - **🎓 Pedagogy**: Socratic dialogue engine, spaced repetition (SM2), mastery tracking
@@ -194,18 +197,55 @@ DotNetAgents uses a modular package architecture:
 - **`DotNetAgents.Agents.Messaging.RabbitMQ`** - RabbitMQ message bus implementation
 - **`DotNetAgents.Agents.Messaging.Redis`** - Redis Pub/Sub message bus implementation
 - **`DotNetAgents.Agents.Messaging.SignalR`** - SignalR message bus implementation
+- **`DotNetAgents.Agents.Swarm`** - Swarm intelligence algorithms for agent coordination
+- **`DotNetAgents.Agents.Hierarchical`** - Hierarchical agent organizations
+- **`DotNetAgents.Agents.Marketplace`** - Agent marketplace and discovery
+- **`DotNetAgents.Workflow.Designer`** - Visual workflow designer backend API
+- **`DotNetAgents.Workflow.Designer.Web`** - Visual workflow designer Blazor UI
+- **`DotNetAgents.Tools.Development`** - AI-powered development tools (chain generator, workflow builder, debugging assistant)
+- **`DotNetAgents.Edge`** - Edge computing support (mobile, offline mode, edge-optimized models)
+- **`DotNetAgents.Ecosystem`** - Plugin architecture and integration marketplace
 - **`DotNetAgents.Configuration`** - Configuration management
-- **`DotNetAgents.Observability`** - Logging, tracing, metrics
+- **`DotNetAgents.Observability`** - Logging, tracing, metrics, distributed tracing
 - **`DotNetAgents.Security`** - Security features
 - **`DotNetAgents.Education`** - Educational extensions (pedagogy, safety, assessment, compliance)
 - **`DotNetAgents`** - Metapackage (references all above)
 
 ## 📚 Documentation
 
+### Getting Started
 - **[Quick Start Guide](docs/guides/INTEGRATION_GUIDE.md)** - Get started with DotNetAgents
 - **[Comparison Guide](docs/comparison.md)** - DotNetAgents vs LangChain, LangGraph, and Microsoft Agent Framework
-- **[Project Status](docs/status/PROJECT_STATUS.md)** - Current development status and completed features
 - **[API Reference](docs/guides/API_REFERENCE.md)** - API documentation
+
+### Production & Operations
+- **[Distributed Tracing](docs/examples/DISTRIBUTED_TRACING.md)** - OpenTelemetry tracing setup and examples
+- **[Alerting Guide](docs/guides/ALERTING.md)** - Prometheus alerting configuration
+- **[Grafana Dashboards](docs/guides/GRAFANA_DASHBOARDS.md)** - Monitoring dashboards
+- **[Disaster Recovery](docs/operations/DISASTER_RECOVERY.md)** - Recovery procedures and runbooks
+- **[Operations Runbook](docs/operations/RUNBOOK.md)** - Quick reference for operations
+- **[Capacity Planning](docs/operations/CAPACITY_PLANNING.md)** - Resource planning guide
+- **[Load Testing](docs/guides/LOAD_TESTING.md)** - Load testing with NBomber
+- **[Chaos Engineering](docs/guides/CHAOS_ENGINEERING.md)** - Resilience testing
+- **[Circuit Breakers](docs/guides/CIRCUIT_BREAKERS.md)** - Circuit breaker patterns
+- **[Graceful Degradation](docs/guides/GRACEFUL_DEGRADATION.md)** - Degradation strategies
+
+### Innovation Features
+- **[Visual Workflow Designer](docs/guides/VISUAL_WORKFLOW_DESIGNER.md)** - Visual workflow design guide
+- **[Workflow Designer UI](docs/guides/WORKFLOW_DESIGNER_UI.md)** - Frontend UI guide
+- **[AI-Powered Tools](docs/guides/AI_POWERED_TOOLS.md)** - Chain generator, workflow builder, debugging assistant
+- **[Advanced Multi-Agent Patterns](docs/guides/ADVANCED_MULTI_AGENT_PATTERNS.md)** - Swarm intelligence, hierarchical organizations, marketplace
+- **[Edge Computing](docs/guides/EDGE_COMPUTING.md)** - Mobile and edge deployment guide
+- **[Ecosystem Integrations](docs/guides/ECOSYSTEM_INTEGRATIONS.md)** - Plugin architecture and marketplace
+
+### Community
+- **[Community Guide](docs/community/COMMUNITY_GUIDE.md)** - Community resources and getting involved
+- **[Certification Program](docs/education/CERTIFICATION_PROGRAM.md)** - Certification levels and process
+- **[Learning Paths](docs/education/LEARNING_PATHS.md)** - Structured learning paths
+- **[Training Materials](docs/education/TRAINING_MATERIALS.md)** - Training resources
+
+### Development
+- **[Project Status](docs/status/PROJECT_STATUS.md)** - Current development status and completed features
 - **[Testing Strategy](docs/guides/TESTING_STRATEGY.md)** - Testing guidelines and best practices
 - **[Kubernetes Deployment](kubernetes/README.md)** - Production deployment with Kubernetes and Helm
 - **[Development Database](docs/DEVELOPMENT_DATABASE.md)** - Database setup and configuration
@@ -309,6 +349,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - ✅ 5 vector store implementations
 - ✅ 19 built-in tools
 - ✅ Workflow engine with checkpointing
+- ✅ **Visual Workflow Designer** - Beautiful Blazor WebAssembly UI with drag-and-drop
 - ✅ State Machines for agent lifecycle management
 - ✅ Behavior Trees for autonomous agent decision-making
 - ✅ Voice command processing (JARVIS)
@@ -319,9 +360,20 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - ✅ Workflow visualization
 - ✅ Human-in-the-loop support
 - ✅ Multi-agent workflows with supervisor-worker patterns
+- ✅ **Advanced Multi-Agent Patterns** - Swarm intelligence, hierarchical organizations, agent marketplace
 - ✅ Complete message bus implementations (Kafka, RabbitMQ, Redis, SignalR)
+- ✅ **AI-Powered Development Tools** - Chain generator, workflow builder, debugging assistant
+- ✅ **Edge Computing Support** - Mobile packages, offline mode, edge-optimized models
+- ✅ **Plugin Architecture** - Extensible plugin system and integration marketplace
 - ✅ Kubernetes deployment manifests and Helm charts
 - ✅ Production monitoring stack (Prometheus, Grafana, Loki)
+- ✅ **Distributed Tracing** - OpenTelemetry integration with examples
+- ✅ **Prometheus Alerting** - 15+ alert rules for production monitoring
+- ✅ **Grafana Dashboards** - 3 comprehensive monitoring dashboards
+- ✅ **Disaster Recovery** - Complete runbooks and recovery procedures
+- ✅ **Load Testing Suite** - NBomber-based performance testing
+- ✅ **Chaos Engineering** - Resilience testing suite
+- ✅ **Resilience Patterns** - Circuit breakers, graceful degradation
 
 **See [Project Status](docs/status/PROJECT_STATUS.md) for detailed status.**
 

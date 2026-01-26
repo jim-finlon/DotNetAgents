@@ -1,0 +1,183 @@
+groups:
+  - name: dotnetagents_alerts
+    interval: 30s
+    rules:
+      # High Error Rate Alert
+      - alert: HighErrorRate
+        expr: |
+          rate(dotnetagents_errors_total[5m]) > 0.1
+        for: 5m
+        labels:
+          severity: critical
+          component: error_rate
+        annotations:
+          summary: "High error rate detected"
+          description: "Error rate is {{ $value }} errors/second over the last 5 minutes. Threshold: 0.1 errors/second."
+
+      # Slow Response Time Alert
+      - alert: SlowResponseTime
+        expr: |
+          histogram_quantile(0.95, rate(dotnetagents_operation_duration_seconds_bucket[5m])) > 5
+        for: 10m
+        labels:
+          severity: warning
+          component: performance
+        annotations:
+          summary: "Slow response times detected"
+          description: "95th percentile response time is {{ $value }}s over the last 5 minutes. Threshold: 5s."
+
+      # High Queue Depth Alert
+      - alert: HighTaskQueueDepth
+        expr: |
+          dotnetagents_task_queue_pending_count > 100
+        for: 5m
+        labels:
+          severity: warning
+          component: task_queue
+        annotations:
+          summary: "High task queue depth"
+          description: "Task queue has {{ $value }} pending tasks. Threshold: 100 tasks."
+
+      # Agent Unavailable Alert
+      - alert: NoAvailableAgents
+        expr: |
+          dotnetagents_agents_available_count == 0
+        for: 2m
+        labels:
+          severity: critical
+          component: agents
+        annotations:
+          summary: "No available agents"
+          description: "No agents are currently available to process tasks."
+
+      # High Agent Failure Rate
+      - alert: HighAgentFailureRate
+        expr: |
+          rate(dotnetagents_agent_tasks_failed_total[5m]) / rate(dotnetagents_agent_tasks_total[5m]) > 0.1
+        for: 5m
+        labels:
+          severity: warning
+          component: agents
+        annotations:
+          summary: "High agent failure rate"
+          description: "Agent failure rate is {{ $value | humanizePercentage }} over the last 5 minutes. Threshold: 10%."
+
+      # LLM Call Failure Rate
+      - alert: HighLLMFailureRate
+        expr: |
+          rate(dotnetagents_llm_calls_failed_total[5m]) / rate(dotnetagents_llm_calls_total[5m]) > 0.05
+        for: 5m
+        labels:
+          severity: critical
+          component: llm
+        annotations:
+          summary: "High LLM call failure rate"
+          description: "LLM call failure rate is {{ $value | humanizePercentage }} over the last 5 minutes. Threshold: 5%."
+
+      # High LLM Latency
+      - alert: HighLLMLatency
+        expr: |
+          histogram_quantile(0.95, rate(dotnetagents_llm_call_duration_seconds_bucket[5m])) > 30
+        for: 10m
+        labels:
+          severity: warning
+          component: llm
+        annotations:
+          summary: "High LLM latency"
+          description: "95th percentile LLM call latency is {{ $value }}s over the last 5 minutes. Threshold: 30s."
+
+      # High Cost Rate Alert
+      - alert: HighCostRate
+        expr: |
+          rate(dotnetagents_cost_total_usd[5m]) > 10
+        for: 5m
+        labels:
+          severity: warning
+          component: cost
+        annotations:
+          summary: "High cost rate detected"
+          description: "Cost rate is ${{ $value }}/second over the last 5 minutes. Threshold: $10/second."
+
+      # Memory Usage Alert
+      - alert: HighMemoryUsage
+        expr: |
+          dotnetagents_memory_usage_bytes / dotnetagents_memory_limit_bytes > 0.9
+        for: 5m
+        labels:
+          severity: warning
+          component: system
+        annotations:
+          summary: "High memory usage"
+          description: "Memory usage is {{ $value | humanizePercentage }} of limit. Threshold: 90%."
+
+      # CPU Usage Alert
+      - alert: HighCPUUsage
+        expr: |
+          rate(dotnetagents_cpu_usage_seconds_total[5m]) > 0.8
+        for: 10m
+        labels:
+          severity: warning
+          component: system
+        annotations:
+          summary: "High CPU usage"
+          description: "CPU usage is {{ $value | humanizePercentage }} over the last 5 minutes. Threshold: 80%."
+
+      # Workflow Execution Failure
+      - alert: WorkflowExecutionFailure
+        expr: |
+          rate(dotnetagents_workflow_executions_failed_total[5m]) > 0.05
+        for: 5m
+        labels:
+          severity: warning
+          component: workflow
+        annotations:
+          summary: "Workflow execution failures detected"
+          description: "Workflow failure rate is {{ $value }} failures/second over the last 5 minutes. Threshold: 0.05 failures/second."
+
+      # Message Bus Latency
+      - alert: HighMessageBusLatency
+        expr: |
+          histogram_quantile(0.95, rate(dotnetagents_message_bus_latency_seconds_bucket[5m])) > 1
+        for: 10m
+        labels:
+          severity: warning
+          component: messaging
+        annotations:
+          summary: "High message bus latency"
+          description: "95th percentile message bus latency is {{ $value }}s over the last 5 minutes. Threshold: 1s."
+
+      # Database Connection Pool Exhaustion
+      - alert: DatabaseConnectionPoolExhausted
+        expr: |
+          dotnetagents_database_connections_active / dotnetagents_database_connections_max > 0.9
+        for: 5m
+        labels:
+          severity: critical
+          component: database
+        annotations:
+          summary: "Database connection pool nearly exhausted"
+          description: "{{ $value | humanizePercentage }} of database connections are in use. Threshold: 90%."
+
+      # Circuit Breaker Open
+      - alert: CircuitBreakerOpen
+        expr: |
+          dotnetagents_circuit_breaker_state{state="open"} > 0
+        for: 2m
+        labels:
+          severity: warning
+          component: resilience
+        annotations:
+          summary: "Circuit breaker is open"
+          description: "Circuit breaker for {{ $labels.service }} is open, indicating repeated failures."
+
+      # Agent Health Check Failure
+      - alert: AgentHealthCheckFailure
+        expr: |
+          up{job="dotnetagents-agents"} == 0
+        for: 5m
+        labels:
+          severity: critical
+          component: health
+        annotations:
+          summary: "Agent health check failing"
+          description: "Agent health check has been failing for {{ $for }}."

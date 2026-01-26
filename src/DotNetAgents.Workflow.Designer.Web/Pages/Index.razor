@@ -1,0 +1,97 @@
+@page "/"
+@using Microsoft.AspNetCore.Components.Web
+
+<PageTitle>DotNetAgents Workflow Designer</PageTitle>
+
+<div style="max-width: 1200px; margin: 0 auto;">
+    <div style="text-align: center; margin-bottom: 48px; padding: 40px 20px;">
+        <h1 style="font-size: 42px; font-weight: 700; margin: 0 0 16px 0; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">
+            DotNetAgents Workflow Designer
+        </h1>
+        <p style="font-size: 18px; color: var(--text-secondary); margin: 0;">
+            Create, edit, and manage workflows visually with our intuitive drag-and-drop interface
+        </p>
+    </div>
+
+    <div class="row">
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body">
+                    <div style="font-size: 48px; margin-bottom: 16px;">🎨</div>
+                    <h5 class="card-title">Create Workflow</h5>
+                    <p class="card-text">Start designing a new workflow from scratch with our visual editor.</p>
+                    <a href="designer" class="btn btn-primary">
+                        <span>✨</span> New Workflow
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body">
+                    <div style="font-size: 48px; margin-bottom: 16px;">📋</div>
+                    <h5 class="card-title">Browse Workflows</h5>
+                    <p class="card-text">View and manage all your existing workflows in one place.</p>
+                    <a href="workflows" class="btn btn-primary">
+                        <span>📂</span> View Workflows
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body">
+                    <div style="font-size: 48px; margin-bottom: 16px;">📥</div>
+                    <h5 class="card-title">Import Workflow</h5>
+                    <p class="card-text">Import a workflow from a JSON definition file.</p>
+                    <button class="btn btn-primary" @onclick="ShowImportDialog">
+                        <span>⬇️</span> Import
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@if (showImport)
+{
+    <div class="modal show" style="display: block;">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Import Workflow</h5>
+                    <button type="button" class="btn-close" @onclick="CloseImportDialog"></button>
+                </div>
+                <div class="modal-body">
+                    <textarea class="form-control" @bind="importJson" rows="10" placeholder="Paste workflow JSON here..."></textarea>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" @onclick="CloseImportDialog">Cancel</button>
+                    <button type="button" class="btn btn-primary" @onclick="ImportWorkflow">Import</button>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+@code {
+    private bool showImport = false;
+    private string importJson = string.Empty;
+
+    private void ShowImportDialog()
+    {
+        showImport = true;
+    }
+
+    private void CloseImportDialog()
+    {
+        showImport = false;
+        importJson = string.Empty;
+    }
+
+    private async Task ImportWorkflow()
+    {
+        // TODO: Implement import logic
+        CloseImportDialog();
+    }
+}

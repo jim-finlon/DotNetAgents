@@ -182,7 +182,7 @@ public class WorkerPoolTests
         };
 
         _mockRegistry.Setup(r => r.GetByIdAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()))
-            .ReturnsAsync((string id) => id == "agent-1" ? agent1 : agent2);
+            .ReturnsAsync((string id, CancellationToken _) => id == "agent-1" ? agent1 : agent2);
         _mockRegistry.Setup(r => r.GetAllAsync(It.IsAny<CancellationToken>()))
             .ReturnsAsync(new[] { agent1, agent2 });
 

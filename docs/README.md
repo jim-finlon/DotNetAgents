@@ -28,11 +28,46 @@ User guides and how-to documentation:
 - `TESTING_STRATEGY.md` - Testing strategy and guidelines
 - `BUILD_AND_CICD.md` - Build and CI/CD pipeline documentation
 - `VERSIONING_AND_MIGRATION.md` - Versioning strategy and migration guides
+- `VISUAL_WORKFLOW_DESIGNER.md` - Visual workflow designer guide
+- `WORKFLOW_DESIGNER_UI.md` - Workflow designer UI guide
+- `AI_POWERED_TOOLS.md` - AI-powered development tools guide
+- `ADVANCED_MULTI_AGENT_PATTERNS.md` - Advanced multi-agent patterns guide
+- `EDGE_COMPUTING.md` - Edge computing and mobile deployment guide
+- `ECOSYSTEM_INTEGRATIONS.md` - Plugin architecture and marketplace guide
+- `ALERTING.md` - Prometheus alerting configuration
+- `GRAFANA_DASHBOARDS.md` - Grafana dashboard setup and usage
+- `LOAD_TESTING.md` - Load testing with NBomber
+- `CHAOS_ENGINEERING.md` - Chaos engineering and resilience testing
+- `CIRCUIT_BREAKERS.md` - Circuit breaker patterns
+- `GRACEFUL_DEGRADATION.md` - Graceful degradation strategies
 
 ### `/status/`
 Project status documents:
 - `PROJECT_STATUS.md` - Current development status and completed features
 - `JARVIS_IMPLEMENTATION_STATUS.md` - JARVIS implementation tracking
+
+### `/examples/`
+Example documentation and tutorials:
+- `DISTRIBUTED_TRACING.md` - Distributed tracing examples and setup
+
+### `/operations/`
+Operations and production documentation:
+- `DISASTER_RECOVERY.md` - Disaster recovery procedures
+- `RUNBOOK.md` - Operations runbook
+- `CAPACITY_PLANNING.md` - Capacity planning guide
+
+### `/community/`
+Community and ecosystem documentation:
+- `COMMUNITY_GUIDE.md` - Community resources and getting involved
+- `DISCORD_SETUP.md` - Discord server setup guide
+- `CONTRIBUTOR_RECOGNITION.md` - Contributor recognition program
+- `SHOWCASE_GUIDELINES.md` - Project showcase guidelines
+
+### `/education/`
+Education and training documentation:
+- `CERTIFICATION_PROGRAM.md` - Certification program overview
+- `LEARNING_PATHS.md` - Structured learning paths
+- `TRAINING_MATERIALS.md` - Training resources and materials
 
 ### Root Level
 Additional documentation files:
@@ -44,6 +79,11 @@ Additional documentation files:
 - `GIT_WORKFLOW.md` - Git workflow and branching strategy
 - `DEVELOPMENT_DATABASE.md` - Development database configuration
 - `AISESSIONPERSISTENCE_COMPARISON.md` - Comparison with AiSessionPersistence project
+- `PHASE3_COMPLETE_SUMMARY.md` - Phase 3 completion summary
+- `PHASE4_COMPLETE_SUMMARY.md` - Phase 4 completion summary
+- `PHASE4_PROGRESS.md` - Phase 4 progress tracking
+- `PHASE5_PROGRESS.md` - Phase 5 progress tracking
+- `PHASE5_COMPLETE_SUMMARY.md` - Phase 5 completion summary
 
 ### `/kubernetes/`
 Kubernetes deployment documentation:
@@ -64,10 +104,35 @@ Kubernetes deployment documentation:
 
 ## 🔍 Quick Links
 
-- **Getting Started**: See the main [README.md](../README.md)
-- **Architecture**: Start with `/architecture/ARCHITECTURE_SUMMARY.md` or `/architecture/technical-specification.md`
-- **Integration**: See `/guides/INTEGRATION_GUIDE.md`
-- **Comparison**: See `/comparison.md` for comparison with LangChain, LangGraph, and Microsoft Agent Framework
-- **Kubernetes Deployment**: See `/kubernetes/README.md` for production deployment
-- **Status**: Check `/status/PROJECT_STATUS.md` for current progress
-- **Database Setup**: See `/DEVELOPMENT_DATABASE.md` for database configuration
+### Getting Started
+- **Main README**: [README.md](../README.md)
+- **Integration Guide**: `/guides/INTEGRATION_GUIDE.md`
+- **API Reference**: `/guides/API_REFERENCE.md`
+
+### Production & Operations
+- **Distributed Tracing**: `/examples/DISTRIBUTED_TRACING.md`
+- **Alerting**: `/guides/ALERTING.md`
+- **Grafana Dashboards**: `/guides/GRAFANA_DASHBOARDS.md`
+- **Disaster Recovery**: `/operations/DISASTER_RECOVERY.md`
+- **Operations Runbook**: `/operations/RUNBOOK.md`
+- **Load Testing**: `/guides/LOAD_TESTING.md`
+- **Chaos Engineering**: `/guides/CHAOS_ENGINEERING.md`
+
+### Innovation Features
+- **Visual Workflow Designer**: `/guides/VISUAL_WORKFLOW_DESIGNER.md`
+- **AI-Powered Tools**: `/guides/AI_POWERED_TOOLS.md`
+- **Advanced Multi-Agent**: `/guides/ADVANCED_MULTI_AGENT_PATTERNS.md`
+- **Edge Computing**: `/guides/EDGE_COMPUTING.md`
+- **Ecosystem**: `/guides/ECOSYSTEM_INTEGRATIONS.md`
+
+### Community & Education
+- **Community Guide**: `/community/COMMUNITY_GUIDE.md`
+- **Certification**: `/education/CERTIFICATION_PROGRAM.md`
+- **Learning Paths**: `/education/LEARNING_PATHS.md`
+
+### Architecture & Development
+- **Architecture**: `/architecture/ARCHITECTURE_SUMMARY.md`
+- **Comparison**: `/comparison.md` - Comparison with LangChain, LangGraph, and Microsoft Agent Framework
+- **Kubernetes Deployment**: `/kubernetes/README.md`
+- **Status**: `/status/PROJECT_STATUS.md`
+- **Database Setup**: `/DEVELOPMENT_DATABASE.md`

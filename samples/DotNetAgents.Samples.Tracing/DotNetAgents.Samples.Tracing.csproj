@@ -1,0 +1,25 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="../../src/DotNetAgents.Agents.Registry/DotNetAgents.Agents.Registry.csproj" />
+    <ProjectReference Include="../../src/DotNetAgents.Agents.Messaging.InMemory/DotNetAgents.Agents.Messaging.InMemory.csproj" />
+    <ProjectReference Include="../../src/DotNetAgents.Agents.Tasks/DotNetAgents.Agents.Tasks.csproj" />
+    <ProjectReference Include="../../src/DotNetAgents.Agents.Supervisor/DotNetAgents.Agents.Supervisor.csproj" />
+    <ProjectReference Include="../../src/DotNetAgents.Agents.WorkerPool/DotNetAgents.Agents.WorkerPool.csproj" />
+    <ProjectReference Include="../../src/DotNetAgents.Observability/DotNetAgents.Observability.csproj" />
+    <ProjectReference Include="../../src/DotNetAgents.Workflow/DotNetAgents.Workflow.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="OpenTelemetry.Exporter.Console" Version="1.9.0" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="9.0.0" />
+  </ItemGroup>
+
+</Project>
